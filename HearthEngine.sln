@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32825.248
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HearthEngine", "HearthEngine.vcxproj", "{AA876E0D-618B-4154-B664-7E80992CA48C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AA876E0D-618B-4154-B664-7E80992CA48C}.Debug|x64.ActiveCfg = Debug|x64
+		{AA876E0D-618B-4154-B664-7E80992CA48C}.Debug|x64.Build.0 = Debug|x64
+		{AA876E0D-618B-4154-B664-7E80992CA48C}.Debug|x86.ActiveCfg = Debug|Win32
+		{AA876E0D-618B-4154-B664-7E80992CA48C}.Debug|x86.Build.0 = Debug|Win32
+		{AA876E0D-618B-4154-B664-7E80992CA48C}.Release|x64.ActiveCfg = Release|x64
+		{AA876E0D-618B-4154-B664-7E80992CA48C}.Release|x64.Build.0 = Release|x64
+		{AA876E0D-618B-4154-B664-7E80992CA48C}.Release|x86.ActiveCfg = Release|Win32
+		{AA876E0D-618B-4154-B664-7E80992CA48C}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A2FF010E-BFC6-44C8-8489-2914AB78E57E}
+	EndGlobalSection
+EndGlobal
