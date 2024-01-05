@@ -1,6 +1,9 @@
 #include "Header.h"
 #include "LuaState.h"
 #include "Debugger.h"
+#include <Windows.h>
+#include <shellapi.h>
+#include <filesystem>
 
 // Open up a fresh lua state.
 LuaHandler::LuaHandler()
@@ -59,7 +62,19 @@ bool LuaHandler::LoadScript(const char* script_name)
 		return false;
 	}
 
+
+
 	Debugger::Get().Print("Successfully loaded script: " + std::string(script_name) + "\n", Debugger::COLOR_GREEN);
 
 	return true;
+}
+
+void LuaHandler::OpenScriptFile(const char* script_name)
+{
+	std::filesystem::path currPath = std::filesystem::current_path();
+	std::string strPath = currPath.generic_string() + "/" + SCRIPTPATH + script_name;
+
+	Debugger::Get().Print("Opening path: " + strPath);
+
+	ShellExecute(0, 0, std::wstring(strPath.begin(), strPath.end()).c_str(), 0, 0, SW_SHOW);
 }

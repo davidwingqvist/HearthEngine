@@ -27,5 +27,8 @@ public:
 
 	// Load a script into the engine.
 	static bool LoadScript(const char* script_name);
+
+	// Open a script in a new window.
+	static void OpenScriptFile(const char* script_name);
 };
 
