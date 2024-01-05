@@ -48,12 +48,8 @@ struct transform
 
 struct vertex_data
 {
-	float x = 0.0f;
-	float y = 0.0f;
-	float z = 0.0f;
-
-	float u = 0.0f;
-	float v = 0.0f;
+	sm::Vector3 position;
+	sm::Vector2 texCoords;
 };
 
 struct model

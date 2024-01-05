@@ -9,6 +9,7 @@ private:
 	std::function<void(recs::recs_registry&)> m_function;
 	DrawManager m_drawManager;
 	ID3D11Buffer* m_publicBuffer;
+	recs::Entity entity;
 
 	bool CreatePublicBuffer();
 	void PreDraw();

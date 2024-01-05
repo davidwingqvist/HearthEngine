@@ -25,9 +25,9 @@ Scene::Scene()
 	}
 
 
-	recs::Entity ent = m_registry.CreateEntity();
-	transform* transf = m_registry.AddComponent<transform>(ent);
-	m_registry.AddComponent<model>(ent)->data = ResourceManager::Get().GetResource<Model3D>("Chest.obj").get();
+	recs::Entity entity = m_registry.CreateEntity();
+	transform* transf = m_registry.AddComponent<transform>(entity);
+	m_registry.AddComponent<model>(entity)->data = ResourceManager::Get().GetResource<Model3D>("Tree1.obj").get();
 
 	transf->pos = { 5, 3.5, 25.5 };
 	//UpdatePublicBuffer(m_publicBuffer, transf->GetMatrix());
@@ -74,14 +74,14 @@ void Scene::Draw()
 	// Public buffer is set to the first slot in Vertex Shader
 	D3D11Core::Get().Context()->VSSetConstantBuffers(0, 1, &m_publicBuffer);
 
-	//m_registry.Group<model, transform>().ForEach([&](model& model, transform& pos){
+	m_registry.Group<model, transform>().ForEach([&](model& model, transform& pos){
 
 
-	//	UpdatePublicBuffer(m_publicBuffer, pos.GetMatrix());
+		UpdatePublicBuffer(m_publicBuffer, pos.GetMatrix());
 
-	//	// draw each model.
-	//	model.data->Draw();
+		// draw each model.
+		model.data->Draw();
 
-	//	});
+		});
 	m_drawManager.Draw();
 }

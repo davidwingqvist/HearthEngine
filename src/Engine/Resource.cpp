@@ -89,11 +89,8 @@ void Model3D::LoadBufferData(const aiScene* scene, const std::string& filename)
         for (unsigned int j = 0; j < mesh->mNumVertices; j++)
         {
             vertex_data mData;
-            mData.x = mesh->mVertices[i].x;
-            mData.y = mesh->mVertices[i].y;
-            mData.z = mesh->mVertices[i].z;
-            mData.u = mesh->mTextureCoords[0][i].x;
-            mData.v = mesh->mTextureCoords[0][i].y;
+            mData.position = { mesh->mVertices[j].x, mesh->mVertices[j].y, mesh->mVertices[j].z };
+            mData.texCoords = { mesh->mTextureCoords[0][j].x, mesh->mTextureCoords[0][j].y };
             data.push_back(mData);
         }
 
@@ -115,16 +112,16 @@ void Model3D::LoadBufferData(const aiScene* scene, const std::string& filename)
         }
 
         indexOffset += (localMaxIndex + 1);
+
+        submesh newMesh{};
+
+        if (!this->CreateVertexBuffer(data, newMesh))
+            DEBUG_ERROR("Couldnt create vertex buffer for model: '" + filename + "'\n");
+        if (!this->CreateIndexBuffer(indices, newMesh))
+            DEBUG_ERROR("Couldnt create index buffer for model: '" + filename + "'\n");
+
+        m_meshes.push_back(newMesh);
     }
-
-    submesh newMesh{};
-
-    if (!this->CreateVertexBuffer(data, newMesh))
-        DEBUG_ERROR("Couldnt create vertex buffer for model: '" + filename + "'\n");
-    if (!this->CreateIndexBuffer(indices, newMesh))
-        DEBUG_ERROR("Couldnt create index buffer for model: '" + filename + "'\n");
-
-    m_meshes.push_back(newMesh);
 
 
 }
@@ -136,7 +133,14 @@ Model3D::Model3D()
 
 Model3D::~Model3D()
 {
+    for (int i = 0; i < m_meshes.size(); i++)
+    {
+        if (m_meshes[i].indexBuffer)
+            m_meshes[i].indexBuffer->Release();
 
+        if(m_meshes[i].vertexBuffer)
+            m_meshes[i].vertexBuffer->Release();
+    }
 }
 
 void Model3D::Draw()
@@ -164,12 +168,12 @@ bool Model3D::Create(const std::string& filename)
     (
         MODELPATH + filename,
         aiProcess_Triangulate |   //Triangulate every surface
-        aiProcess_JoinIdenticalVertices |   //Ignores identical veritices - memory saving  
+        //aiProcess_JoinIdenticalVertices |   //Ignores identical veritices - memory saving  
         aiProcess_FlipWindingOrder |   //Makes it clockwise order
         aiProcess_MakeLeftHanded |	//Use a lefthanded system for the models 
-        aiProcess_CalcTangentSpace |   //Fix tangents and bitangents automatic for us
-        aiProcess_FlipUVs |   //Flips the textures to fit directX-style
-        aiProcess_LimitBoneWeights 		    //Limits by default to 4 weights per vertex
+        //aiProcess_CalcTangentSpace |   //Fix tangents and bitangents automatic for us
+        aiProcess_FlipUVs   //Flips the textures to fit directX-style
+        //aiProcess_LimitBoneWeights 		    //Limits by default to 4 weights per vertex
     );
 
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)

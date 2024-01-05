@@ -15,6 +15,8 @@ Engine::Engine()
 		return;
 	}
 
+
+
 	D3D11Core::Get().Initialize(&m_window);
 	if(!D2D1Core::Get().Initialize())
 		DEBUG_ERROR("D2D1Core couldnt initialize!\n")
@@ -25,6 +27,9 @@ Engine::Engine()
 	//m_sceneManager.SetScene("Test");
 
 	DEBUG_INFO("The basics of the Engine is now up and running.\n");
+
+	LUA.LoadScript("PrintHello.lua");
+	LUA.DumpStack();
 }
 
 Engine::Engine(const std::string& splashScreen)

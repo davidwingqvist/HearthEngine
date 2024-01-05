@@ -23,11 +23,16 @@
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
 
+// Lua
+#include <lua.hpp>
+#pragma comment(lib, "liblua53.a")
+
 namespace dx = DirectX;
 namespace sm = DirectX::SimpleMath;
 
 #include "Structs.h"
-
+#include "LuaState.h"
 
 const std::string UIPATH = "Assets/Graphics2D/";
 const std::string MODELPATH = "Assets/Models/";
+const std::string SCRIPTPATH = "Scripts/";
