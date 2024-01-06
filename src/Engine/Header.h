@@ -27,6 +27,11 @@
 #include <lua.hpp>
 #pragma comment(lib, "liblua53.a")
 
+// ImGUI
+#include "imgui.h"
+#include "imgui_impl_win32.h"
+#include "imgui_impl_dx11.h"
+
 namespace dx = DirectX;
 namespace sm = DirectX::SimpleMath;
 

@@ -2,6 +2,7 @@
 #include "Scene.h"
 #include "D3D11Context.h"
 #include "ResourceManager.h"
+#include "EngineGUI.h"
 
 void UpdatePublicBuffer(ID3D11Buffer*& buffer, const sm::Matrix& matrix_data)
 {
@@ -83,5 +84,8 @@ void Scene::Draw()
 		model.data->Draw();
 
 		});
+
 	m_drawManager.Draw();
+
+	
 }

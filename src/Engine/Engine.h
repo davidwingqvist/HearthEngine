@@ -6,6 +6,7 @@
 #include "SceneManager.h"
 #include "Time.h"
 #include "Renderer.h"
+#include "EngineGUI.h"
 
 class Engine
 {

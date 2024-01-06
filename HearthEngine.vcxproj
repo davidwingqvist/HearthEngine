@@ -26,6 +26,7 @@
     <ClCompile Include="src\Engine\DrawManager.cpp" />
     <ClCompile Include="src\Engine\DrawObject.cpp" />
     <ClCompile Include="src\Engine\Engine.cpp" />
+    <ClCompile Include="src\Engine\EngineGUI.cpp" />
     <ClCompile Include="src\Engine\HearthEngine.cpp" />
     <ClCompile Include="src\Engine\LuaState.cpp" />
     <ClCompile Include="src\Engine\PipelineManager.cpp" />
@@ -39,6 +40,34 @@
     <ClCompile Include="src\Engine\Structs.cpp" />
     <ClCompile Include="src\Engine\Time.cpp" />
     <ClCompile Include="src\Engine\Window.cpp" />
+    <ClCompile Include="Thirdparty\imgui\imgui.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Thirdparty\imgui\imgui_demo.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Thirdparty\imgui\imgui_draw.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Thirdparty\imgui\imgui_impl_dx11.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Thirdparty\imgui\imgui_impl_win32.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Thirdparty\imgui\imgui_tables.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Thirdparty\imgui\imgui_widgets.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Engine\BasicPass.h" />
@@ -48,6 +77,7 @@
     <ClInclude Include="src\Engine\DrawManager.h" />
     <ClInclude Include="src\Engine\DrawObject.h" />
     <ClInclude Include="src\Engine\Engine.h" />
+    <ClInclude Include="src\Engine\EngineGUI.h" />
     <ClInclude Include="src\Engine\Header.h" />
     <ClInclude Include="src\Engine\LuaState.h" />
     <ClInclude Include="src\Engine\PipelineManager.h" />
@@ -61,6 +91,14 @@
     <ClInclude Include="src\Engine\Structs.h" />
     <ClInclude Include="src\Engine\Time.h" />
     <ClInclude Include="src\Engine\Window.h" />
+    <ClInclude Include="Thirdparty\imgui\imconfig.h" />
+    <ClInclude Include="Thirdparty\imgui\imgui.h" />
+    <ClInclude Include="Thirdparty\imgui\imgui_impl_dx11.h" />
+    <ClInclude Include="Thirdparty\imgui\imgui_impl_win32.h" />
+    <ClInclude Include="Thirdparty\imgui\imgui_internal.h" />
+    <ClInclude Include="Thirdparty\imgui\imstb_rectpack.h" />
+    <ClInclude Include="Thirdparty\imgui\imstb_textedit.h" />
+    <ClInclude Include="Thirdparty\imgui\imstb_truetype.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="src\Engine\BasicPixelShader.hlsl">
@@ -177,8 +215,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Create</PrecompiledHeader>
       <PrecompiledHeaderFile>Header.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>
-      </AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Main\Desktop\Game Ground\HearthEngine\Thirdparty\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName).pch</PrecompiledHeaderOutputFile>
     </ClCompile>
@@ -202,8 +239,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Create</PrecompiledHeader>
       <PrecompiledHeaderFile>Header.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>
-      </AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Main\Desktop\Game Ground\HearthEngine\Thirdparty\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName).pch</PrecompiledHeaderOutputFile>
     </ClCompile>

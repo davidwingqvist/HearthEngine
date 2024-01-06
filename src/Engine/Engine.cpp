@@ -8,14 +8,14 @@ Engine::Engine()
 	Debugger::Get();
 
 	Window::Desc config;
-	config.title = L"Game";
+	config.height = 720;
+	config.width = 1080;
+	config.title = L"Hearth Engine";
 	if (!m_window.Initialize(config))
 	{
 		Debugger::Get().Print("Couldnt create Window!\n", Debugger::COLOR_RED);
 		return;
 	}
-
-
 
 	D3D11Core::Get().Initialize(&m_window);
 	if(!D2D1Core::Get().Initialize())
@@ -30,6 +30,8 @@ Engine::Engine()
 
 	LUA.LoadScript("PrintHello.lua");
 	LUA.DumpStack();
+
+	EngineGUI::Get();
 }
 
 Engine::Engine(const std::string& splashScreen)
@@ -62,13 +64,22 @@ void Engine::Update()
 
 void Engine::Draw()
 {
-	this->m_renderer.GetPipelineManager().ClearScreen();
+	ImGui_ImplDX11_NewFrame();
+	ImGui_ImplWin32_NewFrame();
+	ImGui::NewFrame();
+	ImGui::ShowDemoWindow();
 
+	//this->m_renderer.GetPipelineManager().ClearScreen();
 	//D2D1Core::Get().Begin();
 
-	m_renderer.Draw(m_sceneManager.GetCurrentScene());
+	//m_renderer.Draw(m_sceneManager.GetCurrentScene());
 
 	//D2D1Core::Get().Commit();
+
+
+	ImGui::Render();
+	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+
 
 	D3D11Core::Get().Present();
 }
@@ -80,13 +91,13 @@ void Engine::Build()
 
 void Engine::Start()
 {
-
 	while (!shutdown)
 	{
 		auto start = std::chrono::high_resolution_clock::now();
 		Update();
-		Draw();
 		auto end = std::chrono::high_resolution_clock::now();
+		Draw();
+		
 
 		Time::Get().SetDeltaTime(std::chrono::duration<float, std::milli>(end - start).count());
 	}

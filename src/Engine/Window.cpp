@@ -1,8 +1,13 @@
 #include "Header.h"
 #include "Window.h"
 #include <assert.h>
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
 LRESULT CALLBACK Window::WinProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
+	if (ImGui_ImplWin32_WndProcHandler(hwnd, uMsg, wParam, lParam))
+		return true;
+
 	// Engine events:
 	switch (uMsg)
 	{
@@ -56,6 +61,7 @@ LRESULT CALLBACK Window::WinProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 	default:
 		break;
 	}
+	
 
 	return DefWindowProc(hwnd, uMsg, wParam, lParam);
 }
@@ -115,9 +121,9 @@ bool Window::Initialize(const Desc& desc)
 
 	RECT rect;
 	rect.left = posX;
-	rect.right = posX + /*desc.width*/ 1280;
+	rect.right = posX + desc.width;
 	rect.top = posY;
-	rect.bottom = posY + /*desc.height*/ 720;
+	rect.bottom = posY + desc.height;
 
 	m_clientRect = rect;
 	int width;
@@ -159,7 +165,6 @@ bool Window::Initialize(const Desc& desc)
 	}
 
 	//ConfineCursor(this->m_hWnd);
-	SetWindowTextA(m_hWnd, "Game");
 	this->m_windowDesc = desc;
 
 	return true;
