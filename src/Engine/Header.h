@@ -13,6 +13,9 @@
 #include <string>
 #include <functional>
 #include <chrono>
+#include <fstream>
+#include <vector>
+#include <string>
 
 // DirectX
 #include <d3d11.h>
@@ -36,7 +39,6 @@ namespace dx = DirectX;
 namespace sm = DirectX::SimpleMath;
 
 #include "Structs.h"
-#include "LuaState.h"
 
 const std::string UIPATH = "Assets/Graphics2D/";
 const std::string MODELPATH = "Assets/Models/";

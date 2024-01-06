@@ -34,7 +34,12 @@ struct object2D
 	}
 };
 
-struct transform
+struct GameObject
+{
+	std::string name = "Object";
+};
+
+struct Transform
 {
 	sm::Vector3 pos;
 	sm::Vector3 rotation;

@@ -153,11 +153,11 @@ namespace recs
 
 		// Get a view of a specific component.
 		template<typename T>
-		recs_entity_handle<T>&& View() noexcept
+		recs_entity_handle<T> View() noexcept
 		{
 			recs_entity_handle<T> view(this);
 
-			return std::move(view);
+			return view;
 		}
 
 		// Get a group of specific components.

@@ -54,7 +54,7 @@ bool LuaHandler::LoadScript(const char* script_name)
 	//No name on the file...
 	if (!script_name) return false;
 
-	std::string script = SCRIPTPATH + script_name;
+	std::string script = SCRIPTPATH + script_name + ".lua";
 
 	if (luaL_dofile(Get().m_luaState, script.c_str()) != LUA_OK)
 	{
@@ -69,12 +69,73 @@ bool LuaHandler::LoadScript(const char* script_name)
 	return true;
 }
 
-void LuaHandler::OpenScriptFile(const char* script_name)
+void LuaHandler::OpenScriptFile(const char* script_name, const bool& addExtension)
 {
-	std::filesystem::path currPath = std::filesystem::current_path();
-	std::string strPath = currPath.generic_string() + "/" + SCRIPTPATH + script_name;
+	std::string ext = "";
+	if (addExtension)
+		ext = ".lua";
 
-	Debugger::Get().Print("Opening path: " + strPath);
+	std::filesystem::path currPath = std::filesystem::current_path();
+	std::string strPath = currPath.generic_string() + "/" + SCRIPTPATH + script_name + ext;
+
+	Debugger::Get().Print("Opening path: " + strPath + "\n");
 
 	ShellExecute(0, 0, std::wstring(strPath.begin(), strPath.end()).c_str(), 0, 0, SW_SHOW);
+}
+
+void LuaHandler::CreateScriptFile(const char* script_name, const bool& addExtension)
+{
+	std::string ext = "";
+
+	if (addExtension)
+		ext = ".lua";
+
+	std::ofstream outfile(SCRIPTPATH + script_name + ext);
+
+	outfile << "'Fresh Lua File'\n\n'This function runs when object is created.'\nfunction OnAwake()\n\n\n\nend\n\n\n'This function runs each Update cycle'\nfunction OnUpdate()\n\n\n\nend\n";
+
+	outfile.close();
+}
+
+void LuaHandler::DeleteScriptFile(const char* script_name, const bool& addExtension)
+{
+	std::string ext = "";
+	if (addExtension)
+		ext = ".lua";
+
+	std::filesystem::path currPath = std::filesystem::current_path();
+	std::string strPath = currPath.generic_string() + "/" + SCRIPTPATH + script_name + ext;
+
+	try {
+		if (std::filesystem::remove(strPath))
+		{
+			DEBUG_INFO("Remove script file: " + std::string(script_name) + "\n");
+		}
+		else
+		{
+			DEBUG_ERROR("No file with the name: " + std::string(script_name) + "\n");
+		}
+	}
+	catch (const std::filesystem::filesystem_error& err)
+	{
+		DEBUG_ERROR("Error occured in filesystem: " + std::string(err.what()));
+		DEBUG_NEWLINE();
+	}
+}
+
+void LuaHandler::ScanForScripts()
+{
+	Get().m_scriptNames.clear();
+	std::filesystem::path currPath = std::filesystem::current_path();
+	std::string strPath = currPath.generic_string() + "/" + SCRIPTPATH;
+
+	for (const auto& entry : std::filesystem::directory_iterator(strPath))
+	{
+		Get().m_scriptNames.push_back(entry.path().filename().string());
+	}
+}
+
+std::vector<std::string>& LuaHandler::GetScriptNames()
+{
+	return Get().m_scriptNames;
 }

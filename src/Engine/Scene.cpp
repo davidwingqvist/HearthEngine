@@ -24,10 +24,12 @@ Scene::Scene()
 	{
 		DEBUG_ERROR("Creating public buffer failed for scene!\n")
 	}
-
+	m_registry.RegisterComponent<GameObject>();
+	m_registry.RegisterComponent<Transform>();
 
 	recs::Entity entity = m_registry.CreateEntity();
-	transform* transf = m_registry.AddComponent<transform>(entity);
+	Transform* transf = m_registry.AddComponent<Transform>(entity);
+	GameObject* gameObject = m_registry.AddComponent<GameObject>(entity);
 	m_registry.AddComponent<model>(entity)->data = ResourceManager::Get().GetResource<Model3D>("Tree1.obj").get();
 
 	transf->pos = { 5, 3.5, 25.5 };
@@ -75,8 +77,7 @@ void Scene::Draw()
 	// Public buffer is set to the first slot in Vertex Shader
 	D3D11Core::Get().Context()->VSSetConstantBuffers(0, 1, &m_publicBuffer);
 
-	m_registry.Group<model, transform>().ForEach([&](model& model, transform& pos){
-
+	m_registry.Group<model, Transform>().ForEach([&](model& model, Transform& pos){
 
 		UpdatePublicBuffer(m_publicBuffer, pos.GetMatrix());
 
@@ -88,4 +89,9 @@ void Scene::Draw()
 	m_drawManager.Draw();
 
 	
+}
+
+recs::recs_registry& Scene::GetRegistry()
+{
+	return m_registry;
 }

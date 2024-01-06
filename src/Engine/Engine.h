@@ -3,7 +3,6 @@
 #include "Direct2DContext.h"
 #include "Debugger.h"
 #include "ResourceManager.h"
-#include "SceneManager.h"
 #include "Time.h"
 #include "Renderer.h"
 #include "EngineGUI.h"

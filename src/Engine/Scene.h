@@ -24,4 +24,6 @@ public:
 	void Update();
 
 	void Draw();
+
+	recs::recs_registry& GetRegistry();
 };

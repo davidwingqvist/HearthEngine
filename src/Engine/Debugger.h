@@ -37,3 +37,5 @@ public:
 #define DEBUG_ERROR(string) Debugger::Get().Print(string, Debugger::COLOR_RED);
 #define DEBUG_SUCCESS(string) Debugger::Get().Print(string, Debugger::COLOR_GREEN);
 #define DEBUG_INFO(string) Debugger::Get().Print(string, Debugger::COLOR_WHITE);
+
+#define DEBUG_NEWLINE() Debugger::Get().Print("\n");

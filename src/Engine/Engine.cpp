@@ -1,6 +1,7 @@
 #include "Header.h"
 #include "Engine.h"
 #include "Debugger.h"
+#include "LuaState.h"
 
 Engine::Engine()
 {
@@ -28,10 +29,8 @@ Engine::Engine()
 
 	DEBUG_INFO("The basics of the Engine is now up and running.\n");
 
-	LUA.LoadScript("PrintHello.lua");
-	LUA.DumpStack();
-
-	EngineGUI::Get();
+	EngineGUI::Get().SetSceneManagerRef(&m_sceneManager);
+	LUA.ScanForScripts();
 }
 
 Engine::Engine(const std::string& splashScreen)
@@ -64,22 +63,16 @@ void Engine::Update()
 
 void Engine::Draw()
 {
-	ImGui_ImplDX11_NewFrame();
-	ImGui_ImplWin32_NewFrame();
-	ImGui::NewFrame();
-	ImGui::ShowDemoWindow();
+	EngineGUI::Get().RenderGUI();
+	{ // Ingame rendering.
+		this->m_renderer.GetPipelineManager().ClearScreen();
+		D2D1Core::Get().Begin();
 
-	//this->m_renderer.GetPipelineManager().ClearScreen();
-	//D2D1Core::Get().Begin();
+		m_renderer.Draw(m_sceneManager.GetCurrentScene());
 
-	//m_renderer.Draw(m_sceneManager.GetCurrentScene());
-
-	//D2D1Core::Get().Commit();
-
-
-	ImGui::Render();
-	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-
+		D2D1Core::Get().Commit();
+	}
+	EngineGUI::Get().CommitGUI();
 
 	D3D11Core::Get().Present();
 }
