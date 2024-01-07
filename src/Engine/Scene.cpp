@@ -26,11 +26,14 @@ Scene::Scene()
 	}
 	m_registry.RegisterComponent<GameObject>();
 	m_registry.RegisterComponent<Transform>();
+	m_registry.RegisterComponent<Script>();
 
 	recs::Entity entity = m_registry.CreateEntity();
 	Transform* transf = m_registry.AddComponent<Transform>(entity);
 	GameObject* gameObject = m_registry.AddComponent<GameObject>(entity);
 	m_registry.AddComponent<model>(entity)->data = ResourceManager::Get().GetResource<Model3D>("Tree1.obj").get();
+	Script* scr = m_registry.AddComponent<Script>(entity);
+	scr->scripts.push_back("Player.lua");
 
 	transf->pos = { 5, 3.5, 25.5 };
 	//UpdatePublicBuffer(m_publicBuffer, transf->GetMatrix());

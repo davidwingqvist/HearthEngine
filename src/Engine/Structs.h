@@ -57,6 +57,11 @@ struct vertex_data
 	sm::Vector2 texCoords;
 };
 
+struct Script
+{
+	std::vector<std::string> scripts;
+};
+
 struct model
 {
 	Model3D* data;

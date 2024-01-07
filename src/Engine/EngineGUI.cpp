@@ -67,7 +67,7 @@ void EngineGUI::RenderTopBar()
 
 	if (m_showEditTab)
 	{
-		ImGui::Begin("Edit Tab", &m_showEditTab);
+		ImGui::Begin("Edit Tab", &m_showEditTab, ImGuiWindowFlags_NoTitleBar);
 		if (ImGui::Button("Scripts", ImVec2(ImGui::GetWindowContentRegionMax().x, 0)))
 			m_showScriptsTab = !m_showScriptsTab;
 		if (ImGui::Button("Objects", ImVec2(ImGui::GetWindowContentRegionMax().x, 0)))
@@ -78,8 +78,8 @@ void EngineGUI::RenderTopBar()
 
 	if (m_showScriptsTab)
 	{
-		ImGui::Begin("Scripts", &m_showScriptsTab);
-		ImGui::InputTextWithHint(":", "Input script name", m_createScriptPath, sizeof m_createScriptPath);
+		ImGui::Begin("Scripts", &m_showScriptsTab, ImGuiWindowFlags_NoTitleBar);
+		ImGui::InputTextWithHint("###ScriptNew", "Input script name", m_createScriptPath, sizeof m_createScriptPath);
 		ImGui::SameLine();
 		if (ImGui::Button("Create Script"))
 		{
@@ -87,22 +87,24 @@ void EngineGUI::RenderTopBar()
 			LUA.ScanForScripts();
 			memset(m_createScriptPath, '\0', sizeof m_createScriptPath);
 		}
-		ImGui::BeginListBox("All Scripts");
-		for (int i = 0; i < LUA.GetScriptNames().size(); i++)
+		if (ImGui::BeginListBox("All Scripts"))
 		{
-			ImGui::Text(LUA.GetScriptNames()[i].c_str());
-			ImGui::SameLine();
-			std::string name = "Open###" + std::to_string(i);
-			if (ImGui::Button(name.c_str()))
+			for (int i = 0; i < LUA.GetScriptNames().size(); i++)
 			{
-				LUA.OpenScriptFile(LUA.GetScriptNames()[i].c_str());
-			}
-			ImGui::SameLine();
-			name = "Remove##" + std::to_string(i);
-			if (ImGui::Button(name.c_str()))
-			{
-				LUA.DeleteScriptFile(LUA.GetScriptNames()[i].c_str());
-				LUA.ScanForScripts();
+				ImGui::Text(LUA.GetScriptNames()[i].c_str());
+				ImGui::SameLine();
+				std::string name = "Open###" + std::to_string(i);
+				if (ImGui::Button(name.c_str()))
+				{
+					LUA.OpenScriptFile(LUA.GetScriptNames()[i].c_str());
+				}
+				ImGui::SameLine();
+				name = "Remove##" + std::to_string(i);
+				if (ImGui::Button(name.c_str()))
+				{
+					LUA.DeleteScriptFile(LUA.GetScriptNames()[i].c_str());
+					LUA.ScanForScripts();
+				}
 			}
 		}
 		ImGui::EndListBox();
@@ -111,22 +113,134 @@ void EngineGUI::RenderTopBar()
 
 	if (m_showObjectsTab)
 	{
-		ImGui::Begin("Objects Tab");
-		ImGui::BeginListBox("All Objects");
+		ImGui::Begin("Objects Tab", NULL, ImGuiWindowFlags_NoTitleBar);
+		if (ImGui::BeginListBox("All Objects"))
+		{
+			recs::recs_registry& reg = m_sceneManagerRef->GetCurrentScene()->GetRegistry();
+
+			reg.View<GameObject>().ForEach([&](const recs::Entity& entity, GameObject& gameObject) {
+
+
+				std::string name = "Entity: " + gameObject.name;
+				ImGui::Text(name.c_str());
+
+				ImGui::SameLine();
+				name = "Open###Entity" + entity;
+				if (ImGui::Button(name.c_str()))
+				{
+					if (!m_showPropertiesTab)
+					{
+						m_showPropertiesTab = true;
+					}
+
+					m_currentEntity = entity;
+				}
+
+				});
+		}
+		ImGui::EndListBox();
+		ImGui::End();
+	}
+
+	if (m_showPropertiesTab)
+	{
+		ImGui::Begin("Properties", NULL);
+
 		recs::recs_registry& reg = m_sceneManagerRef->GetCurrentScene()->GetRegistry();
+		
+		GameObject* currGameObject = reg.GetComponent<GameObject>(m_currentEntity);
 
-		reg.View<GameObject>().ForEach([](const recs::Entity& entity, GameObject& gameObject) {
-
+		if (currGameObject)
+		{
+			ImGui::BeginChild(1, ImVec2(0, 0), ImGuiChildFlags_Border | ImGuiChildFlags_AlwaysUseWindowPadding | ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_AutoResizeX);
+			ImGui::TextColored(ImVec4(255, 0, 255, 255), "GameObject");
+			std::string gameObjectName = "Name: " + currGameObject->name;
+			ImGui::Text(gameObjectName.c_str());
+			ImGui::SameLine();
 			char input[32] = { '\0' };
-			std::string name = "Entity " + std::to_string(entity);
-			if (ImGui::InputTextWithHint(name.c_str(), gameObject.name.c_str(), input, sizeof input, ImGuiInputTextFlags_EnterReturnsTrue))
+			std::string name = "###PropInputName";
+			if (ImGui::InputTextWithHint(name.c_str(), std::string("Input new name").c_str(), input, sizeof input, ImGuiInputTextFlags_EnterReturnsTrue))
 			{
-				gameObject.name = input;
+				currGameObject->name = input;
+			}
+			ImGui::EndChild();
+		}
+
+		Transform* currTransform = reg.GetComponent<Transform>(m_currentEntity);
+		if (currTransform)
+		{
+			ImGui::BeginChild(2, ImVec2(0, 0), ImGuiChildFlags_Border | ImGuiChildFlags_AlwaysUseWindowPadding | ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_AutoResizeX);
+			ImGui::TextColored(ImVec4(255, 0, 255, 255), "Transform");
+			ImGui::BeginGroup();
+			ImGui::Text("Position");
+			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 4.0f);
+			ImGui::SliderFloat("x###Pos", &currTransform->pos.x, -100, 100);
+			ImGui::SameLine();
+			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 4.0f);
+			ImGui::SliderFloat("y###Pos", &currTransform->pos.y, -100, 100);
+			ImGui::SameLine();
+			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 4.0f);
+			ImGui::SliderFloat("z###Pos", &currTransform->pos.z, -100, 100);
+
+			ImGui::Text("Rotation");
+			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 4.0f);
+			ImGui::SliderFloat("x###Rot", &currTransform->rotation.x, 0, 360);
+			ImGui::SameLine();
+			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 4.0f);
+			ImGui::SliderFloat("y###Rot", &currTransform->rotation.y, 0, 360);
+			ImGui::SameLine();
+			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 4.0f);
+			ImGui::SliderFloat("z###Rot", &currTransform->rotation.z, 0, 360);
+
+			ImGui::Text("Scale");
+			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 4.0f);
+			ImGui::SliderFloat("x###Scale", &currTransform->scale.x, 0.1, 10);
+			ImGui::SameLine();
+			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 4.0f);
+			ImGui::SliderFloat("y###Scale", &currTransform->scale.y, 0.1, 10);
+			ImGui::SameLine();
+			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 4.0f);
+			ImGui::SliderFloat("z###Scale", &currTransform->scale.z, 0.1, 10);
+			ImGui::EndGroup();
+			ImGui::EndChild();
+		}
+
+		Script* currScripts = reg.GetComponent<Script>(m_currentEntity);
+
+		if (currScripts)
+		{
+			ImGui::BeginChild(3, ImVec2(0, 0), ImGuiChildFlags_Border | ImGuiChildFlags_AlwaysUseWindowPadding | ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_AutoResizeX);
+
+			ImGui::TextColored(ImVec4(255, 0, 255, 255), "Scripts");
+			std::string scriptId = "";
+
+			ImGui::InputTextWithHint("###InputScriptNameProps", "Input script name", m_createScriptPathProp, sizeof m_createScriptPathProp);
+			ImGui::SameLine();
+			if (ImGui::Button("Create Script"))
+			{
+				LUA.CreateScriptFile(m_createScriptPathProp);
+				LUA.ScanForScripts();
+				currScripts->scripts.push_back(std::string(m_createScriptPathProp) + ".lua");
+				memset(m_createScriptPathProp, '\0', sizeof m_createScriptPathProp);
 			}
 
-			});
+			for (int i = 0; i < currScripts->scripts.size(); i++)
+			{
+				scriptId = "Open###Script" + std::to_string(i);
+				ImGui::Text(currScripts->scripts[i].c_str());
+				ImGui::SameLine();
+				if (ImGui::Button(scriptId.c_str()))
+				{
+					LUA.OpenScriptFile(currScripts->scripts[i].c_str());
+				}
+				ImGui::SameLine();
+				scriptId = "Delete###Script" + std::to_string(i);
+				ImGui::Button(scriptId.c_str());
+			}
+			
+			ImGui::EndChild();
+		}
 
-		ImGui::EndListBox();
 		ImGui::End();
 	}
 

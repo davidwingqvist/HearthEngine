@@ -92,7 +92,7 @@ void LuaHandler::CreateScriptFile(const char* script_name, const bool& addExtens
 
 	std::ofstream outfile(SCRIPTPATH + script_name + ext);
 
-	outfile << "'Fresh Lua File'\n\n'This function runs when object is created.'\nfunction OnAwake()\n\n\n\nend\n\n\n'This function runs each Update cycle'\nfunction OnUpdate()\n\n\n\nend\n";
+	outfile << "'Fresh Lua File'\n\n" + std::string(script_name) + "={}\n\n\n'This function runs when object is created.'\nfunction OnAwake()\n\n\n\nend\n\n\n'This function runs each Update cycle'\nfunction OnUpdate()\n\n\n\nend\n\n\nreturn " + std::string(script_name);
 
 	outfile.close();
 }

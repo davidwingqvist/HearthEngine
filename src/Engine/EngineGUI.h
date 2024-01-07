@@ -11,12 +11,17 @@ private:
 
 	bool m_showEditTab = false;
 
-	// Script values
+	// Script Tab values
 	bool m_showScriptsTab = false;
 	char m_createScriptPath[36] = {};
 
-	// Object values
+	// Object Tab values
 	bool m_showObjectsTab = false;
+
+	// Properties Tab Values
+	recs::Entity m_currentEntity = (recs::Entity) - 1;
+	bool m_showPropertiesTab = false;
+	char m_createScriptPathProp[36] = {};
 
 public:
 	static auto& Get()

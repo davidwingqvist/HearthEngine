@@ -1,6 +1,6 @@
 'Fresh Lua File'
 
-Player={}
+HealthScript={}
 
 
 'This function runs when object is created.'
@@ -19,4 +19,4 @@ function OnUpdate()
 end
 
 
-return Player
+return HealthScript
