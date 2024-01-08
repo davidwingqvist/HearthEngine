@@ -21,6 +21,8 @@ public:
 		return instance;
 	}
 
+	static lua_State* State();
+
 	// Dump everything from the stack onto the console window.
 	static void DumpStack();
 

@@ -3,6 +3,7 @@
 #include "D3D11Context.h"
 #include "ResourceManager.h"
 #include "EngineGUI.h"
+#include "LuaState.h"
 
 void UpdatePublicBuffer(ID3D11Buffer*& buffer, const sm::Matrix& matrix_data)
 {
@@ -37,6 +38,10 @@ Scene::Scene()
 
 	transf->pos = { 5, 3.5, 25.5 };
 	//UpdatePublicBuffer(m_publicBuffer, transf->GetMatrix());
+
+
+	pushTransform(LUA.State(), &*transf);
+	lua_setglobal(LUA.State(), "Transform");
 }
 
 Scene::~Scene()

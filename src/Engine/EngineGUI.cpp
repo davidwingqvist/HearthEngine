@@ -6,6 +6,12 @@
 
 constexpr ImGuiWindowFlags menuWindow = (ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoTitleBar);
 
+/*
+
+	Memory leaks in this singleton class.
+
+*/
+
 EngineGUI::EngineGUI()
 {
 #ifdef _DEBUG
@@ -69,7 +75,14 @@ void EngineGUI::RenderTopBar()
 	if (ImGui::Button("Edit"))
 		m_showEditTab = !m_showEditTab;
 	ImGui::Button("View");
-	ImGui::Button("Run");
+	if (ImGui::Button("Run"))
+	{
+		LUA.LoadScript("Test");
+	}
+	if (ImGui::Button("Dump Stack"))
+	{
+		LUA.DumpStack();
+	}
 
 	ImGui::EndMenuBar();
 

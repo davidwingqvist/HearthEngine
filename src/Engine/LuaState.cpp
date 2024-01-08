@@ -17,6 +17,11 @@ LuaHandler::~LuaHandler()
 	lua_close(m_luaState);
 }
 
+lua_State* LuaHandler::State()
+{
+	return Get().m_luaState;
+}
+
 void LuaHandler::DumpStack()
 {
 	std::cout << "------- STACK DUMP -------\n";
