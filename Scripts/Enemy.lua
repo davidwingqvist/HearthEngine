@@ -1,6 +1,6 @@
 'Fresh Lua File'
 
-Test={}
+Enemy={}
 
 
 'This function runs when object is created.'
@@ -19,4 +19,4 @@ function OnUpdate()
 end
 
 
-return Test
+return Enemy

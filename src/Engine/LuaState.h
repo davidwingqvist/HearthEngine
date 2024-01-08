@@ -44,5 +44,8 @@ public:
 
 	// Get the list of names of scripts available.
 	static std::vector<std::string>& GetScriptNames();
+
+	// Search for a saved script, return true if it exists
+	static bool LookUpScript(const char* script_name, const bool& addExtenstion = true);
 };
 

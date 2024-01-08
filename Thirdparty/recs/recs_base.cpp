@@ -68,3 +68,8 @@ const bool& recs::recs_registry::IsUsingOpenMP() const
 {
 	return m_useOpenMp;
 }
+
+const std::vector<recs::Entity>& recs::recs_registry::GetEntities() const
+{
+	return m_activeEntities;
+}

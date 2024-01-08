@@ -8,6 +8,7 @@ constexpr ImGuiWindowFlags menuWindow = (ImGuiWindowFlags_MenuBar | ImGuiWindowF
 
 EngineGUI::EngineGUI()
 {
+#ifdef _DEBUG
 	IMGUI_CHECKVERSION();
 	auto test = ImGui::CreateContext();
 	// Setup ImGUI
@@ -18,32 +19,41 @@ EngineGUI::EngineGUI()
 	ImGui_ImplDX11_Init(D3D11Core::Get().Device(), D3D11Core::Get().Context());
 	ImGui::StyleColorsDark();
 	ImGui_ImplDX11_CreateDeviceObjects(); // uses device, therefore has to be called before render thread starts
+#endif
 }
 
 EngineGUI::~EngineGUI()
 {
+#ifdef _DEBUG
 	ImGui_ImplDX11_Shutdown();
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
+#endif
 }
 
 void EngineGUI::RenderGUI()
 {
+#ifdef _DEBUG
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
 	Get().RenderTopBar();
+#endif
 }
 
 void EngineGUI::CommitGUI()
 {
+#ifdef _DEBUG
 	ImGui::Render();
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+#endif
 }
 
 void EngineGUI::SetSceneManagerRef(SceneManager* ref_pointer)
 {
+#ifdef _DEBUG
 	Get().m_sceneManagerRef = ref_pointer;
+#endif
 }
 
 void EngineGUI::RenderTopBar()
@@ -79,6 +89,7 @@ void EngineGUI::RenderTopBar()
 	if (m_showScriptsTab)
 	{
 		ImGui::Begin("Scripts", &m_showScriptsTab, ImGuiWindowFlags_NoTitleBar);
+		ImGui::TextColored(ImVec4(255, 0, 255, 255), "Scripts");
 		ImGui::InputTextWithHint("###ScriptNew", "Input script name", m_createScriptPath, sizeof m_createScriptPath);
 		ImGui::SameLine();
 		if (ImGui::Button("Create Script"))
@@ -87,7 +98,8 @@ void EngineGUI::RenderTopBar()
 			LUA.ScanForScripts();
 			memset(m_createScriptPath, '\0', sizeof m_createScriptPath);
 		}
-		if (ImGui::BeginListBox("All Scripts"))
+		
+		if (ImGui::BeginListBox("###AllScripts"))
 		{
 			for (int i = 0; i < LUA.GetScriptNames().size(); i++)
 			{
@@ -114,7 +126,8 @@ void EngineGUI::RenderTopBar()
 	if (m_showObjectsTab)
 	{
 		ImGui::Begin("Objects Tab", NULL, ImGuiWindowFlags_NoTitleBar);
-		if (ImGui::BeginListBox("All Objects"))
+		ImGui::TextColored(ImVec4(255, 0, 255, 255), "Objects");
+		if (ImGui::BeginListBox("###AllObjects"))
 		{
 			recs::recs_registry& reg = m_sceneManagerRef->GetCurrentScene()->GetRegistry();
 
@@ -144,7 +157,7 @@ void EngineGUI::RenderTopBar()
 
 	if (m_showPropertiesTab)
 	{
-		ImGui::Begin("Properties", NULL);
+		ImGui::Begin("Properties", &m_showPropertiesTab);
 
 		recs::recs_registry& reg = m_sceneManagerRef->GetCurrentScene()->GetRegistry();
 		
@@ -216,11 +229,12 @@ void EngineGUI::RenderTopBar()
 
 			ImGui::InputTextWithHint("###InputScriptNameProps", "Input script name", m_createScriptPathProp, sizeof m_createScriptPathProp);
 			ImGui::SameLine();
-			if (ImGui::Button("Create Script"))
+			if (ImGui::Button("Add Script"))
 			{
-				LUA.CreateScriptFile(m_createScriptPathProp);
-				LUA.ScanForScripts();
-				currScripts->scripts.push_back(std::string(m_createScriptPathProp) + ".lua");
+				if (LUA.LookUpScript(m_createScriptPathProp))
+				{
+					currScripts->scripts.push_back(std::string(m_createScriptPathProp) + ".lua");
+				}
 				memset(m_createScriptPathProp, '\0', sizeof m_createScriptPathProp);
 			}
 

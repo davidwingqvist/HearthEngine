@@ -190,6 +190,11 @@ namespace recs
 			Check if the registry is currently using OpenMP
 		*/
 		const bool& IsUsingOpenMP() const;
+
+		/*
+			Return a vector of all active entities.
+		*/
+		const std::vector<Entity>& GetEntities() const;
 	};
 
 	template<typename T>

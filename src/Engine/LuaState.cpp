@@ -139,3 +139,20 @@ std::vector<std::string>& LuaHandler::GetScriptNames()
 {
 	return Get().m_scriptNames;
 }
+
+bool LuaHandler::LookUpScript(const char* script_name, const bool& addExtenstion)
+{
+	std::string ext = "";
+
+	if (addExtenstion)
+		ext = ".lua";
+
+	for (int i = 0; i < Get().m_scriptNames.size(); i++)
+	{
+		if (Get().m_scriptNames[i] == (std::string(script_name) + ext))
+		{
+			return true;
+		}
+	}
+	return false;
+}
