@@ -1,10 +1,8 @@
 Test={}
 
-x, y, z = 0
+x,y,z= Transform.position
 
-Transform.xPosition = 500
-Transform.yPosition = 15
-
+print(z)
 
 function OnAwake()
 
@@ -18,5 +16,3 @@ function OnUpdate()
 
 
 end
-
-return Transform

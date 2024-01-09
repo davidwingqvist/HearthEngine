@@ -39,9 +39,11 @@ Scene::Scene()
 	transf->pos = { 5, 3.5, 25.5 };
 	//UpdatePublicBuffer(m_publicBuffer, transf->GetMatrix());
 
+	LUA.m_currentRegistry = &m_registry;
 
-	pushTransform(LUA.State(), &*transf);
+	pushTransform(LUA.State(), transf);
 	lua_setglobal(LUA.State(), "Transform");
+	m_camera.Activate();
 }
 
 Scene::~Scene()

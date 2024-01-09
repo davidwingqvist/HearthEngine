@@ -15,16 +15,22 @@ private:
 
 public:
 
+	recs::recs_registry* m_currentRegistry;
+
 	static auto& Get()
 	{
 		static LuaHandler instance;
 		return instance;
 	}
 
+	// Get the Lua State
 	static lua_State* State();
 
 	// Dump everything from the stack onto the console window.
 	static void DumpStack();
+
+	// Clear the stack of everything, create a fresh clean stack.
+	static void ClearStack();
 
 	// Register a function from C to LUA.
 	static void RegisterFunction(const char* func_name, lua_CFunction func);

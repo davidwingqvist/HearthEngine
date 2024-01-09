@@ -83,6 +83,11 @@ void EngineGUI::RenderTopBar()
 	{
 		LUA.DumpStack();
 	}
+	if (ImGui::Button("Clear Stack"))
+	{
+		LUA.ClearStack();
+		DEBUG_INFO("LUA stack has been cleared.\n")
+	}
 
 	ImGui::EndMenuBar();
 
@@ -199,34 +204,34 @@ void EngineGUI::RenderTopBar()
 			ImGui::TextColored(ImVec4(255, 0, 255, 255), "Transform");
 			ImGui::BeginGroup();
 			ImGui::Text("Position");
-			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 4.0f);
-			ImGui::SliderFloat("x###Pos", &currTransform->pos.x, -100, 100);
+			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 3.6f);
+			ImGui::InputFloat("x###Posx", &currTransform->pos.x, 1, 10, "%.2f");
 			ImGui::SameLine();
-			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 4.0f);
-			ImGui::SliderFloat("y###Pos", &currTransform->pos.y, -100, 100);
+			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 3.6f);
+			ImGui::InputFloat("y###Posy", &currTransform->pos.y, 1, 10, "%.2f");
 			ImGui::SameLine();
-			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 4.0f);
-			ImGui::SliderFloat("z###Pos", &currTransform->pos.z, -100, 100);
+			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 3.6f);
+			ImGui::InputFloat("z###Posz", &currTransform->pos.z, 1, 10, "%.2f");
 
 			ImGui::Text("Rotation");
 			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 4.0f);
-			ImGui::SliderFloat("x###Rot", &currTransform->rotation.x, 0, 360);
+			ImGui::SliderFloat("x###Rotx", &currTransform->rotation.x, 0, 360, "%.2f");
 			ImGui::SameLine();
 			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 4.0f);
-			ImGui::SliderFloat("y###Rot", &currTransform->rotation.y, 0, 360);
+			ImGui::SliderFloat("y###Roty", &currTransform->rotation.y, 0, 360, "%.2f");
 			ImGui::SameLine();
 			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 4.0f);
-			ImGui::SliderFloat("z###Rot", &currTransform->rotation.z, 0, 360);
+			ImGui::SliderFloat("z###Rotz", &currTransform->rotation.z, 0, 360, "%.2f");
 
 			ImGui::Text("Scale");
 			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 4.0f);
-			ImGui::SliderFloat("x###Scale", &currTransform->scale.x, 0.1, 10);
+			ImGui::SliderFloat("x###Scalex", &currTransform->scale.x, 0.1, 10, "%.2f");
 			ImGui::SameLine();
 			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 4.0f);
-			ImGui::SliderFloat("y###Scale", &currTransform->scale.y, 0.1, 10);
+			ImGui::SliderFloat("y###Scaley", &currTransform->scale.y, 0.1, 10, "%.2f");
 			ImGui::SameLine();
 			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 4.0f);
-			ImGui::SliderFloat("z###Scale", &currTransform->scale.z, 0.1, 10);
+			ImGui::SliderFloat("z###Scalez", &currTransform->scale.z, 0.1, 10, "%.2f");
 			ImGui::EndGroup();
 			ImGui::EndChild();
 		}

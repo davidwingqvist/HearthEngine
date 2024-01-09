@@ -69,7 +69,7 @@ PipelineManager::~PipelineManager()
 
 void PipelineManager::ClearScreen()
 {
-    const FLOAT clear[4] = { FLOAT(255), FLOAT(0), FLOAT(0), FLOAT(0) };
+    const FLOAT clear[4] = { FLOAT(0), FLOAT(0), FLOAT(0), FLOAT(0) };
     D3D11Core::Get().Context()->ClearRenderTargetView(m_backBuffer, clear);
 }
 

@@ -1,5 +1,6 @@
 #pragma once
 #include "DrawManager.h"
+#include "Camera.h"
 
 class Scene
 {
@@ -10,6 +11,7 @@ private:
 	DrawManager m_drawManager;
 	ID3D11Buffer* m_publicBuffer;
 	recs::Entity entity;
+	Camera m_camera;
 
 	bool CreatePublicBuffer();
 	void PreDraw();

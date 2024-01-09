@@ -49,6 +49,14 @@ void LuaHandler::DumpStack()
 	std::cout << "--------------------------\n";
 }
 
+void LuaHandler::ClearStack()
+{
+	while (lua_gettop(Get().m_luaState) > 0)
+	{
+		lua_pop(Get().m_luaState, -1);
+	}
+}
+
 void LuaHandler::RegisterFunction(const char* func_name, lua_CFunction func)
 {
 	lua_register(Get().m_luaState, func_name, func);
@@ -69,7 +77,7 @@ bool LuaHandler::LoadScript(const char* script_name)
 
 
 
-	Debugger::Get().Print("Successfully loaded script: " + std::string(script_name) + "\n", Debugger::COLOR_GREEN);
+	//Debugger::Get().Print("Successfully loaded script: " + std::string(script_name) + "\n", Debugger::COLOR_GREEN);
 
 	return true;
 }
@@ -97,7 +105,7 @@ void LuaHandler::CreateScriptFile(const char* script_name, const bool& addExtens
 
 	std::ofstream outfile(SCRIPTPATH + script_name + ext);
 
-	outfile << "'Fresh Lua File'\n\n" + std::string(script_name) + "={}\n\n\n'This function runs when object is created.'\nfunction OnAwake()\n\n\n\nend\n\n\n'This function runs each Update cycle'\nfunction OnUpdate()\n\n\n\nend\n\n\nreturn " + std::string(script_name);
+	outfile << "local " << std::string(script_name) + "={}\n\n\n--This function runs when object is created.\nlocal function OnAwake()\n\n\n\nend\n\n\n--This function runs each Update cycle\nlocal function OnUpdate()\n\n\n\nend\n";
 
 	outfile.close();
 }

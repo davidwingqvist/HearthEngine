@@ -20,7 +20,7 @@ private:
 
 	// Properties Tab Values
 	recs::Entity m_currentEntity = (recs::Entity) - 1;
-	bool m_showPropertiesTab = false;
+	bool m_showPropertiesTab = true;
 	char m_createScriptPathProp[36] = {};
 
 public:
