@@ -23,6 +23,12 @@ private:
 	bool m_showPropertiesTab = true;
 	char m_createScriptPathProp[36] = {};
 
+	// Bottom Bar Values
+
+	bool m_showBottomEntities = false;
+	bool m_showBottomConsole = false;
+
+	void BottomBarPutToFalse();
 public:
 	static auto& Get()
 	{

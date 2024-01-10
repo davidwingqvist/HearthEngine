@@ -35,7 +35,7 @@ Scene::Scene()
 	m_registry.AddComponent<model>(entity)->data = ResourceManager::Get().GetResource<Model3D>("Tree1.obj").get();
 	Script* scr = m_registry.AddComponent<Script>(entity);
 
-	transf->pos = { 0, 0, -125.5 };
+	transf->pos = { 0, 0, -225.5 };
 	//UpdatePublicBuffer(m_publicBuffer, transf->GetMatrix());
 
 	LUA.m_currentRegistry = &m_registry;

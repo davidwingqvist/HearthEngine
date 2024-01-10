@@ -38,6 +38,12 @@ EngineGUI::~EngineGUI()
 #endif
 }
 
+void EngineGUI::BottomBarPutToFalse()
+{
+	m_showBottomConsole = false;
+	m_showBottomEntities = false;
+}
+
 void EngineGUI::RenderGUI()
 {
 #ifdef _DEBUG
@@ -100,8 +106,22 @@ void EngineGUI::RenderTopBar()
 		ImGui::Begin("Edit Tab", &m_showEditTab, ImGuiWindowFlags_NoTitleBar);
 		if (ImGui::Button("Scripts", ImVec2(ImGui::GetWindowContentRegionMax().x, 0)))
 			m_showScriptsTab = !m_showScriptsTab;
-		if (ImGui::Button("Entities", ImVec2(ImGui::GetWindowContentRegionMax().x, 0)))
-			m_showObjectsTab = !m_showObjectsTab;
+		if (ImGui::Button("Models", ImVec2(ImGui::GetWindowContentRegionMax().x, 0)))
+		{
+
+		}
+		if (ImGui::Button("Textures", ImVec2(ImGui::GetWindowContentRegionMax().x, 0)))
+		{
+
+		}
+		if (ImGui::Button("Sounds", ImVec2(ImGui::GetWindowContentRegionMax().x, 0)))
+		{
+
+		}
+		if (ImGui::Button("Shaders", ImVec2(ImGui::GetWindowContentRegionMax().x, 0)))
+		{
+
+		}
 
 		ImGui::End();
 	}
@@ -287,9 +307,50 @@ void EngineGUI::RenderBottomBar()
 
 	ImGui::Begin("BottomBar", NULL, bottomWindow);
 
-	ImGui::BeginChild("Sidebar", {ImGui::GetWindowWidth() / 5.0f, ImGui::GetContentRegionAvail().y }, ImGuiChildFlags_Border, ImGuiWindowFlags_MenuBar);
+	ImGui::BeginChild("Sidebar", {ImGui::GetWindowWidth() / 5.0f, ImGui::GetContentRegionAvail().y }, ImGuiChildFlags_Border);
 
-	ImGui::Button("Entities", { ImGui::GetWindowWidth(), ImGui::GetWindowHeight() / 10.0f });
+	if (ImGui::Button("Entities", { ImGui::GetWindowWidth(), ImGui::GetWindowHeight() / 10.0f }))
+	{
+		BottomBarPutToFalse();
+		m_showBottomEntities = true;
+	}
+
+	if (ImGui::Button("Scenes", { ImGui::GetWindowWidth(), ImGui::GetWindowHeight() / 10.0f }))
+	{
+		BottomBarPutToFalse();
+	}
+
+	if (ImGui::Button("Console", { ImGui::GetWindowWidth(), ImGui::GetWindowHeight() / 10.0f }))
+	{
+		BottomBarPutToFalse();
+		m_showBottomConsole = true;
+	}
+
+	ImGui::EndChild();
+
+	ImGui::SameLine();
+
+	ImGui::BeginChild("SideWindow", { ImGui::GetWindowWidth() / 1.3f, ImGui::GetContentRegionAvail().y }, ImGuiChildFlags_Border);
+
+	// Show entities tab in the bottom window.
+	if (m_showBottomEntities)
+	{
+		recs::recs_registry& reg = m_sceneManagerRef->GetCurrentScene()->GetRegistry();
+		auto& grp = reg.GetEntities();
+
+		for (int i = 0; i < grp.size(); i++)
+		{
+			std::string label = "Entity " + std::to_string(i);
+			if (ImGui::Button(label.c_str()))
+			{
+				m_currentEntity = grp[i];
+				if (!m_showPropertiesTab)
+					m_showPropertiesTab;
+				break;
+			}
+		}
+	}
+
 
 	ImGui::EndChild();
 
