@@ -1,8 +1,6 @@
 Test={}
 
-x,y,z= Transform.position
-
-print(z)
+print('z position is: ' .. Transform.zPosition)
 
 function OnAwake()
 

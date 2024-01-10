@@ -99,7 +99,7 @@ void Engine::Start()
 void Engine::SetSplashScreen(const std::string& fileName)
 {
 	
-	object2D splash(0,0, D3D11Core::Get().GetWindow()->GetWidth(), D3D11Core::Get().GetWindow()->GetHeight());
+	object2D splash(0.0f,0.0f, (float)D3D11Core::Get().GetWindow()->GetWidth(), (float)D3D11Core::Get().GetWindow()->GetHeight());
 	
 	Image2D* image = ResourceManager::Get().GetResource<Image2D>(fileName).get();
 

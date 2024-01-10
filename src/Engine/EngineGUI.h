@@ -38,5 +38,6 @@ public:
 private:
 
 	void RenderTopBar();
+	void RenderBottomBar();
 };
 

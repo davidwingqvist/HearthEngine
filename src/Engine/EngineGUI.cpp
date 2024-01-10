@@ -5,6 +5,7 @@
 #include "LuaState.h"
 
 constexpr ImGuiWindowFlags menuWindow = (ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoTitleBar);
+constexpr ImGuiWindowFlags bottomWindow = ImGuiWindowFlags_NoTitleBar;
 
 /*
 
@@ -44,6 +45,7 @@ void EngineGUI::RenderGUI()
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
 	Get().RenderTopBar();
+	Get().RenderBottomBar();
 #endif
 }
 
@@ -98,7 +100,7 @@ void EngineGUI::RenderTopBar()
 		ImGui::Begin("Edit Tab", &m_showEditTab, ImGuiWindowFlags_NoTitleBar);
 		if (ImGui::Button("Scripts", ImVec2(ImGui::GetWindowContentRegionMax().x, 0)))
 			m_showScriptsTab = !m_showScriptsTab;
-		if (ImGui::Button("Objects", ImVec2(ImGui::GetWindowContentRegionMax().x, 0)))
+		if (ImGui::Button("Entities", ImVec2(ImGui::GetWindowContentRegionMax().x, 0)))
 			m_showObjectsTab = !m_showObjectsTab;
 
 		ImGui::End();
@@ -149,14 +151,15 @@ void EngineGUI::RenderTopBar()
 		{
 			recs::recs_registry& reg = m_sceneManagerRef->GetCurrentScene()->GetRegistry();
 
-			reg.View<GameObject>().ForEach([&](const recs::Entity& entity, GameObject& gameObject) {
+			const recs::Entity_Group grp = reg.GetEntities();
 
-
-				std::string name = "Entity: " + gameObject.name;
+			for (int i = 0; i < grp.size(); i++)
+			{
+				std::string name = "Entity: " + std::to_string(i);
 				ImGui::Text(name.c_str());
 
 				ImGui::SameLine();
-				name = "Open###Entity" + entity;
+				name = "Open###Entity" + std::to_string(i);
 				if (ImGui::Button(name.c_str()))
 				{
 					if (!m_showPropertiesTab)
@@ -164,10 +167,9 @@ void EngineGUI::RenderTopBar()
 						m_showPropertiesTab = true;
 					}
 
-					m_currentEntity = entity;
+					m_currentEntity = grp[i];
 				}
-
-				});
+			}
 		}
 		ImGui::EndListBox();
 		ImGui::End();
@@ -276,4 +278,20 @@ void EngineGUI::RenderTopBar()
 		ImGui::End();
 	}
 
+}
+
+void EngineGUI::RenderBottomBar()
+{
+	ImGui::SetNextWindowPos(ImVec2(0, D3D11Core::Get().GetWindow()->GetHeight() / 1.5f));
+	ImGui::SetNextWindowSize(ImVec2(D3D11Core::Get().GetWindow()->GetWidth(), D3D11Core::Get().GetWindow()->GetHeight() / 3.0));
+
+	ImGui::Begin("BottomBar", NULL, bottomWindow);
+
+	ImGui::BeginChild("Sidebar", {ImGui::GetWindowWidth() / 5.0f, ImGui::GetContentRegionAvail().y }, ImGuiChildFlags_Border, ImGuiWindowFlags_MenuBar);
+
+	ImGui::Button("Entities", { ImGui::GetWindowWidth(), ImGui::GetWindowHeight() / 10.0f });
+
+	ImGui::EndChild();
+
+	ImGui::End();
 }

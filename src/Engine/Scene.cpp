@@ -34,9 +34,8 @@ Scene::Scene()
 	GameObject* gameObject = m_registry.AddComponent<GameObject>(entity);
 	m_registry.AddComponent<model>(entity)->data = ResourceManager::Get().GetResource<Model3D>("Tree1.obj").get();
 	Script* scr = m_registry.AddComponent<Script>(entity);
-	scr->scripts.push_back("Player.lua");
 
-	transf->pos = { 5, 3.5, 25.5 };
+	transf->pos = { 0, 0, -125.5 };
 	//UpdatePublicBuffer(m_publicBuffer, transf->GetMatrix());
 
 	LUA.m_currentRegistry = &m_registry;

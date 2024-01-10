@@ -24,26 +24,38 @@ static int transform_get(lua_State* L)
 	Transform* inst = *(Transform**)luaL_checkudata(L, 1, tname);
 	*inst = *LUA.m_currentRegistry->GetComponent<Transform>(0);
 
-	switch (luaL_checkoption(L, 2, NULL, tmap_get))
+	switch (luaL_checkoption(L, 2, NULL, tmap_set))
 	{
-	case 0: // position
+	case 0: // position x
 		lua_pushnumber(L, inst->pos.x);
+		break;
+	case 1: // position y
 		lua_pushnumber(L, inst->pos.y);
+		break;
+	case 2: // position z
 		lua_pushnumber(L, inst->pos.z);
 		break;
-	case 1: // rotation
+	case 3: // rotation x
 		lua_pushnumber(L, inst->rotation.x);
+		break;
+	case 4: // rotation y
 		lua_pushnumber(L, inst->rotation.y);
+		break;
+	case 5: // rotation z
 		lua_pushnumber(L, inst->rotation.z);
 		break;
-	case 2: // scale
+	case 6: // scale x
 		lua_pushnumber(L, inst->scale.x);
+		break;
+	case 7: // scale y
 		lua_pushnumber(L, inst->scale.y);
+		break;
+	case 8: // scale z
 		lua_pushnumber(L, inst->scale.z);
 		break;
 	}
 
-	return 3;
+	return 1;
 }
 
 static int transform_set(lua_State* L)

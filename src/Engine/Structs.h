@@ -47,7 +47,6 @@ struct GameObject
 
 
 static const char* const tname = "Transform";
-static const char* const tmap_get[] = { "position", "rotation", "scale"};
 static const char* const tmap_set[] = { "xPosition", "yPosition", "zPosition", "xRotation", "yRotation", "zRotation", "xScale", "yScale", "zScale" };
 struct Transform
 {
