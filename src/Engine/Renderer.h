@@ -11,6 +11,7 @@ private:
 	BasicPass m_basicPass; // G-Pass before Light
 	LightPass m_lightPass; // Light pass, based on basic pass.
 
+
 private:
 
 	std::vector<IRenderpass*> m_renderPasses;

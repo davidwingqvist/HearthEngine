@@ -3,9 +3,9 @@ class Camera
 {
 private:
 
-	Camera_data m_matData;
+	camera_data m_matData{};
 	ID3D11Buffer* m_buffer;
-	sm::Vector3 m_position;
+	sm::Vector3 m_position{};
 
 	void Update();
 	bool SetUpBuffer();

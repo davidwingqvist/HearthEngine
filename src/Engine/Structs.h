@@ -76,7 +76,7 @@ struct vertex_data
 	sm::Vector2 texCoords;
 };
 
-struct Camera_data
+struct camera_data
 {
 	sm::Matrix viewMatrix;
 	sm::Matrix projectionMatrix;
@@ -87,7 +87,7 @@ struct Script
 	std::vector<std::string> scripts;
 };
 
-struct model
+struct Model
 {
 	Model3D* data;
 };

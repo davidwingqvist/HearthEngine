@@ -16,7 +16,7 @@ public:
 class VertexShader : public IShader
 {
 private:
-    ID3D11VertexShader* m_shader;
+    ID3D11VertexShader* m_shader = nullptr;
 public:
     VertexShader() = default;
     VertexShader(const VertexShader& other) = default;
@@ -34,7 +34,7 @@ public:
 class PixelShader : public IShader
 {
 private:
-    ID3D11PixelShader* m_shader;
+    ID3D11PixelShader* m_shader = nullptr;
 public:
     PixelShader() = default;
     PixelShader(const PixelShader& other) = default;

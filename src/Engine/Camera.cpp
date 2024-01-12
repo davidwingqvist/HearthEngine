@@ -13,7 +13,7 @@ bool Camera::SetUpBuffer()
 {
 	D3D11_BUFFER_DESC desc{};
 	desc.BindFlags = D3D11_BIND_FLAG::D3D11_BIND_CONSTANT_BUFFER;
-	desc.ByteWidth = sizeof Camera_data;
+	desc.ByteWidth = sizeof camera_data;
 	desc.Usage = D3D11_USAGE_DYNAMIC;
 	desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	desc.MiscFlags = 0;

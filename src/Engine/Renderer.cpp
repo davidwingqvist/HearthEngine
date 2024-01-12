@@ -1,7 +1,6 @@
 #include "Header.h"
 #include "Renderer.h"
 
-
 Renderer::Renderer()
 	:m_basicPass(&m_pipelineManager), m_lightPass(&m_pipelineManager)
 {

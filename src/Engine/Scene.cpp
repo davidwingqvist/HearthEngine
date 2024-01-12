@@ -32,7 +32,7 @@ Scene::Scene()
 	recs::Entity entity = m_registry.CreateEntity();
 	Transform* transf = m_registry.AddComponent<Transform>(entity);
 	GameObject* gameObject = m_registry.AddComponent<GameObject>(entity);
-	m_registry.AddComponent<model>(entity)->data = ResourceManager::Get().GetResource<Model3D>("Tree1.obj").get();
+	m_registry.AddComponent<Model>(entity)->data = ResourceManager::Get().GetResource<Model3D>("Tree1.obj").get();
 	Script* scr = m_registry.AddComponent<Script>(entity);
 
 	transf->pos = { 0, 0, -225.5 };
@@ -86,7 +86,7 @@ void Scene::Draw()
 	// Public buffer is set to the first slot in Vertex Shader
 	D3D11Core::Get().Context()->VSSetConstantBuffers(0, 1, &m_publicBuffer);
 
-	m_registry.Group<model, Transform>().ForEach([&](model& model, Transform& pos){
+	m_registry.Group<Model, Transform>().ForEach([&](Model& model, Transform& pos){
 
 		UpdatePublicBuffer(m_publicBuffer, pos.GetMatrix());
 
