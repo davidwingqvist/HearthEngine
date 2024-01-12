@@ -1,18 +1,26 @@
 #include "Header.h"
 #include "Window.h"
 #include <assert.h>
+#include "InputManager.h"
+#include "Debugger.h"
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 LRESULT CALLBACK Window::WinProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
+#ifdef _DEBUG
 	if (ImGui_ImplWin32_WndProcHandler(hwnd, uMsg, wParam, lParam))
 		return true;
+#endif
 
 	// Engine events:
 	switch (uMsg)
 	{
 	case WM_ACTIVATE:
 		//ConfineCursor(hwnd);
+		break;
+	case WM_ACTIVATEAPP:
+		InputManager::Get().GetKeyboard()->ProcessMessage(uMsg, wParam, lParam);
+		InputManager::Get().GetMouse()->ProcessMessage(uMsg, wParam, lParam);
 		break;
 	case WM_NCCREATE:
 
@@ -26,10 +34,13 @@ LRESULT CALLBACK Window::WinProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 		PostQuitMessage(0);
 		break;
 	case WM_INPUT:
+		InputManager::Get().GetMouse()->ProcessMessage(uMsg, wParam, lParam);
 		break;
 	case WM_KEYDOWN:
+		InputManager::Get().GetKeyboard()->ProcessMessage(uMsg, wParam, lParam);
 		break;
 	case WM_KEYUP:
+		InputManager::Get().GetKeyboard()->ProcessMessage(uMsg, wParam, lParam);
 		break;
 	case WM_MOUSEMOVE:
 		break;
@@ -45,15 +56,21 @@ LRESULT CALLBACK Window::WinProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 		break;
 	case WM_RBUTTONDOWN:
 		break;
+	case WM_MOUSEACTIVATE:
+		// When you click activate the window, we want Mouse to ignore it.
+		return MA_ACTIVATEANDEAT;
 	case WM_RBUTTONUP:
 		break;
 	case WM_MOUSEHOVER:
+		InputManager::Get().GetMouse()->ProcessMessage(uMsg, wParam, lParam);
 		break;
 	case WM_MOUSEWHEEL:
 		break;
 	case WM_SYSKEYDOWN:
+		InputManager::Get().GetKeyboard()->ProcessMessage(uMsg, wParam, lParam);
 		break;
 	case WM_SYSKEYUP:
+		InputManager::Get().GetKeyboard()->ProcessMessage(uMsg, wParam, lParam);
 		break;
 	case WM_SIZE:
 		// https://docs.microsoft.com/en-us/windows/win32/direct3ddxgi/d3d10-graphics-programming-guide-dxgi#handling-window-resizing
@@ -119,7 +136,7 @@ bool Window::Initialize(const Desc& desc)
 	const int posX = (desktop.right / 2) - (desc.width / 2);
 	const int posY = (desktop.bottom / 2) - (desc.height / 2);
 
-	RECT rect;
+	RECT rect{};
 	rect.left = posX;
 	rect.right = posX + desc.width;
 	rect.top = posY;
@@ -166,6 +183,7 @@ bool Window::Initialize(const Desc& desc)
 
 	//ConfineCursor(this->m_hWnd);
 	this->m_windowDesc = desc;
+	InputManager::Get().Initialize(this->m_hWnd);
 
 	return true;
 }
@@ -214,6 +232,5 @@ void Window::SetFullScreen(bool fullscreen)
 {
 	assert(this->m_hWnd && "There's no window to resize.");
 
-	// TODO: previous code caused issues.
 	//D3D11Core::Get().SwapChain()->SetFullscreenState(true, nullptr);
 }

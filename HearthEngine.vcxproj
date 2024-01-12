@@ -29,6 +29,7 @@
     <ClCompile Include="src\Engine\Engine.cpp" />
     <ClCompile Include="src\Engine\EngineGUI.cpp" />
     <ClCompile Include="src\Engine\HearthEngine.cpp" />
+    <ClCompile Include="src\Engine\InputManager.cpp" />
     <ClCompile Include="src\Engine\LuaState.cpp" />
     <ClCompile Include="src\Engine\PipelineManager.cpp" />
     <ClCompile Include="src\Engine\Renderer.cpp" />
@@ -81,6 +82,7 @@
     <ClInclude Include="src\Engine\Engine.h" />
     <ClInclude Include="src\Engine\EngineGUI.h" />
     <ClInclude Include="src\Engine\Header.h" />
+    <ClInclude Include="src\Engine\InputManager.h" />
     <ClInclude Include="src\Engine\LuaState.h" />
     <ClInclude Include="src\Engine\PipelineManager.h" />
     <ClInclude Include="src\Engine\Renderer.h" />
@@ -261,12 +263,12 @@
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="packages\directxtk_uwp.2023.10.31.1\build\native\directxtk_uwp.targets" Condition="Exists('packages\directxtk_uwp.2023.10.31.1\build\native\directxtk_uwp.targets')" />
+    <Import Project="packages\directxtk_desktop_win10.2024.1.1.1\build\native\directxtk_desktop_win10.targets" Condition="Exists('packages\directxtk_desktop_win10.2024.1.1.1\build\native\directxtk_desktop_win10.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('packages\directxtk_uwp.2023.10.31.1\build\native\directxtk_uwp.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\directxtk_uwp.2023.10.31.1\build\native\directxtk_uwp.targets'))" />
+    <Error Condition="!Exists('packages\directxtk_desktop_win10.2024.1.1.1\build\native\directxtk_desktop_win10.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\directxtk_desktop_win10.2024.1.1.1\build\native\directxtk_desktop_win10.targets'))" />
   </Target>
 </Project>

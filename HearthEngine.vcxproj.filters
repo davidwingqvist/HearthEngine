@@ -52,6 +52,9 @@
     <Filter Include="Camera">
       <UniqueIdentifier>{811911cd-5435-49a4-a307-21a1f5434d4c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Input">
+      <UniqueIdentifier>{154775ea-24ee-44c6-b98f-03f37658737f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Engine\HearthEngine.cpp">
@@ -140,6 +143,9 @@
     </ClCompile>
     <ClCompile Include="src\Engine\Camera.cpp">
       <Filter>Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\InputManager.cpp">
+      <Filter>Input</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -232,6 +238,9 @@
     </ClInclude>
     <ClInclude Include="src\Engine\Camera.h">
       <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\InputManager.h">
+      <Filter>Input</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

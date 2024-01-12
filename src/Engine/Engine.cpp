@@ -2,6 +2,7 @@
 #include "Engine.h"
 #include "Debugger.h"
 #include "LuaState.h"
+#include "InputManager.h"
 
 Engine::Engine()
 {
@@ -28,7 +29,6 @@ Engine::Engine()
 	//m_sceneManager.SetScene("Test");
 
 	DEBUG_INFO("The basics of the Engine is now up and running.\n");
-
 	EngineGUI::Get().SetSceneManagerRef(&m_sceneManager);
 	LUA.ScanForScripts();
 }
@@ -45,6 +45,7 @@ Engine::~Engine()
 
 void Engine::Update()
 {
+	InputManager::Get().Update();
 	MSG msg = { nullptr };
 
 	while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
@@ -56,6 +57,7 @@ void Engine::Update()
 			shutdown = true;
 		}
 	}
+
 
 	if (m_sceneManager.GetCurrentScene())
 		m_sceneManager.GetCurrentScene()->Update();
