@@ -20,6 +20,7 @@ public:
 	void SetActive(const bool& tog);
 	const bool& IsActive() const;
 
+	virtual void Create() = 0;
 	virtual void Prepass() = 0;
 	virtual void Pass(Scene* currentScene) = 0;
 	virtual void Postpass() = 0;

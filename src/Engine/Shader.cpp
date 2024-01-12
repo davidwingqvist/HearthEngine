@@ -49,6 +49,10 @@ bool VertexShader::Create(const std::string& filename)
     {
         hr = D3D11Core::Get().Device()->CreateVertexShader(GetShaderByteCode().c_str(), GetShaderByteCode().length(), nullptr, &m_shader);
     }
+    else
+    {
+        DEBUG_ERROR("Couldnt create Vertex shader: " + filename + "\n")
+    }
 
     return !FAILED(hr);
 }
@@ -75,6 +79,10 @@ bool PixelShader::Create(const std::string& filename)
     if (LoadShaderDataFromFile(filename))
     {
         hr = D3D11Core::Get().Device()->CreatePixelShader(GetShaderByteCode().c_str(), GetShaderByteCode().length(), nullptr, &m_shader);
+    }
+    else
+    {
+        DEBUG_ERROR("Couldnt create Pixel shader: " + filename + "\n")
     }
 
     return !FAILED(hr);

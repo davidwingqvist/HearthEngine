@@ -28,17 +28,11 @@
     <Filter Include="Shaders">
       <UniqueIdentifier>{d70d2095-f90f-4a9c-8d13-448e47799cab}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Graphics\RenderPass">
-      <UniqueIdentifier>{a9e6a4d3-b1dd-4e04-939d-83a5ff40c85c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Debug">
       <UniqueIdentifier>{a5e3b2a7-b77a-4f0e-b196-ad5551fa40d3}</UniqueIdentifier>
     </Filter>
     <Filter Include="Lua">
       <UniqueIdentifier>{2631242d-5885-4765-942e-e5a49f2dc30a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Graphics\RenderPass\Passes">
-      <UniqueIdentifier>{7d58bccd-c1f9-4685-aea5-5125c396f5fc}</UniqueIdentifier>
     </Filter>
     <Filter Include="Resource">
       <UniqueIdentifier>{07ac3530-5a4c-4380-9898-4a7aaeb942e3}</UniqueIdentifier>
@@ -54,6 +48,12 @@
     </Filter>
     <Filter Include="Input">
       <UniqueIdentifier>{154775ea-24ee-44c6-b98f-03f37658737f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RenderPass">
+      <UniqueIdentifier>{a9e6a4d3-b1dd-4e04-939d-83a5ff40c85c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RenderPass\Passes">
+      <UniqueIdentifier>{7d58bccd-c1f9-4685-aea5-5125c396f5fc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -109,13 +109,13 @@
       <Filter>Lua</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Renderpass.cpp">
-      <Filter>Graphics\RenderPass</Filter>
+      <Filter>RenderPass</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Renderer.cpp">
-      <Filter>Graphics\RenderPass</Filter>
+      <Filter>RenderPass</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\BasicPass.cpp">
-      <Filter>Graphics\RenderPass\Passes</Filter>
+      <Filter>RenderPass\Passes</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\ResourceManager.cpp">
       <Filter>Resource</Filter>
@@ -124,7 +124,7 @@
       <Filter>Resource</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\PipelineManager.cpp">
-      <Filter>Graphics\RenderPass</Filter>
+      <Filter>RenderPass</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Shader.cpp">
       <Filter>Shaders</Filter>
@@ -146,6 +146,9 @@
     </ClCompile>
     <ClCompile Include="src\Engine\InputManager.cpp">
       <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\LightPass.cpp">
+      <Filter>RenderPass\Passes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -204,13 +207,13 @@
       <Filter>Lua</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Renderpass.h">
-      <Filter>Graphics\RenderPass</Filter>
+      <Filter>RenderPass</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Renderer.h">
-      <Filter>Graphics\RenderPass</Filter>
+      <Filter>RenderPass</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\BasicPass.h">
-      <Filter>Graphics\RenderPass\Passes</Filter>
+      <Filter>RenderPass\Passes</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\ResourceManager.h">
       <Filter>Resource</Filter>
@@ -219,7 +222,7 @@
       <Filter>Resource</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\PipelineManager.h">
-      <Filter>Graphics\RenderPass</Filter>
+      <Filter>RenderPass</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Structs.h">
       <Filter>Tools</Filter>
@@ -242,12 +245,21 @@
     <ClInclude Include="src\Engine\InputManager.h">
       <Filter>Input</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\LightPass.h">
+      <Filter>RenderPass\Passes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="src\Engine\BasicPixelShader.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="src\Engine\BasicVertexShader.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="src\Engine\LightPixelShader.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="src\Engine\LightVertexShader.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>

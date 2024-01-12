@@ -17,4 +17,7 @@ public:
 	virtual void Prepass() override;
 	virtual void Pass(Scene* currentScene) override;
 	virtual void Postpass() override;
+
+	// Inherited via IRenderpass
+	void Create() override;
 };

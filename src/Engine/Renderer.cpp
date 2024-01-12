@@ -3,9 +3,8 @@
 
 
 Renderer::Renderer()
-	:m_basicPass(&m_pipelineManager)
+	:m_basicPass(&m_pipelineManager), m_lightPass(&m_pipelineManager)
 {
-	m_renderPasses.push_back(&m_basicPass);
 }
 
 Renderer::~Renderer()
@@ -15,6 +14,12 @@ Renderer::~Renderer()
 void Renderer::Initialize()
 {
 	m_pipelineManager.Initialize();
+
+	m_basicPass.Create();
+	m_lightPass.Create();
+
+	m_renderPasses.push_back(&m_basicPass);
+	m_renderPasses.push_back(&m_lightPass);
 }
 
 void Renderer::Draw(Scene* currentScene)

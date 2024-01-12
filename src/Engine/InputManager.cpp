@@ -33,7 +33,18 @@ void InputManager::Update()
 	m_mouseTracker.Update(m_mouse->GetState());
 }
 
-const bool& InputManager::CheckKey(const dx::Keyboard::Keys& key) const
+const bool InputManager::CheckKey(const dx::Keyboard::Keys& key, const key_state& state) const
 {
-	return m_keyboardTracker.IsKeyPressed(key);
+	switch (state)
+	{
+		case key_state::PRESSED:
+			return m_keyboardTracker.IsKeyPressed(key);
+		case key_state::RELEASED:
+			return m_keyboardTracker.IsKeyReleased(key);
+		case key_state::HOLD:
+			return m_keyboard->GetState().IsKeyDown(key);
+	}
+	
+	// No state inserted was recognized, return false.
+	return false;
 }

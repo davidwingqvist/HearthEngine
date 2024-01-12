@@ -30,3 +30,7 @@ void BasicPass::Postpass()
 {
 
 }
+
+void BasicPass::Create()
+{
+}

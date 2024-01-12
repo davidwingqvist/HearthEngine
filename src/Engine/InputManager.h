@@ -1,4 +1,14 @@
 #pragma once
+
+using kb_key = dx::Keyboard::Keys;
+
+enum key_state : UINT
+{
+	PRESSED = 0,
+	RELEASED = 1,
+	HOLD = 2
+};
+
 class InputManager
 {
 private:
@@ -19,13 +29,26 @@ public:
 		return instance;
 	}
 
+	/*
+		Sets the window reference to the mouse.
+	*/
 	void Initialize(const HWND& window);
 
 	dx::Keyboard* GetKeyboard() const;
+
 	dx::Mouse* GetMouse() const;
 
+	/*
+		Updates the states of the keyboard and the mouse.
+	*/
 	void Update();
 
-	const bool& CheckKey(const dx::Keyboard::Keys& key) const;
+	/*
+	
+		Check the state of a keyboard button specified by 'key'
+		Use key_state to check for different kinds of state of the key.
+		Default is PRESSED state(it will run one time, when it is pressed).
+	*/
+	const bool CheckKey(const dx::Keyboard::Keys& key, const key_state& state = key_state::PRESSED) const;
 };
 
