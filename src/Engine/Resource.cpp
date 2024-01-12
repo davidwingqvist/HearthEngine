@@ -91,6 +91,7 @@ void Model3D::LoadBufferData(const aiScene* scene, const std::string& filename)
             vertex_data mData;
             mData.position = { mesh->mVertices[j].x, mesh->mVertices[j].y, mesh->mVertices[j].z };
             mData.texCoords = { mesh->mTextureCoords[0][j].x, mesh->mTextureCoords[0][j].y };
+            mData.normal = { mesh->mNormals[j].x, mesh->mNormals[j].y, mesh->mNormals[j].z };
             data.push_back(mData);
         }
 

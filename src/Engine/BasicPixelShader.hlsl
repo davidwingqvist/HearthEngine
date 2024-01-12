@@ -2,9 +2,19 @@ struct PxIn
 {
 	float4 position : SV_POSITION;
 	float2 uv: TEXCOORD;
+    float3 normal : NORMAL;
 };
 
-float4 main() : SV_TARGET
+struct PxOut
 {
-	return float4(1.0f, 1.0f, 1.0f, 1.0f);
+    float4 color : SV_Target0;
+	float4 normals : SV_Target1;
+};
+
+PxOut main(PxIn input)
+{
+    PxOut output;
+    output.color = float4(1.0f, 1.0f, 1.0f, 1.0f);
+    output.normals = float4(input.normal, 1.0f);
+    return output;
 }

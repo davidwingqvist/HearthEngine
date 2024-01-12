@@ -53,10 +53,21 @@ LightPass::~LightPass()
 
 void LightPass::Prepass()
 {
+	D3D11Core::Get().Context()->VSSetShader(m_lightVertex.Get(), nullptr, 0);
+	D3D11Core::Get().Context()->PSSetShader(m_lightPixel.Get(), nullptr, 0);
+
+	const UINT stride = sizeof(vertex_data);
+	const UINT offset = 0;
+	D3D11Core::Get().Context()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	D3D11Core::Get().Context()->IASetVertexBuffers(0, 1, &m_vertexBuffer, &stride, &offset);
+	D3D11Core::Get().Context()->IASetIndexBuffer(m_indicesBuffer, DXGI_FORMAT_R32_UINT, 0);
+
+	D3D11Core::Get().Context()->OMSetRenderTargets(1, &m_pipeline->m_backBuffer, m_pipeline->m_depthStencilView);
 }
 
 void LightPass::Pass(Scene* currentScene)
 {
+	D3D11Core::Get().Context()->DrawIndexed(6, 0, 0);
 }
 
 void LightPass::Postpass()

@@ -6,7 +6,14 @@ class BasicPass : public IRenderpass
 {
 private:
 
+	ID3D11Texture2D* m_colorTexture = nullptr;
+	ID3D11Texture2D* m_normalsTexture = nullptr;
+	ID3D11ShaderResourceView* m_colorView = nullptr;
+	ID3D11ShaderResourceView* m_normalsView = nullptr;
+	ID3D11RenderTargetView* m_colorTarget = nullptr;
+	ID3D11RenderTargetView* m_normalsTarget = nullptr;
 
+	bool SetUpTextures();
 
 public:
 

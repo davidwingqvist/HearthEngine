@@ -74,6 +74,7 @@ struct vertex_data
 {
 	sm::Vector3 position;
 	sm::Vector2 texCoords;
+	sm::Vector3 normal;
 };
 
 struct camera_data

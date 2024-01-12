@@ -11,10 +11,10 @@ private:
 
 	ID3D11Buffer* m_vertexBuffer = nullptr;
 	const vertex_data m_screenVertexes[4] = {
-		{{0.5f, 0.5f, 0.0f},   {1.0f, 0.0f}},
-		{{0.5f, -0.5f, 0.0f},  {1.0f, 1.0f}},
-		{{-0.5f, -0.5f, 0.0f}, {0.0f, 1.0f}},
-		{{-0.5f, 0.5f, 0.0f},  {0.0f, 0.0f}}
+		{{0.5f, 0.5f, .0f},   {1.0f, 0.0f}, {0.0f, 0.0f, 1.0f}},
+		{{0.5f, -0.5f, .0f},  {1.0f, 1.0f}, {0.0f, 0.0f, 1.0f}},
+		{{-0.5f, -0.5f, .0f}, {0.0f, 1.0f}, {0.0f, 0.0f, 1.0f}},
+		{{-0.5f, 0.5f, .0f},  {0.0f, 0.0f}, {0.0f, 0.0f, 1.0f}}
 	};
 
 	ID3D11Buffer* m_indicesBuffer = nullptr;
@@ -23,6 +23,8 @@ private:
 		3,0,2 // Triangle 2
 	};
 
+	// Decides if cel shading should me used for the light pass.
+	bool m_useCelShading = false;
 
 	bool SetUpScreenTriangles();
 

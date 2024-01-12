@@ -34,7 +34,7 @@ Camera::Camera()
 {
 	m_position = { 0.0f, 0.0f, -1.0f };
 	m_matData.viewMatrix = sm::Matrix::CreateLookAt(m_position, m_position + m_position.Forward, sm::Vector3::Up);
-	m_matData.projectionMatrix = sm::Matrix::CreatePerspectiveFieldOfView(3.1415 / 4.0f, ((float)D3D11Core::Get().GetWindow()->GetWidth() / D3D11Core::Get().GetWindow()->GetHeight()), 0.1f, 1000.f);
+	m_matData.projectionMatrix = sm::Matrix::CreatePerspectiveFieldOfView(3.1415f / 4.0f, ((float)D3D11Core::Get().GetWindow()->GetWidth() / D3D11Core::Get().GetWindow()->GetHeight()), 0.1f, 1000.f);
 	if (!SetUpBuffer())
 	{
 		DEBUG_ERROR("Failed to setup buffer for Camera!\n")
