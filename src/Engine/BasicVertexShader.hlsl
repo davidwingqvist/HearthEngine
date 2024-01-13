@@ -33,6 +33,7 @@ VSOut main(VSIn input)
 	output.pos = mul(c_proj, output.pos);
 
     output.normal = mul(c_world, float4(input.normal, 1.0f)).xyz;
+    output.normal = normalize(output.normal);
 	output.uv = input.uv;
 
 	return output;

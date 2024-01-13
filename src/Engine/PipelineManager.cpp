@@ -17,6 +17,8 @@ void PipelineManager::Initialize()
         DEBUG_ERROR("Couldnt create shaders!\n")
     if(!this->CreateInputLayouts())
         DEBUG_ERROR("Couldnt create Input Layout\n")
+    if(!this->CreateBlendStates())
+        DEBUG_ERROR("Couldnt create blend states\n")
     this->SetViewport();
 }
 
@@ -32,6 +34,7 @@ PipelineManager::PipelineManager()
     m_blendStateAlphaBlending = nullptr;
     m_anisotropicSamplerState = nullptr;
     m_defaultInputLayout = nullptr;
+    m_linearSamplerState = nullptr;
     m_viewport = {};
 }
 
@@ -66,6 +69,9 @@ PipelineManager::~PipelineManager()
 
     if (m_defaultInputLayout)
         m_defaultInputLayout->Release();
+
+    if (m_linearSamplerState)
+        m_linearSamplerState->Release();
 }
 
 void PipelineManager::ClearScreen()
@@ -204,6 +210,18 @@ bool PipelineManager::CreateSamplerStates()
     D3D11_SAMPLER_DESC samplerDesc;
     ZeroMemory(&samplerDesc, sizeof(D3D11_SAMPLER_DESC));
 
+    samplerDesc.Filter = D3D11_FILTER::D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+    samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_MODE::D3D11_TEXTURE_ADDRESS_WRAP;
+    samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_MODE::D3D11_TEXTURE_ADDRESS_WRAP;
+    samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_MODE::D3D11_TEXTURE_ADDRESS_WRAP;
+    samplerDesc.ComparisonFunc = D3D11_COMPARISON_FUNC::D3D11_COMPARISON_NEVER;
+    samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
+    samplerDesc.MinLOD = 0;
+
+    HRESULT hr = D3D11Core::Get().Device()->CreateSamplerState(&samplerDesc, &m_linearSamplerState);
+    if (FAILED(hr))
+        return false;
+
     // Setup for Anisotropic SamplerState
     samplerDesc.Filter = D3D11_FILTER::D3D11_FILTER_ANISOTROPIC;
     samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_MODE::D3D11_TEXTURE_ADDRESS_WRAP;
@@ -215,9 +233,12 @@ bool PipelineManager::CreateSamplerStates()
     samplerDesc.MipLODBias = 0.f;
     samplerDesc.MaxAnisotropy = D3D11_REQ_MAXANISOTROPY;
 
-    HRESULT hr = D3D11Core::Get().Device()->CreateSamplerState(&samplerDesc, &m_anisotropicSamplerState);
+    hr = D3D11Core::Get().Device()->CreateSamplerState(&samplerDesc, &m_anisotropicSamplerState);
     if (FAILED(hr))
         return false;
+
+
+
 
     return true;
 }

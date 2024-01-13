@@ -18,6 +18,7 @@ public:
 	ID3D11RasterizerState* m_rasterState;
 	ID3D11BlendState* m_blendStateAlphaBlending;
 	ID3D11SamplerState* m_anisotropicSamplerState;
+	ID3D11SamplerState* m_linearSamplerState;
 	ID3D11InputLayout* m_defaultInputLayout;
 	D3D11_VIEWPORT m_viewport;
 	UINT m_windowWidth = 0;

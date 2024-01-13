@@ -58,13 +58,16 @@ void LightPass::Prepass()
 
 	const UINT stride = sizeof(vertex_data);
 	const UINT offset = 0;
-	D3D11Core::Get().Context()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	D3D11Core::Get().Context()->IASetVertexBuffers(0, 1, &m_vertexBuffer, &stride, &offset);
 	D3D11Core::Get().Context()->IASetIndexBuffer(m_indicesBuffer, DXGI_FORMAT_R32_UINT, 0);
 
 	D3D11Core::Get().Context()->OMSetRenderTargets(1, &m_pipeline->m_backBuffer, nullptr);
 
-	D3D11Core::Get().Context()->PSSetSamplers(0, 1, &m_pipeline->m_anisotropicSamplerState);
+	D3D11Core::Get().Context()->OMSetBlendState(m_pipeline->m_blendStateAlphaBlending, NULL, 0xffffffff);
+
+	D3D11Core::Get().Context()->RSSetState(m_pipeline->m_rasterState);
+	
+	D3D11Core::Get().Context()->PSSetSamplers(0, 1, &m_pipeline->m_linearSamplerState);
 }
 
 void LightPass::Pass(Scene* currentScene)
@@ -74,6 +77,7 @@ void LightPass::Pass(Scene* currentScene)
 
 void LightPass::Postpass()
 {
+	D3D11Core::Get().Context()->OMSetBlendState(nullptr, NULL, 0xffffffff);
 }
 
 void LightPass::Create()

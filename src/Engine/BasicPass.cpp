@@ -6,7 +6,7 @@
 bool BasicPass::SetUpTextures()
 {
 	D3D11_TEXTURE2D_DESC desc{};
-	desc.Format = DXGI_FORMAT_R32G32B32A32_TYPELESS;
+	desc.Format = DXGI_FORMAT_R16G16B16A16_TYPELESS;
 	desc.ArraySize = 1;
 	desc.BindFlags = D3D11_BIND_FLAG::D3D11_BIND_RENDER_TARGET | D3D11_BIND_FLAG::D3D11_BIND_SHADER_RESOURCE;
 	desc.Height = D3D11Core::Get().GetWindow()->GetHeight();
@@ -14,15 +14,16 @@ bool BasicPass::SetUpTextures()
 	desc.Usage = D3D11_USAGE_DEFAULT;
 	desc.SampleDesc.Count = 1;
 	desc.SampleDesc.Quality = 0;
+	desc.MipLevels = 1;
 
 	D3D11_SHADER_RESOURCE_VIEW_DESC shaderDesc{};
-	shaderDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+	shaderDesc.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;
 	shaderDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-	shaderDesc.Texture2D.MostDetailedMip = 1;
+	shaderDesc.Texture2D.MostDetailedMip = 0;
 	shaderDesc.Texture2D.MipLevels = 1;
 
 	D3D11_RENDER_TARGET_VIEW_DESC targetDesc{};
-	targetDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+	targetDesc.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;
 	targetDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
 
 	HRESULT hr = D3D11Core::Get().Device()->CreateTexture2D(&desc, nullptr, &m_colorTexture);
@@ -75,7 +76,7 @@ bool BasicPass::SetUpDepthTexture()
 	D3D11_TEXTURE2D_DESC desc{};
 	desc.Format = DXGI_FORMAT_R32_TYPELESS;
 	desc.ArraySize = 1;
-	desc.BindFlags = D3D11_BIND_FLAG::D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_DEPTH_STENCIL;
+	desc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_DEPTH_STENCIL;
 	desc.Height = D3D11Core::Get().GetWindow()->GetHeight();
 	desc.Width = D3D11Core::Get().GetWindow()->GetWidth();
 	desc.Usage = D3D11_USAGE_DEFAULT;
@@ -118,6 +119,12 @@ bool BasicPass::SetUpDepthTexture()
 
 void BasicPass::ClearRenderTargets()
 {
+	ID3D11ShaderResourceView* temp[D3D11_COMMONSHADER_INPUT_RESOURCE_REGISTER_COUNT] = { 0 };
+	D3D11Core::Get().Context()->PSSetShaderResources(0, D3D11_COMMONSHADER_INPUT_RESOURCE_REGISTER_COUNT, temp);
+
+	ID3D11RenderTargetView* const m_targets[8] = { nullptr };
+	D3D11Core::Get().Context()->OMSetRenderTargets(8, m_targets, nullptr);
+
 	const FLOAT clear[4] = { FLOAT(0), FLOAT(0), FLOAT(0), FLOAT(0) };
 	D3D11Core::Get().Context()->ClearRenderTargetView(m_colorTarget, clear);
 	D3D11Core::Get().Context()->ClearRenderTargetView(m_normalsTarget, clear);
@@ -144,6 +151,13 @@ BasicPass::~BasicPass()
 		m_normalsShader->Release();
 	if (m_normalsTarget)
 		m_normalsTarget->Release();
+
+	if (m_depthTexture)
+		m_depthTexture->Release();
+	if (m_depthShader)
+		m_depthShader->Release();
+	if (m_depthTarget)
+		m_depthTarget->Release();
 }
 
 void BasicPass::Prepass()
@@ -154,6 +168,7 @@ void BasicPass::Prepass()
 	D3D11Core::Get().Context()->IASetInputLayout(m_pipeline->m_defaultInputLayout);
 	ID3D11RenderTargetView* const m_targets[2] = { m_colorTarget, m_normalsTarget };
 	D3D11Core::Get().Context()->OMSetRenderTargets(2, m_targets, m_depthTarget);
+
 }
 
 void BasicPass::Pass(Scene* currentScene)
@@ -163,6 +178,15 @@ void BasicPass::Pass(Scene* currentScene)
 
 void BasicPass::Postpass()
 {
+	// Reset values for next pass.
+	{
+		ID3D11RenderTargetView* const m_targets[8] = { nullptr };
+		D3D11Core::Get().Context()->OMSetRenderTargets(8, m_targets, nullptr);
+
+		ID3D11ShaderResourceView* temp[D3D11_COMMONSHADER_INPUT_RESOURCE_REGISTER_COUNT] = { 0 };
+		D3D11Core::Get().Context()->PSSetShaderResources(0, D3D11_COMMONSHADER_INPUT_RESOURCE_REGISTER_COUNT, temp);
+	}
+
 	// Prepare for Light pass input.
 	ID3D11ShaderResourceView* const m_views[3] = { m_colorShader, m_normalsShader, m_depthShader };
 	D3D11Core::Get().Context()->PSSetShaderResources(0, 3, m_views);
