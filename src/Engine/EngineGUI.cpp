@@ -79,7 +79,7 @@ void EngineGUI::RenderTopBar()
 
 	ImGui::BeginMenuBar();
 
-	ImGui::Button("File");
+	ImGui::Button("Settings");
 	if (ImGui::Button("Edit"))
 		m_showEditTab = !m_showEditTab;
 	ImGui::Button("View");

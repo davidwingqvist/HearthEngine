@@ -62,7 +62,9 @@ void LightPass::Prepass()
 	D3D11Core::Get().Context()->IASetVertexBuffers(0, 1, &m_vertexBuffer, &stride, &offset);
 	D3D11Core::Get().Context()->IASetIndexBuffer(m_indicesBuffer, DXGI_FORMAT_R32_UINT, 0);
 
-	D3D11Core::Get().Context()->OMSetRenderTargets(1, &m_pipeline->m_backBuffer, m_pipeline->m_depthStencilView);
+	D3D11Core::Get().Context()->OMSetRenderTargets(1, &m_pipeline->m_backBuffer, nullptr);
+
+	D3D11Core::Get().Context()->PSSetSamplers(0, 1, &m_pipeline->m_anisotropicSamplerState);
 }
 
 void LightPass::Pass(Scene* currentScene)

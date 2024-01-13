@@ -95,7 +95,7 @@ void Scene::Draw()
 
 		});
 
-	m_drawManager.Draw();
+	//m_drawManager.Draw();
 
 	
 }

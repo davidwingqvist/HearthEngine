@@ -1,5 +1,7 @@
-Texture2D t_pos : register(t0);
-Texture2D t_normal : register(t1);
+Texture2D t_color      : register(t0);
+Texture2D t_normal     : register(t1);
+Texture2D t_depth      : register(t2);
+SamplerState s_aniSamp : register(s0);
 
 struct PxIn
 {
@@ -10,5 +12,5 @@ struct PxIn
 
 float4 main(PxIn input) : SV_TARGET
 {
-	return float4(1.0f, 0.0f, 0.0f, 1.0f);
+    return t_color.Sample(s_aniSamp, input.uv);
 }

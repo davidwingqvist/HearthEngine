@@ -11,7 +11,7 @@ Engine::Engine()
 
 	Window::Desc config;
 	config.height = 720;
-	config.width = 1080;
+	config.width = 1280;
 	config.title = L"Hearth Engine";
 	if (!m_window.Initialize(config))
 	{
@@ -20,8 +20,8 @@ Engine::Engine()
 	}
 
 	D3D11Core::Get().Initialize(&m_window);
-	if(!D2D1Core::Get().Initialize())
-		DEBUG_ERROR("D2D1Core couldnt initialize!\n")
+	/*if(!D2D1Core::Get().Initialize())
+		DEBUG_ERROR("D2D1Core couldnt initialize!\n")*/
 
 	this->m_renderer.Initialize();
 
@@ -68,11 +68,11 @@ void Engine::Draw()
 	EngineGUI::Get().RenderGUI();
 	{ // Ingame rendering.
 		this->m_renderer.GetPipelineManager().ClearScreen();
-		D2D1Core::Get().Begin();
+		/*D2D1Core::Get().Begin();*/
 
 		m_renderer.Draw(m_sceneManager.GetCurrentScene());
 
-		D2D1Core::Get().Commit();
+		/*D2D1Core::Get().Commit();*/
 	}
 	EngineGUI::Get().CommitGUI();
 
