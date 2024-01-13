@@ -2,10 +2,12 @@
 #include "Camera.h"
 #include "D3D11Context.h"
 #include "Debugger.h"
+#include "InputManager.h"
+#include "Time.h"
 
 void Camera::Update()
 {
-	m_matData.viewMatrix = sm::Matrix::CreateLookAt(m_position, m_position + m_position.Forward, sm::Vector3::Up);
+	m_matData.viewMatrix = sm::Matrix::CreateLookAt(m_position, m_lookAt, sm::Vector3::Up);
 	UpdateBuffer();
 }
 
@@ -27,13 +29,23 @@ bool Camera::SetUpBuffer()
 
 bool Camera::UpdateBuffer()
 {
-	return false;
+	D3D11_MAPPED_SUBRESOURCE sub;
+	HRESULT hr = D3D11Core::Get().Context()->Map(m_buffer, 0, D3D11_MAP_WRITE_DISCARD, NULL, &sub);
+	if (FAILED(hr))
+	{
+		DEBUG_ERROR("Failed to map public buffer for scene!\n");
+		return false;
+	}
+	std::memcpy(sub.pData, &m_matData, sizeof camera_data);
+	D3D11Core::Get().Context()->Unmap(m_buffer, 0);
+	return true;
 }
 
 Camera::Camera()
 {
-	m_position = { 0.0f, 10.0f, -1.0f };
-	m_matData.viewMatrix = sm::Matrix::CreateLookAt(m_position, m_position + m_position.Forward, sm::Vector3::Up);
+	m_position = { 0.0f, 10.0f, .0f };
+	m_lookAt = m_position + m_position.Forward;
+	m_matData.viewMatrix = sm::Matrix::CreateLookAt(m_position, m_lookAt, sm::Vector3::Up);
 	m_matData.projectionMatrix = sm::Matrix::CreatePerspectiveFieldOfView(3.1415f / 4.0f, ((float)D3D11Core::Get().GetWindow()->GetWidth() / D3D11Core::Get().GetWindow()->GetHeight()), 0.1f, 1000.f);
 	if (!SetUpBuffer())
 	{
@@ -47,13 +59,41 @@ Camera::~Camera()
 		m_buffer->Release();
 }
 
-void Camera::SetPosition(sm::Vector3 pos)
+void Camera::SetPosition(const sm::Vector3& pos)
 {
-	m_position = pos;
+	m_position += pos;
+}
+
+void Camera::SetPosition(const float& x, const float& y, const float& z)
+{
+	m_position.x += x;
+	m_position.y += y;
+	m_position.z += z;
 	Update();
 }
 
-void Camera::Activate()
+void Camera::Move()
+{
+	if (InputManager::Get().CheckKey(kb_key::W, key_state::HOLD))
+	{
+		SetPosition(0, .1f * Time::Get().GetDeltaTime(), 0);
+	}
+	else if (InputManager::Get().CheckKey(kb_key::S, key_state::HOLD))
+	{
+		SetPosition(0, -.1f * Time::Get().GetDeltaTime(), 0);
+	}
+
+	if (InputManager::Get().CheckKey(kb_key::A, key_state::HOLD))
+	{
+		SetPosition(-.1f * Time::Get().GetDeltaTime(), 0, 0);
+	}
+	else if (InputManager::Get().CheckKey(kb_key::D, key_state::HOLD))
+	{
+		SetPosition(0.1f * Time::Get().GetDeltaTime(), 0, 0);
+	}
+}
+
+void Camera::Activate() const
 {
 	D3D11Core::Get().Context()->VSSetConstantBuffers(1, 1, &m_buffer);
 }

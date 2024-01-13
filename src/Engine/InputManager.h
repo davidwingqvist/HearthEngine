@@ -1,13 +1,13 @@
 #pragma once
 
 using kb_key = dx::Keyboard::Keys;
-
 enum key_state : UINT
 {
 	PRESSED = 0,
 	RELEASED = 1,
 	HOLD = 2
 };
+enum class MouseKey { LEFT, RIGHT, MIDDLE };
 
 class InputManager
 {
@@ -17,6 +17,9 @@ private:
 	std::unique_ptr<dx::Mouse> m_mouse{};
 	dx::Keyboard::KeyboardStateTracker m_keyboardTracker{};
 	dx::Mouse::ButtonStateTracker m_mouseTracker{};
+
+	int m_mouseX;
+	int m_mouseY;
 
 	InputManager();
 	~InputManager() = default;
@@ -38,6 +41,11 @@ public:
 
 	dx::Mouse* GetMouse() const;
 
+	const int& GetMouseX() const;
+	const int& GetMouseY() const;
+
+	void SetMouseMode(const dx::Mouse::Mode& mode);
+
 	/*
 		Updates the states of the keyboard and the mouse.
 	*/
@@ -50,5 +58,7 @@ public:
 		Default is PRESSED state(it will run one time, when it is pressed).
 	*/
 	const bool CheckKey(const dx::Keyboard::Keys& key, const key_state& state = key_state::PRESSED) const;
+
+	const bool CheckMouseKey(const MouseKey& key, const key_state state = key_state::PRESSED);
 };
 

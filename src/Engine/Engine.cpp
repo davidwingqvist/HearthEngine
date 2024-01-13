@@ -90,10 +90,10 @@ void Engine::Start()
 	{
 		auto start = std::chrono::high_resolution_clock::now();
 		Update();
-		auto end = std::chrono::high_resolution_clock::now();
+
 		Draw();
 		
-
+		auto end = std::chrono::high_resolution_clock::now();
 		Time::Get().SetDeltaTime(std::chrono::duration<float, std::milli>(end - start).count());
 	}
 }

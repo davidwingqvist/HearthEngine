@@ -43,18 +43,25 @@ LRESULT CALLBACK Window::WinProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 		InputManager::Get().GetKeyboard()->ProcessMessage(uMsg, wParam, lParam);
 		break;
 	case WM_MOUSEMOVE:
+		InputManager::Get().GetMouse()->ProcessMessage(uMsg, wParam, lParam);
 		break;
 	case WM_MBUTTONDBLCLK:
+		InputManager::Get().GetMouse()->ProcessMessage(uMsg, wParam, lParam);
 		break;
 	case WM_MBUTTONUP:
+		InputManager::Get().GetMouse()->ProcessMessage(uMsg, wParam, lParam);
 		break;
 	case WM_MBUTTONDOWN:
+		InputManager::Get().GetMouse()->ProcessMessage(uMsg, wParam, lParam);
 		break;
 	case WM_LBUTTONDOWN:
+		InputManager::Get().GetMouse()->ProcessMessage(uMsg, wParam, lParam);
 		break;
 	case WM_LBUTTONUP:
+		InputManager::Get().GetMouse()->ProcessMessage(uMsg, wParam, lParam);
 		break;
 	case WM_RBUTTONDOWN:
+		InputManager::Get().GetMouse()->ProcessMessage(uMsg, wParam, lParam);
 		break;
 	case WM_MOUSEACTIVATE:
 		// When you click activate the window, we want Mouse to ignore it.

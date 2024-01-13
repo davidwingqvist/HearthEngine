@@ -83,7 +83,7 @@ bool WireFramePass::CreateInput()
 
 WireFramePass::WireFramePass()
 {
-	BuildGrid({ 0.0f, 0.0f, 0.0f }, { 500.0f, 500.0f }, 25);
+	BuildGrid({ 0.0f, 0.0f, 0.0f }, { 1000.0f, 1000.0f }, 25);
 }
   
 WireFramePass::~WireFramePass()
@@ -113,7 +113,8 @@ void WireFramePass::Prepass()
 	const UINT stride = sizeof point_data;
 	const UINT offset = 0;
 	D3D11Core::Get().Context()->IASetVertexBuffers(0, 1, &m_vertexBuffer, &stride, &offset);
-	D3D11Core::Get().Context()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
+	//D3D11Core::Get().Context()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
+	D3D11Core::Get().Context()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
 }
 
 void WireFramePass::Pass(Scene* currentScene)

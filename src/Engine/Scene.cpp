@@ -4,6 +4,7 @@
 #include "ResourceManager.h"
 #include "EngineGUI.h"
 #include "LuaState.h"
+#include "Time.h"
 
 void UpdatePublicBuffer(ID3D11Buffer*& buffer, const sm::Matrix& matrix_data)
 {
@@ -85,6 +86,7 @@ void Scene::Draw()
 	//this->PreDraw();
 	// Public buffer is set to the first slot in Vertex Shader
 	D3D11Core::Get().Context()->VSSetConstantBuffers(0, 1, &m_publicBuffer);
+	m_camera.Move();
 
 	m_registry.Group<Model, Transform>().ForEach([&](Model& model, Transform& pos){
 

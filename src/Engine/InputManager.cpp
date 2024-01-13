@@ -10,11 +10,15 @@ InputManager::InputManager()
 
 	m_keyboardTracker.Reset();
 	m_mouseTracker.Reset();
+
+	m_mouseX = 0;
+	m_mouseY = 0;
 }
 
 void InputManager::Initialize(const HWND& window)
 {
 	m_mouse->SetWindow(window);
+	SetMouseMode(dx::Mouse::MODE_ABSOLUTE);
 }
 
 dx::Keyboard* InputManager::GetKeyboard() const
@@ -25,12 +29,32 @@ dx::Keyboard* InputManager::GetKeyboard() const
 dx::Mouse* InputManager::GetMouse() const
 {
 	return m_mouse.get();
-} 
+}
+const int& InputManager::GetMouseX() const
+{
+	return m_mouseX;
+}
+
+const int& InputManager::GetMouseY() const
+{
+	return m_mouseY;
+}
+
+void InputManager::SetMouseMode(const dx::Mouse::Mode& mode)
+{
+	m_mouse->SetMode(mode);
+}
+
 
 void InputManager::Update()
 {
 	m_keyboardTracker.Update(m_keyboard->GetState());
 	m_mouseTracker.Update(m_mouse->GetState());
+
+	m_mouseX = m_mouse->GetState().x;
+	m_mouseY = m_mouse->GetState().y;
+
+	//DEBUG_INFO(std::to_string(m_mouseX) + " | " + std::to_string(m_mouseY) + "\n")
 }
 
 const bool InputManager::CheckKey(const dx::Keyboard::Keys& key, const key_state& state) const
@@ -47,4 +71,40 @@ const bool InputManager::CheckKey(const dx::Keyboard::Keys& key, const key_state
 	
 	// No state inserted was recognized, return false.
 	return false;
+}
+
+const bool InputManager::CheckMouseKey(const MouseKey& key, const key_state state)
+{
+	dx::Mouse::ButtonStateTracker::ButtonState* button = nullptr;
+	switch (key)
+	{
+	case MouseKey::LEFT:
+		button = &m_mouseTracker.leftButton;
+		break;
+	case MouseKey::MIDDLE:
+		button = &m_mouseTracker.middleButton;
+		break;
+	case MouseKey::RIGHT:
+		button = &m_mouseTracker.rightButton;
+		break;
+	default:
+		button = &m_mouseTracker.leftButton;
+		break;
+	}
+
+	switch (state)
+	{
+	case key_state::PRESSED:
+		return *button == m_mouseTracker.PRESSED;
+		break;
+	case key_state::HOLD:
+		return *button == m_mouseTracker.HELD;
+		break;
+	case key_state::RELEASED:
+		return *button == m_mouseTracker.RELEASED;
+		break;
+	default:
+		return false;
+		break;
+	}
 }
