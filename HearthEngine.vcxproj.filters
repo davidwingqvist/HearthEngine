@@ -146,6 +146,9 @@
     <ClCompile Include="src\Engine\LightPass.cpp">
       <Filter>RenderPass\Passes</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine\WireFramePass.cpp">
+      <Filter>RenderPass\Passes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Engine\Header.h">
@@ -244,6 +247,9 @@
     <ClInclude Include="src\Engine\LightPass.h">
       <Filter>RenderPass\Passes</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\WireFramePass.h">
+      <Filter>RenderPass\Passes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="src\Engine\BasicPixelShader.hlsl">
@@ -256,6 +262,12 @@
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="src\Engine\LightVertexShader.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="src\Engine\WireFrameVertexShader.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="src\Engine\WireFramePixelShader.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>

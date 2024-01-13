@@ -163,6 +163,7 @@ BasicPass::~BasicPass()
 void BasicPass::Prepass()
 {
 	ClearRenderTargets();
+	D3D11Core::Get().Context()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	D3D11Core::Get().Context()->VSSetShader(m_pipeline->m_baseVertexShader.Get(), nullptr, 0);
 	D3D11Core::Get().Context()->PSSetShader(m_pipeline->m_basePixelShader.Get(), nullptr, 0);
 	D3D11Core::Get().Context()->IASetInputLayout(m_pipeline->m_defaultInputLayout);
@@ -174,6 +175,9 @@ void BasicPass::Prepass()
 void BasicPass::Pass(Scene* currentScene)
 {
 	currentScene->Draw();
+	m_gridPass.Prepass();
+	m_gridPass.Pass(currentScene);
+	m_gridPass.Postpass();
 }
 
 void BasicPass::Postpass()
@@ -196,4 +200,5 @@ void BasicPass::Create()
 {
 	SetUpTextures();
 	SetUpDepthTexture();
+	m_gridPass.Create();
 }

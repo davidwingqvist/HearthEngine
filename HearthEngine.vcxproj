@@ -43,6 +43,7 @@
     <ClCompile Include="src\Engine\Structs.cpp" />
     <ClCompile Include="src\Engine\Time.cpp" />
     <ClCompile Include="src\Engine\Window.cpp" />
+    <ClCompile Include="src\Engine\WireFramePass.cpp" />
     <ClCompile Include="Thirdparty\imgui\imgui.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
@@ -97,6 +98,7 @@
     <ClInclude Include="src\Engine\Structs.h" />
     <ClInclude Include="src\Engine\Time.h" />
     <ClInclude Include="src\Engine\Window.h" />
+    <ClInclude Include="src\Engine\WireFramePass.h" />
     <ClInclude Include="Thirdparty\imgui\imconfig.h" />
     <ClInclude Include="Thirdparty\imgui\imgui.h" />
     <ClInclude Include="Thirdparty\imgui\imgui_impl_dx11.h" />
@@ -126,6 +128,18 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
     </FxCompile>
     <FxCompile Include="src\Engine\LightVertexShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="src\Engine\WireFramePixelShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="src\Engine\WireFrameVertexShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>

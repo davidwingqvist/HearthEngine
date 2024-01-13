@@ -1,6 +1,7 @@
 #pragma once
 #include "Renderpass.h"
 #include "Shader.h"
+#include "WireFramePass.h"
 
 class BasicPass : public IRenderpass
 {
@@ -22,6 +23,10 @@ private:
 	bool SetUpDepthTexture();
 
 	void ClearRenderTargets();
+
+private:
+
+	WireFramePass m_gridPass;
 
 public:
 
