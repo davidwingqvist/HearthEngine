@@ -12,6 +12,7 @@ private:
 	float m_yaw = 0.0f;
 
 	void Update();
+	void UpdateRotation();
 	bool SetUpBuffer();
 	bool UpdateBuffer();
 public:
