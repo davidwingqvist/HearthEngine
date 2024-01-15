@@ -13,8 +13,15 @@ void Camera::Update()
 
 void Camera::UpdateRotation()
 {
-	m_lookAt = sm::Vector3::Transform(m_position + m_position.Forward, sm::Matrix::CreateFromYawPitchRoll(m_yaw, m_pitch, 0.f));
-	//DEBUG_INFO(std::to_string(m_lookAt.x) + " " + std::to_string(m_lookAt.y) + " " + std::to_string(m_lookAt.z) + "\n")
+	if (m_yaw > dx::XM_PI)
+	{
+		m_yaw -= dx::XM_2PI;
+	}
+	else if (m_yaw < -dx::XM_PI)
+	{
+		m_yaw += dx::XM_2PI;
+	}
+	m_lookAt = sm::Vector3::Transform(m_position.Forward, sm::Matrix::CreateFromYawPitchRoll(m_yaw, 0.0f, 0.f)) + m_position;
 	Update();
 }
 
@@ -73,18 +80,11 @@ void Camera::SetPosition(const sm::Vector3& pos)
 
 void Camera::SetPosition(const float& x, const float& y, const float& z)
 {
-	constexpr float limit = dx::XM_PIDIV2 - 0.01f;
-	m_pitch = max(-limit, m_pitch);
-	m_pitch = std::min(+limit, m_pitch);
-
 	sm::Vector3 vec = m_lookAt - m_position;
 	vec.Normalize();
 
 	m_position += vec * z;
 	m_lookAt += vec * z;
-
-	DEBUG_INFO(std::to_string(m_position.x) + " " + std::to_string(m_position.y) + " " + std::to_string(m_position.z) + "\n")
-	DEBUG_INFO(std::to_string(m_lookAt.x) + " " + std::to_string(m_lookAt.y) + " " + std::to_string(m_lookAt.z) + "\n")
 	Update();
 }
 
@@ -108,41 +108,30 @@ void Camera::Move()
 		SetPosition(0.1f * Time::Get().GetDeltaTime(), 0, 0);
 	}
 
-	if (InputManager::Get().CheckKey(kb_key::Up, key_state::HOLD))
-	{
-		m_pitch += 0.001f * Time::Get().GetDeltaTime();
-		UpdateRotation();
-	}
-	else if(InputManager::Get().CheckKey(kb_key::Down, key_state::HOLD))
-	{
-		m_pitch -= 0.001f * Time::Get().GetDeltaTime();
-		UpdateRotation();
-	}
+	//constexpr float limit = dx::XM_PIDIV2 - 0.01f;
+	//if (InputManager::Get().CheckKey(kb_key::Up, key_state::HOLD))
+	//{
+	//	m_pitch += 0.001f * Time::Get().GetDeltaTime();
+	//	m_pitch = max(-limit, m_pitch);
+	//	m_pitch = std::min(+limit, m_pitch);
+	//	UpdateRotation();
+	//}
+	//else if(InputManager::Get().CheckKey(kb_key::Down, key_state::HOLD))
+	//{
+	//	m_pitch -= 0.001f * Time::Get().GetDeltaTime();
+	//	m_pitch = max(-limit, m_pitch);
+	//	m_pitch = std::min(+limit, m_pitch);
+	//	UpdateRotation();
+	//}
 
 	if (InputManager::Get().CheckKey(kb_key::Left, key_state::HOLD))
 	{
 		m_yaw += 0.001f * Time::Get().GetDeltaTime();
-		if (m_yaw > dx::XM_PI)
-		{
-			m_yaw -= dx::XM_PI;
-		}
-		else if (m_yaw < -dx::XM_PI)
-		{
-			m_yaw = dx::XM_PI;
-		}
 		UpdateRotation();
 	}
 	else if (InputManager::Get().CheckKey(kb_key::Right, key_state::HOLD))
 	{
 		m_yaw -= 0.001f * Time::Get().GetDeltaTime();
-		if (m_yaw > dx::XM_PI)
-		{
-			m_yaw -= dx::XM_PI;
-		}
-		else if (m_yaw < -dx::XM_PI)
-		{
-			m_yaw = dx::XM_PI;
-		}
 		UpdateRotation();
 	}
 }
