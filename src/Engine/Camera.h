@@ -7,6 +7,7 @@ private:
 	ID3D11Buffer* m_buffer;
 	sm::Vector3 m_position{};
 	sm::Vector3 m_lookAt{};
+	sm::Vector3 m_right{};
 
 	float m_pitch = 0.0f;
 	float m_yaw = 0.0f;

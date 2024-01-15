@@ -5,6 +5,8 @@
 #include "InputManager.h"
 #include "Time.h"
 
+constexpr float limit = dx::XM_PIDIV2 - 0.01f;
+
 void Camera::Update()
 {
 	m_matData.viewMatrix = sm::Matrix::CreateLookAt(m_position, m_lookAt, sm::Vector3::Up);
@@ -13,6 +15,10 @@ void Camera::Update()
 
 void Camera::UpdateRotation()
 {
+	// Limiting pitch and yaw to not cause trouble.
+	m_pitch = max(-limit, m_pitch);
+	m_pitch = std::min(+limit, m_pitch);
+
 	if (m_yaw > dx::XM_PI)
 	{
 		m_yaw -= dx::XM_2PI;
@@ -21,7 +27,9 @@ void Camera::UpdateRotation()
 	{
 		m_yaw += dx::XM_2PI;
 	}
-	m_lookAt = sm::Vector3::Transform(m_position.Forward, sm::Matrix::CreateFromYawPitchRoll(m_yaw, 0.0f, 0.f)) + m_position;
+
+	m_lookAt = sm::Vector3::Transform(m_position.Forward, sm::Matrix::CreateFromYawPitchRoll(m_yaw, m_pitch, 0.f)) + m_position;
+	m_right = sm::Vector3::Transform(m_position.Right, sm::Matrix::CreateFromYawPitchRoll(m_yaw, m_pitch, 0.f)) + m_position;
 	Update();
 }
 
@@ -59,6 +67,7 @@ Camera::Camera()
 {
 	m_position = { 0.0f, 10.0f, .0f };
 	m_lookAt = m_position + m_position.Forward;
+	m_right = m_position + m_position.Right;
 	m_matData.viewMatrix = sm::Matrix::CreateLookAt(m_position, m_lookAt, sm::Vector3::Up);
 	m_matData.projectionMatrix = sm::Matrix::CreatePerspectiveFieldOfView(3.1415f / 4.0f, ((float)D3D11Core::Get().GetWindow()->GetWidth() / D3D11Core::Get().GetWindow()->GetHeight()), 0.1f, 1000.f);
 	if (!SetUpBuffer())
@@ -80,12 +89,16 @@ void Camera::SetPosition(const sm::Vector3& pos)
 
 void Camera::SetPosition(const float& x, const float& y, const float& z)
 {
-	sm::Vector3 vec = m_lookAt - m_position;
-	vec.Normalize();
+	sm::Vector3 vec_forward = m_lookAt - m_position;
+	sm::Vector3 vec_right = m_right - m_position;
+	vec_forward.Normalize();
+	vec_right.Normalize();
 
-	m_position += vec * z;
-	m_lookAt += vec * z;
-	Update();
+	// Move forward and backward based on rotation.
+	m_position += vec_forward * z;
+	m_position += vec_right * x;
+
+	UpdateRotation();
 }
 
 void Camera::Move()
@@ -108,21 +121,17 @@ void Camera::Move()
 		SetPosition(0.1f * Time::Get().GetDeltaTime(), 0, 0);
 	}
 
-	//constexpr float limit = dx::XM_PIDIV2 - 0.01f;
-	//if (InputManager::Get().CheckKey(kb_key::Up, key_state::HOLD))
-	//{
-	//	m_pitch += 0.001f * Time::Get().GetDeltaTime();
-	//	m_pitch = max(-limit, m_pitch);
-	//	m_pitch = std::min(+limit, m_pitch);
-	//	UpdateRotation();
-	//}
-	//else if(InputManager::Get().CheckKey(kb_key::Down, key_state::HOLD))
-	//{
-	//	m_pitch -= 0.001f * Time::Get().GetDeltaTime();
-	//	m_pitch = max(-limit, m_pitch);
-	//	m_pitch = std::min(+limit, m_pitch);
-	//	UpdateRotation();
-	//}
+	
+	if (InputManager::Get().CheckKey(kb_key::Up, key_state::HOLD))
+	{
+		m_pitch += 0.001f * Time::Get().GetDeltaTime();
+		UpdateRotation();
+	}
+	else if(InputManager::Get().CheckKey(kb_key::Down, key_state::HOLD))
+	{
+		m_pitch -= 0.001f * Time::Get().GetDeltaTime();
+		UpdateRotation();
+	}
 
 	if (InputManager::Get().CheckKey(kb_key::Left, key_state::HOLD))
 	{
