@@ -17,23 +17,31 @@ void WireFramePass::BuildGrid(const sm::Vector3& midPoint, const sm::Vector2& si
 
 	float currentX = startPoint.x;
 	FLOAT currentID = 0;
-	for (UINT i = 0; i < xSteps; i++)
+	for (int i = 0; i < xSteps; i++)
 	{
 		float currentZ = startPoint.z;
-		for (UINT j = 0; j < zSteps; j++)
-		{
-			m_points.push_back({ {currentX, m_middlePoint.y, currentZ},{currentID}});
-			currentZ += m_offset;
-			m_indices.push_back(currentID);
-			currentID++;
-		}
+		m_points.push_back({ { currentX, m_middlePoint.y, currentZ}, {0} });
+		m_points.push_back({{ currentX, m_middlePoint.y, currentZ + m_size.y - m_offset},{0}});
+		currentZ += m_offset;
 		currentX += m_offset;
-
-		//DEBUG_INFO("\n")
+		m_indices.push_back(currentID);
+		currentID++;
+		m_indices.push_back(currentID);
+		currentID++;
 	}
 
-	m_amount = currentID;
-
+	currentX = startPoint.x;
+	float currentZ = startPoint.z;
+	for (int i = 0; i < zSteps; i++)
+	{
+		m_points.push_back({ { startPoint.x, m_middlePoint.y, currentZ}, {0} });
+		m_points.push_back({ { startPoint.x + m_size.x - m_offset, m_middlePoint.y, currentZ},{0} });
+		currentZ += m_offset;
+		m_indices.push_back(currentID);
+		currentID++;
+		m_indices.push_back(currentID);
+		currentID++;
+	}
 }
 
 bool WireFramePass::CreateShaders()
@@ -65,7 +73,7 @@ bool WireFramePass::CreateInput()
 	}
 
 	D3D11_BUFFER_DESC desc{};
-	desc.ByteWidth = sizeof(point_data) * m_amount;
+	desc.ByteWidth = sizeof(point_data) * m_points.size();
 	desc.Usage = D3D11_USAGE_IMMUTABLE;
 	desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 
@@ -139,7 +147,7 @@ void WireFramePass::Prepass()
 	const UINT offset = 0;
 	D3D11Core::Get().Context()->IASetVertexBuffers(0, 1, &m_vertexBuffer, &stride, &offset);
 	D3D11Core::Get().Context()->IASetIndexBuffer(m_indexBuffer, DXGI_FORMAT_R32_UINT, 0);
-	D3D11Core::Get().Context()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
+	D3D11Core::Get().Context()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
 }
 
 void WireFramePass::Pass(Scene* currentScene)
