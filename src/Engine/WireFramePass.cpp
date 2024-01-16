@@ -24,8 +24,8 @@ void WireFramePass::BuildGrid(const sm::Vector3& midPoint, const sm::Vector2& si
 		{
 			m_points.push_back({ {currentX, m_middlePoint.y, currentZ},{currentID}});
 			currentZ += m_offset;
+			m_indices.push_back(currentID);
 			currentID++;
-			//DEBUG_INFO("| " + std::to_string(currentX) + " " + std::to_string(currentZ) + " | ")
 		}
 		currentX += m_offset;
 
@@ -33,6 +33,7 @@ void WireFramePass::BuildGrid(const sm::Vector3& midPoint, const sm::Vector2& si
 	}
 
 	m_amount = currentID;
+
 }
 
 bool WireFramePass::CreateShaders()
@@ -81,6 +82,26 @@ bool WireFramePass::CreateInput()
 	return true;
 }
 
+inline bool WireFramePass::CreateIndexBuffer()
+{
+	D3D11_BUFFER_DESC indDesc{};
+	indDesc.ByteWidth = sizeof UINT * m_indices.size();
+	indDesc.Usage = D3D11_USAGE_IMMUTABLE;
+	indDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+
+	D3D11_SUBRESOURCE_DATA indData{};
+	indData.pSysMem = &m_indices[0];
+
+	HRESULT hr = D3D11Core::Get().Device()->CreateBuffer(&indDesc, &indData, &m_indexBuffer);
+	if (FAILED(hr))
+	{
+		DEBUG_ERROR("Failed creating Index buffer for Light pass!\n")
+			return false;
+	}
+
+	return true;
+}
+
 WireFramePass::WireFramePass()
 {
 	BuildGrid({ 0.0f, 0.0f, 0.0f }, { 1000.0f, 1000.0f }, 25);
@@ -92,6 +113,8 @@ WireFramePass::~WireFramePass()
 		m_inputLayout->Release();
 	if (m_vertexBuffer)
 		m_vertexBuffer->Release();
+	if (m_indexBuffer)
+		m_indexBuffer->Release();
 }
 
 void WireFramePass::Create()
@@ -102,6 +125,8 @@ void WireFramePass::Create()
 	}
 
 	CreateInput();
+
+	CreateIndexBuffer();
 }
 
 void WireFramePass::Prepass()
@@ -113,13 +138,13 @@ void WireFramePass::Prepass()
 	const UINT stride = sizeof point_data;
 	const UINT offset = 0;
 	D3D11Core::Get().Context()->IASetVertexBuffers(0, 1, &m_vertexBuffer, &stride, &offset);
-	//D3D11Core::Get().Context()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
-	D3D11Core::Get().Context()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+	D3D11Core::Get().Context()->IASetIndexBuffer(m_indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+	D3D11Core::Get().Context()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
 }
 
 void WireFramePass::Pass(Scene* currentScene)
 {
-	D3D11Core::Get().Context()->Draw(m_amount, 0);
+	D3D11Core::Get().Context()->DrawIndexed(m_indices.size(), 0, 0);
 }
 
 void WireFramePass::Postpass()

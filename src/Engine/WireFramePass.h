@@ -18,6 +18,7 @@ private:
 	};
 	std::vector<point_data> m_points;
 	UINT m_amount = 0;
+	std::vector<UINT> m_indices;
 
 	sm::Vector3 m_middlePoint; // Middle point of the grid.
 	sm::Vector2 m_size; // Size for both x z
@@ -35,11 +36,13 @@ private:
 	*/
 	ID3D11InputLayout* m_inputLayout = nullptr;
 	ID3D11Buffer* m_vertexBuffer = nullptr;
+	ID3D11Buffer* m_indexBuffer = nullptr;
 	VertexShader m_vertexShader;
 	PixelShader m_pixelShader;
 
 	bool CreateShaders();
 	bool CreateInput();
+	inline bool CreateIndexBuffer();
 
 public:
 
