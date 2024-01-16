@@ -12,6 +12,8 @@ private:
 	float m_pitch = 0.0f;
 	float m_yaw = 0.0f;
 
+	float m_speed = 1.0f;
+
 	void Update();
 	void UpdateRotation();
 	bool SetUpBuffer();

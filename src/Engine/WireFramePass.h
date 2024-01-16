@@ -40,9 +40,15 @@ private:
 	VertexShader m_vertexShader;
 	PixelShader m_pixelShader;
 
+	// Graphical Values
+	sm::Vector4 m_gridColor;
+	ID3D11Buffer* m_gridColorBuffer = nullptr;
+
 	bool CreateShaders();
 	bool CreateInput();
 	inline bool CreateIndexBuffer();
+	inline bool CreateColorBuffer();
+	inline bool UpdateColorBuffer();
 
 public:
 
@@ -54,4 +60,7 @@ public:
 	void Prepass() override;
 	void Pass(Scene* currentScene) override;
 	void Postpass() override;
+
+	// Set the color of the wireframe grid.
+	void SetGridColor(const sm::Vector3& newColor);
 };

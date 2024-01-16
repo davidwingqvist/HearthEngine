@@ -19,10 +19,8 @@ void WireFramePass::BuildGrid(const sm::Vector3& midPoint, const sm::Vector2& si
 	FLOAT currentID = 0;
 	for (int i = 0; i < xSteps; i++)
 	{
-		float currentZ = startPoint.z;
-		m_points.push_back({ { currentX, m_middlePoint.y, currentZ}, {0} });
-		m_points.push_back({{ currentX, m_middlePoint.y, currentZ + m_size.y - m_offset},{0}});
-		currentZ += m_offset;
+		m_points.push_back({ { currentX, m_middlePoint.y, startPoint.z}, {0} });
+		m_points.push_back({{ currentX, m_middlePoint.y, startPoint.z + m_size.y - m_offset},{0}});
 		currentX += m_offset;
 		m_indices.push_back(currentID);
 		currentID++;
@@ -110,9 +108,45 @@ inline bool WireFramePass::CreateIndexBuffer()
 	return true;
 }
 
+inline bool WireFramePass::CreateColorBuffer()
+{
+	D3D11_BUFFER_DESC indDesc{};
+	indDesc.ByteWidth = sizeof sm::Vector4;
+	indDesc.Usage = D3D11_USAGE_DYNAMIC;
+	indDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	indDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+
+	D3D11_SUBRESOURCE_DATA indData{};
+	indData.pSysMem = &m_gridColor;
+
+	HRESULT hr = D3D11Core::Get().Device()->CreateBuffer(&indDesc, &indData, &m_gridColorBuffer);
+	if (FAILED(hr))
+	{
+		DEBUG_ERROR("Failed creating Index buffer for Light pass!\n")
+			return false;
+	}
+
+	return true;
+}
+
+inline bool WireFramePass::UpdateColorBuffer()
+{
+	D3D11_MAPPED_SUBRESOURCE sub;
+	HRESULT hr = D3D11Core::Get().Context()->Map(m_gridColorBuffer, 0, D3D11_MAP_WRITE_DISCARD, NULL, &sub);
+	if (FAILED(hr))
+	{
+		DEBUG_ERROR("Failed to update new color to the DirectX buffer\n");
+		return false;
+	}
+	std::memcpy(sub.pData, &m_gridColor, sizeof sm::Vector4);
+	D3D11Core::Get().Context()->Unmap(m_gridColorBuffer, 0);
+	return true;
+}
+
 WireFramePass::WireFramePass()
 {
 	BuildGrid({ 0.0f, 0.0f, 0.0f }, { 1000.0f, 1000.0f }, 25);
+	m_gridColor = { 0.f, 1.f, 0.f, 1.f };
 }
   
 WireFramePass::~WireFramePass()
@@ -123,6 +157,8 @@ WireFramePass::~WireFramePass()
 		m_vertexBuffer->Release();
 	if (m_indexBuffer)
 		m_indexBuffer->Release();
+	if (m_gridColorBuffer)
+		m_gridColorBuffer->Release();
 }
 
 void WireFramePass::Create()
@@ -135,6 +171,10 @@ void WireFramePass::Create()
 	CreateInput();
 
 	CreateIndexBuffer();
+
+	CreateColorBuffer();
+
+	SetGridColor({ .8f, .1f, .75f });
 }
 
 void WireFramePass::Prepass()
@@ -148,6 +188,7 @@ void WireFramePass::Prepass()
 	D3D11Core::Get().Context()->IASetVertexBuffers(0, 1, &m_vertexBuffer, &stride, &offset);
 	D3D11Core::Get().Context()->IASetIndexBuffer(m_indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	D3D11Core::Get().Context()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+	D3D11Core::Get().Context()->PSSetConstantBuffers(0, 1, &m_gridColorBuffer);
 }
 
 void WireFramePass::Pass(Scene* currentScene)
@@ -157,4 +198,10 @@ void WireFramePass::Pass(Scene* currentScene)
 
 void WireFramePass::Postpass()
 {
+}
+
+void WireFramePass::SetGridColor(const sm::Vector3& newColor)
+{
+	m_gridColor = { newColor.x, newColor.y, newColor.z, 1.0f };
+	UpdateColorBuffer();
 }

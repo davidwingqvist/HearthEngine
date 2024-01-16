@@ -95,8 +95,8 @@ void Camera::SetPosition(const float& x, const float& y, const float& z)
 	vec_right.Normalize();
 
 	// Move forward and backward based on rotation.
-	m_position += vec_forward * z;
-	m_position += vec_right * x;
+	m_position += vec_forward * z * m_speed;
+	m_position += vec_right * x * m_speed;
 
 	UpdateRotation();
 }
@@ -124,25 +124,32 @@ void Camera::Move()
 	
 	if (InputManager::Get().CheckKey(kb_key::Up, key_state::HOLD))
 	{
-		m_pitch += 0.001f * Time::Get().GetDeltaTime();
+		m_pitch += 0.002f * Time::Get().GetDeltaTime();
 		UpdateRotation();
 	}
 	else if(InputManager::Get().CheckKey(kb_key::Down, key_state::HOLD))
 	{
-		m_pitch -= 0.001f * Time::Get().GetDeltaTime();
+		m_pitch -= 0.002f * Time::Get().GetDeltaTime();
 		UpdateRotation();
 	}
 
 	if (InputManager::Get().CheckKey(kb_key::Left, key_state::HOLD))
 	{
-		m_yaw += 0.001f * Time::Get().GetDeltaTime();
+		m_yaw += 0.002f * Time::Get().GetDeltaTime();
 		UpdateRotation();
 	}
 	else if (InputManager::Get().CheckKey(kb_key::Right, key_state::HOLD))
 	{
-		m_yaw -= 0.001f * Time::Get().GetDeltaTime();
+		m_yaw -= 0.002f * Time::Get().GetDeltaTime();
 		UpdateRotation();
 	}
+
+	if (InputManager::Get().CheckKey(kb_key::LeftShift, key_state::HOLD))
+	{
+		m_speed = 5.0f;
+	}
+	else
+		m_speed = 1.0f;
 }
 
 void Camera::Activate() const
