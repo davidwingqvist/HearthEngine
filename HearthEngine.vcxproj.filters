@@ -149,6 +149,9 @@
     <ClCompile Include="src\Engine\WireFramePass.cpp">
       <Filter>RenderPass\Passes</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine\CubeMapPass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Engine\Header.h">
@@ -248,6 +251,9 @@
       <Filter>RenderPass\Passes</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\WireFramePass.h">
+      <Filter>RenderPass\Passes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\CubeMapPass.h">
       <Filter>RenderPass\Passes</Filter>
     </ClInclude>
   </ItemGroup>
