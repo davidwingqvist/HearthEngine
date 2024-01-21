@@ -10,7 +10,7 @@ private:
 
 protected:
 
-	PipelineManager* m_pipeline;
+	PipelineManager* m_pipeline = nullptr;
 
 public:
 	IRenderpass() = default;

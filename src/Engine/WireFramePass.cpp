@@ -16,8 +16,8 @@ void WireFramePass::BuildGrid(const sm::Vector3& midPoint, const sm::Vector2& si
 	UINT zSteps = (UINT)m_size.y / (UINT)m_offset;
 
 	float currentX = startPoint.x;
-	FLOAT currentID = 0;
-	for (int i = 0; i < xSteps; i++)
+	UINT currentID = 0;
+	for (UINT i = 0; i < xSteps; i++)
 	{
 		m_points.push_back({ { currentX, m_middlePoint.y, startPoint.z}, {0} });
 		m_points.push_back({{ currentX, m_middlePoint.y, startPoint.z + m_size.y - m_offset},{0}});
@@ -30,7 +30,7 @@ void WireFramePass::BuildGrid(const sm::Vector3& midPoint, const sm::Vector2& si
 
 	currentX = startPoint.x;
 	float currentZ = startPoint.z;
-	for (int i = 0; i < zSteps; i++)
+	for (UINT i = 0; i < zSteps; i++)
 	{
 		m_points.push_back({ { startPoint.x, m_middlePoint.y, currentZ}, {0} });
 		m_points.push_back({ { startPoint.x + m_size.x - m_offset, m_middlePoint.y, currentZ},{0} });
@@ -193,7 +193,7 @@ void WireFramePass::Prepass()
 
 void WireFramePass::Pass(Scene* currentScene)
 {
-	D3D11Core::Get().Context()->DrawIndexed(m_indices.size(), 0, 0);
+	D3D11Core::Get().Context()->DrawIndexed((UINT)m_indices.size(), 0, 0);
 }
 
 void WireFramePass::Postpass()
