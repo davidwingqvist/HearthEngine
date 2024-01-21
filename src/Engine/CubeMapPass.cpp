@@ -11,6 +11,7 @@ CubeMapPass::~CubeMapPass()
 
 void CubeMapPass::Create()
 {
+
 }
 
 void CubeMapPass::Prepass()

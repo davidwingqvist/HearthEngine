@@ -152,6 +152,9 @@
     <ClCompile Include="src\Engine\CubeMapPass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine\Texture.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Engine\Header.h">
@@ -255,6 +258,9 @@
     </ClInclude>
     <ClInclude Include="src\Engine\CubeMapPass.h">
       <Filter>RenderPass\Passes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Texture.h">
+      <Filter>Resource</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

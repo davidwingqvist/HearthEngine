@@ -42,6 +42,7 @@
     <ClCompile Include="src\Engine\SceneManager.cpp" />
     <ClCompile Include="src\Engine\Shader.cpp" />
     <ClCompile Include="src\Engine\Structs.cpp" />
+    <ClCompile Include="src\Engine\Texture.cpp" />
     <ClCompile Include="src\Engine\Time.cpp" />
     <ClCompile Include="src\Engine\Window.cpp" />
     <ClCompile Include="src\Engine\WireFramePass.cpp" />
@@ -98,6 +99,7 @@
     <ClInclude Include="src\Engine\SceneManager.h" />
     <ClInclude Include="src\Engine\Shader.h" />
     <ClInclude Include="src\Engine\Structs.h" />
+    <ClInclude Include="src\Engine\Texture.h" />
     <ClInclude Include="src\Engine\Time.h" />
     <ClInclude Include="src\Engine\Window.h" />
     <ClInclude Include="src\Engine\WireFramePass.h" />
