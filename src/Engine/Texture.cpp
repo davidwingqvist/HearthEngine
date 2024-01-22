@@ -12,6 +12,13 @@ Texture::~Texture()
 {
     if (m_texture)
         m_texture->Release();
+    if (m_textureView)
+        m_textureView->Release();
+}
+
+const ID3D11ShaderResourceView* Texture::GetShaderView() const
+{
+    return m_textureView;
 }
 
 bool Texture::Create(const std::string& filename)
@@ -40,8 +47,11 @@ bool Texture::Create(const std::string& filename)
     {
         DEBUG_ERROR("Couldnt create texture for " + filename + " !\n")
     }
+    else
+    {
+        hr = D3D11Core::Get().Device()->CreateShaderResourceView(m_texture, 0, &m_textureView);
+    }
 
-    hr = D3D11Core::Get().Device()->CreateShaderResourceView(m_texture, 0, &m_textureView);
-
+    stbi_image_free(image);
     return !FAILED(hr);
 }

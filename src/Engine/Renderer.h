@@ -3,6 +3,7 @@
 #include "PipelineManager.h"
 #include "BasicPass.h"
 #include "LightPass.h"
+#include "CubeMapPass.h"
 
 class Renderer
 {
@@ -10,6 +11,7 @@ private:
 
 	BasicPass m_basicPass; // G-Pass before Light
 	LightPass m_lightPass; // Light pass, based on basic pass.
+	CubeMapPass m_cubeMapPass; // Cube map
 
 private:
 

@@ -169,7 +169,8 @@ void BasicPass::Prepass()
 	D3D11Core::Get().Context()->IASetInputLayout(m_pipeline->m_defaultInputLayout);
 	ID3D11RenderTargetView* const m_targets[2] = { m_colorTarget, m_normalsTarget };
 	D3D11Core::Get().Context()->OMSetRenderTargets(2, m_targets, m_depthTarget);
-
+	DC->RSSetState(m_pipeline->m_rasterState);
+	DC->OMSetBlendState(nullptr, NULL, 0xffffffff);
 }
 
 void BasicPass::Pass(Scene* currentScene)

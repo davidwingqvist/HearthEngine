@@ -17,6 +17,8 @@ public:
 
 	~Texture();
 
+	const ID3D11ShaderResourceView* GetShaderView() const;
+
 	// Inherited via IResource
 	bool Create(const std::string& filename) override;
 };

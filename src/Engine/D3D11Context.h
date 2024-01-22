@@ -2,6 +2,9 @@
 #include <d3d11.h>
 #include "Window.h"
 
+#define DC D3D11Core::Get().Context()
+#define DD D3D11Core::Get().Device()
+
 class D3D11Core
 {
 private:

@@ -16,9 +16,11 @@ void Renderer::Initialize()
 
 	m_basicPass.Create();
 	m_lightPass.Create();
+	m_cubeMapPass.Create();
 
 	m_renderPasses.push_back(&m_basicPass);
 	m_renderPasses.push_back(&m_lightPass);
+	m_renderPasses.push_back(&m_cubeMapPass);
 }
 
 void Renderer::Draw(Scene* currentScene)

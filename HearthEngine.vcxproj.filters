@@ -51,6 +51,9 @@
     <Filter Include="RenderPass\Passes">
       <UniqueIdentifier>{7d58bccd-c1f9-4685-aea5-5125c396f5fc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders\HLSL">
+      <UniqueIdentifier>{da5fe207-8bc6-49dc-9deb-c571aeae0dd1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Engine\HearthEngine.cpp">
@@ -149,11 +152,11 @@
     <ClCompile Include="src\Engine\WireFramePass.cpp">
       <Filter>RenderPass\Passes</Filter>
     </ClCompile>
-    <ClCompile Include="src\Engine\CubeMapPass.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Engine\Texture.cpp">
       <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\CubeMapPass.cpp">
+      <Filter>RenderPass\Passes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -265,22 +268,28 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="src\Engine\BasicPixelShader.hlsl">
-      <Filter>Shaders</Filter>
+      <Filter>Shaders\HLSL</Filter>
     </FxCompile>
     <FxCompile Include="src\Engine\BasicVertexShader.hlsl">
-      <Filter>Shaders</Filter>
+      <Filter>Shaders\HLSL</Filter>
     </FxCompile>
     <FxCompile Include="src\Engine\LightPixelShader.hlsl">
-      <Filter>Shaders</Filter>
+      <Filter>Shaders\HLSL</Filter>
     </FxCompile>
     <FxCompile Include="src\Engine\LightVertexShader.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="src\Engine\WireFrameVertexShader.hlsl">
-      <Filter>Shaders</Filter>
+      <Filter>Shaders\HLSL</Filter>
     </FxCompile>
     <FxCompile Include="src\Engine\WireFramePixelShader.hlsl">
-      <Filter>Shaders</Filter>
+      <Filter>Shaders\HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="src\Engine\WireFrameVertexShader.hlsl">
+      <Filter>Shaders\HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="src\Engine\SkyBoxVertexShader.hlsl">
+      <Filter>Shaders\HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="src\Engine\SkyBoxPixelShader.hlsl">
+      <Filter>Shaders\HLSL</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
