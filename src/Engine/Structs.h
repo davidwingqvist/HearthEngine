@@ -50,13 +50,13 @@ static const char* const tname = "Transform";
 static const char* const tmap_set[] = { "xPosition", "yPosition", "zPosition", "xRotation", "yRotation", "zRotation", "xScale", "yScale", "zScale" };
 struct Transform
 {
-	sm::Vector3 pos;
-	sm::Vector3 rotation;
-	sm::Vector3 scale;
+	sm::Vector3 pos = {0.0f, 0.0f, 0.0f};
+	sm::Vector3 rotation = {0.0f, 0.0f, 0.0f};
+	sm::Vector3 scale = {1.0f, 1.0f, 1.0f};
 
-	sm::Matrix GetMatrix()
+	const sm::Matrix GetMatrix() const
 	{
-		return sm::Matrix::CreateWorld(pos, pos.Forward, sm::Vector3::Up);
+		return sm::Matrix::CreateTranslation(pos) * sm::Matrix::CreateFromYawPitchRoll(rotation) * sm::Matrix::CreateScale(scale);
 	}
 };
 static int transform_get(lua_State* L);

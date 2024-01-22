@@ -278,6 +278,8 @@ void CubeMapPass::Prepass()
 	// Input Assembly
 	DC->IASetInputLayout(m_inputLayout);
 
+	DC->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
 	const UINT stride = sizeof sm::Vector3;
 	const UINT offset = 0;
 	DC->IASetVertexBuffers(0, 1, &m_vertexBuffer, &stride, &offset);
@@ -301,4 +303,12 @@ void CubeMapPass::Pass(Scene* currentScene)
 
 void CubeMapPass::Postpass()
 {
+	// Reset values for next pass.
+	{
+		ID3D11RenderTargetView* const m_targets[8] = { nullptr };
+		D3D11Core::Get().Context()->OMSetRenderTargets(8, m_targets, nullptr);
+
+		ID3D11ShaderResourceView* temp[D3D11_COMMONSHADER_INPUT_RESOURCE_REGISTER_COUNT] = { 0 };
+		D3D11Core::Get().Context()->PSSetShaderResources(0, D3D11_COMMONSHADER_INPUT_RESOURCE_REGISTER_COUNT, temp);
+	}
 }

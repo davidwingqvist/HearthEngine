@@ -30,6 +30,8 @@ private:
 
 public:
 
+	void SetLightPassValues();
+
 
 	BasicPass(PipelineManager* pipe);
 	virtual ~BasicPass() override;

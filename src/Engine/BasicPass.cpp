@@ -131,6 +131,13 @@ void BasicPass::ClearRenderTargets()
 	D3D11Core::Get().Context()->ClearDepthStencilView(m_depthTarget, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 }
 
+void BasicPass::SetLightPassValues()
+{
+	// Prepare for Light pass input.
+	ID3D11ShaderResourceView* const m_views[3] = { m_colorShader, m_normalsShader, m_depthShader };
+	D3D11Core::Get().Context()->PSSetShaderResources(0, 3, m_views);
+}
+
 BasicPass::BasicPass(PipelineManager* pipe)
 	:IRenderpass(pipe)
 {
@@ -192,9 +199,7 @@ void BasicPass::Postpass()
 		D3D11Core::Get().Context()->PSSetShaderResources(0, D3D11_COMMONSHADER_INPUT_RESOURCE_REGISTER_COUNT, temp);
 	}
 
-	// Prepare for Light pass input.
-	ID3D11ShaderResourceView* const m_views[3] = { m_colorShader, m_normalsShader, m_depthShader };
-	D3D11Core::Get().Context()->PSSetShaderResources(0, 3, m_views);
+	DC->OMSetRenderTargets(1, &m_colorTarget, m_depthTarget);
 }
 
 void BasicPass::Create()

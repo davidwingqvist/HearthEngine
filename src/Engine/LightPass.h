@@ -1,6 +1,7 @@
 #pragma once
 #include "Renderpass.h"
 #include "Shader.h"
+#include "BasicPass.h"
 
 class LightPass : public IRenderpass
 {
@@ -29,6 +30,8 @@ private:
 	bool SetUpScreenTriangles();
 
 public:
+
+	BasicPass* m_basicPassRef;
 
 	LightPass(PipelineManager* pipe);
 	~LightPass();

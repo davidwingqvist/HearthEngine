@@ -53,6 +53,8 @@ LightPass::~LightPass()
 
 void LightPass::Prepass()
 {
+	m_basicPassRef->SetLightPassValues();
+
 	D3D11Core::Get().Context()->VSSetShader(m_lightVertex.Get(), nullptr, 0);
 	D3D11Core::Get().Context()->PSSetShader(m_lightPixel.Get(), nullptr, 0);
 	D3D11Core::Get().Context()->IASetInputLayout(m_pipeline->m_defaultInputLayout);

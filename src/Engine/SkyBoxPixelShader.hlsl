@@ -10,6 +10,6 @@ struct PixelIn
 
 float4 main(PixelIn input) : SV_TARGET
 {
-    return lerp(float4(0.2f, 0.2f, 0.2f, 0.0f), cubemap.Sample(samp, input.uv), 0.2f);
+    return cubemap.Sample(samp, input.uv) * 0.85f;
 
 }

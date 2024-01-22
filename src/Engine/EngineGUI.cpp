@@ -237,13 +237,13 @@ void EngineGUI::RenderTopBar()
 
 			ImGui::Text("Rotation");
 			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 4.0f);
-			ImGui::SliderFloat("x###Rotx", &currTransform->rotation.x, 0, 360, "%.2f");
+			ImGui::SliderFloat("x###Rotx", &currTransform->rotation.x, -3.1415, 3.1415, "%.3f");
 			ImGui::SameLine();
 			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 4.0f);
-			ImGui::SliderFloat("y###Roty", &currTransform->rotation.y, 0, 360, "%.2f");
+			ImGui::SliderFloat("y###Roty", &currTransform->rotation.y, -3.1415, 3.1415, "%.3f");
 			ImGui::SameLine();
 			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 4.0f);
-			ImGui::SliderFloat("z###Rotz", &currTransform->rotation.z, 0, 360, "%.2f");
+			ImGui::SliderFloat("z###Rotz", &currTransform->rotation.z, -3.1415, 3.1415, "%.3f");
 
 			ImGui::Text("Scale");
 			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 4.0f);
