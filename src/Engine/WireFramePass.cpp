@@ -71,7 +71,7 @@ bool WireFramePass::CreateInput()
 	}
 
 	D3D11_BUFFER_DESC desc{};
-	desc.ByteWidth = sizeof(point_data) * m_points.size();
+	desc.ByteWidth = sizeof(point_data) * (UINT)m_points.size();
 	desc.Usage = D3D11_USAGE_IMMUTABLE;
 	desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 
@@ -91,7 +91,7 @@ bool WireFramePass::CreateInput()
 inline bool WireFramePass::CreateIndexBuffer()
 {
 	D3D11_BUFFER_DESC indDesc{};
-	indDesc.ByteWidth = sizeof UINT * m_indices.size();
+	indDesc.ByteWidth = sizeof UINT * (UINT)m_indices.size();
 	indDesc.Usage = D3D11_USAGE_IMMUTABLE;
 	indDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
 

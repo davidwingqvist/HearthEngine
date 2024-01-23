@@ -2,6 +2,15 @@
 
 class Model3D;
 
+enum class LIGHTTYPE : UINT
+{
+	DIRECTIONAL = 1U,
+	SPOTLIGHT = 2U,
+	POINTLIGHT = 3U,
+
+	NONE = 0U
+};
+
 struct object2D
 {
 	float x;
@@ -83,6 +92,21 @@ struct camera_data
 	sm::Matrix projectionMatrix;
 };
 
+struct Physics
+{
+	float mass;
+};
+
+/*
+
+	This component is used for easily creating different kinds of lights.
+*/
+struct Light
+{
+	sm::Vector3 position = {};
+	LIGHTTYPE type = LIGHTTYPE::NONE;
+};
+
 struct Script
 {
 	std::vector<std::string> scripts;
@@ -91,4 +115,5 @@ struct Script
 struct Model
 {
 	Model3D* data;
+	bool isVisible = true;
 };
