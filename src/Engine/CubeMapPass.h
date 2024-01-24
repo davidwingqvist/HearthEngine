@@ -6,16 +6,16 @@ class CubeMapPass : public IRenderpass
 {
 private:
 
-	ID3D11Buffer* m_vertexBuffer = nullptr;
-	ID3D11Buffer* m_indexBuffer = nullptr;
+	DXPointer<ID3D11Buffer> m_vertexBuffer;
+	DXPointer<ID3D11Buffer> m_indexBuffer;
 	UINT m_nrOfIndices = 0;
 
-	ID3D11Texture2D* m_cubeMap = nullptr;
-	ID3D11ShaderResourceView* m_cubeMapView = nullptr;
-	ID3D11SamplerState* m_sampler = nullptr;
-	ID3D11InputLayout* m_inputLayout = nullptr;
-	ID3D11DepthStencilState* m_lessEqualState = nullptr;
-	ID3D11RasterizerState* m_rasterState = nullptr;
+	DXPointer<ID3D11Texture2D> m_cubeMap;
+	DXPointer<ID3D11ShaderResourceView> m_cubeMapView;
+	DXPointer<ID3D11SamplerState> m_sampler;
+	DXPointer<ID3D11InputLayout> m_inputLayout;
+	DXPointer<ID3D11DepthStencilState> m_lessEqualState;
+	DXPointer<ID3D11RasterizerState> m_rasterState;
 
 	PixelShader m_pixelShader;
 	VertexShader m_vertexShader;

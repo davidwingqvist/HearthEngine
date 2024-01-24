@@ -40,44 +40,12 @@ PipelineManager::PipelineManager()
 
 PipelineManager::~PipelineManager()
 {
-    if (m_backBuffer)
-        m_backBuffer->Release();
-
-    if (m_backBufferAccessView)
-        m_backBufferAccessView->Release();
-
-    if (m_depthStencilStateLess)
-        m_depthStencilStateLess->Release();
-
-    if (m_depthStencilTexture)
-        m_depthStencilTexture->Release();
-
-    if (m_depthStencilView)
-        m_depthStencilView->Release();
-
-    if (m_depthBufferSRV)
-        m_depthBufferSRV->Release();
-
-    if (m_rasterState)
-        m_rasterState->Release();
-
-    if (m_blendStateAlphaBlending)
-        m_blendStateAlphaBlending->Release();
-
-    if (m_anisotropicSamplerState)
-        m_anisotropicSamplerState->Release();
-
-    if (m_defaultInputLayout)
-        m_defaultInputLayout->Release();
-
-    if (m_linearSamplerState)
-        m_linearSamplerState->Release();
 }
 
 void PipelineManager::ClearScreen()
 {
     const FLOAT clear[4] = { FLOAT(0), FLOAT(0), FLOAT(0), FLOAT(0) };
-    D3D11Core::Get().Context()->ClearRenderTargetView(m_backBuffer, clear);
+    D3D11Core::Get().Context()->ClearRenderTargetView(m_backBuffer.Get(), clear);
 }
 
 bool PipelineManager::CreateRenderTargetView()
@@ -89,8 +57,8 @@ bool PipelineManager::CreateRenderTargetView()
         return false;
 
     // Create the renderTargetView with the back buffer pointer.
-    HRESULT hr = D3D11Core::Get().Device()->CreateRenderTargetView(pBackBuffer, nullptr, &m_backBuffer);
-    D3D11Core::Get().Device()->CreateUnorderedAccessView(pBackBuffer, nullptr, &m_backBufferAccessView);
+    HRESULT hr = D3D11Core::Get().Device()->CreateRenderTargetView(pBackBuffer, nullptr, m_backBuffer.GetAddressOf());
+    D3D11Core::Get().Device()->CreateUnorderedAccessView(pBackBuffer, nullptr, m_backBufferAccessView.GetAddressOf());
     D3D11_TEXTURE2D_DESC desc = {};
     pBackBuffer->GetDesc(&desc);
     desc.Format = DXGI_FORMAT_R16G16B16A16_UNORM;
@@ -127,7 +95,7 @@ bool PipelineManager::CreateDepthStencilStates()
     depthStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
 
     // Create m_depthStencilStateLess.
-    HRESULT hr = D3D11Core::Get().Device()->CreateDepthStencilState(&depthStencilDesc, &m_depthStencilStateLess);
+    HRESULT hr = D3D11Core::Get().Device()->CreateDepthStencilState(&depthStencilDesc, m_depthStencilStateLess.GetAddressOf());
     if (FAILED(hr))
         return false;
 
@@ -149,7 +117,7 @@ bool PipelineManager::CreateDepthBuffer()
     depthBufferDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE;
     depthBufferDesc.CPUAccessFlags = 0;
     depthBufferDesc.MiscFlags = 0;
-    HRESULT hr = D3D11Core::Get().Device()->CreateTexture2D(&depthBufferDesc, nullptr, &m_depthStencilTexture);
+    HRESULT hr = D3D11Core::Get().Device()->CreateTexture2D(&depthBufferDesc, nullptr, m_depthStencilTexture.GetAddressOf());
     if (FAILED(hr))
         return false;
 
@@ -158,7 +126,7 @@ bool PipelineManager::CreateDepthBuffer()
     depthStencilViewDesc.Format = DXGI_FORMAT_D32_FLOAT;
     depthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
     depthStencilViewDesc.Texture2D.MipSlice = 0;
-    hr = D3D11Core::Get().Device()->CreateDepthStencilView(m_depthStencilTexture, &depthStencilViewDesc, &m_depthStencilView);
+    hr = D3D11Core::Get().Device()->CreateDepthStencilView(m_depthStencilTexture.Get(), &depthStencilViewDesc, m_depthStencilView.GetAddressOf());
     if (FAILED(hr))
         return false;
 
@@ -168,7 +136,7 @@ bool PipelineManager::CreateDepthBuffer()
     shaderResourceViewDesc.Texture2D.MostDetailedMip = 0;
     shaderResourceViewDesc.Texture2D.MipLevels = 1;
 
-    hr = D3D11Core::Get().Device()->CreateShaderResourceView(m_depthStencilTexture, &shaderResourceViewDesc, &m_depthBufferSRV);
+    hr = D3D11Core::Get().Device()->CreateShaderResourceView(m_depthStencilTexture.Get(), &shaderResourceViewDesc, m_depthBufferSRV.GetAddressOf());
     if (FAILED(hr))
         return false;
 
@@ -196,7 +164,7 @@ bool PipelineManager::CreateRasterizerStates()
     rasterizerDesc.CullMode = D3D11_CULL_MODE::D3D11_CULL_BACK;
 
     // Create the rasterizer state from the description we just filled out.
-    HRESULT hr = D3D11Core::Get().Device()->CreateRasterizerState(&rasterizerDesc, &m_rasterState);
+    HRESULT hr = D3D11Core::Get().Device()->CreateRasterizerState(&rasterizerDesc, m_rasterState.GetAddressOf());
 
     if (FAILED(hr))
         return false;
@@ -218,7 +186,7 @@ bool PipelineManager::CreateSamplerStates()
     samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
     samplerDesc.MinLOD = 0;
 
-    HRESULT hr = D3D11Core::Get().Device()->CreateSamplerState(&samplerDesc, &m_linearSamplerState);
+    HRESULT hr = D3D11Core::Get().Device()->CreateSamplerState(&samplerDesc, m_linearSamplerState.GetAddressOf());
     if (FAILED(hr))
         return false;
 
@@ -233,7 +201,7 @@ bool PipelineManager::CreateSamplerStates()
     samplerDesc.MipLODBias = 0.f;
     samplerDesc.MaxAnisotropy = D3D11_REQ_MAXANISOTROPY;
 
-    hr = D3D11Core::Get().Device()->CreateSamplerState(&samplerDesc, &m_anisotropicSamplerState);
+    hr = D3D11Core::Get().Device()->CreateSamplerState(&samplerDesc, m_anisotropicSamplerState.GetAddressOf());
     if (FAILED(hr))
         return false;
 
@@ -279,7 +247,7 @@ bool PipelineManager::CreateBlendStates()
 
 
 
-    HRESULT hr = D3D11Core::Get().Device()->CreateBlendState(&blendDesc, &m_blendStateAlphaBlending);
+    HRESULT hr = D3D11Core::Get().Device()->CreateBlendState(&blendDesc, m_blendStateAlphaBlending.GetAddressOf());
     if (FAILED(hr))
         return false;
 
@@ -309,7 +277,7 @@ bool PipelineManager::CreateInputLayouts()
         {"NORMAL",      0, DXGI_FORMAT_R32G32B32_FLOAT,    0,    D3D11_APPEND_ALIGNED_ELEMENT,    D3D11_INPUT_PER_VERTEX_DATA, 0}
     };
 
-    if (FAILED(hr = D3D11Core::Get().Device()->CreateInputLayout(defaultVertexShaderDesc, ARRAYSIZE(defaultVertexShaderDesc), shaderByteCode.c_str(), shaderByteCode.length(), &m_defaultInputLayout)))
+    if (FAILED(hr = D3D11Core::Get().Device()->CreateInputLayout(defaultVertexShaderDesc, ARRAYSIZE(defaultVertexShaderDesc), shaderByteCode.c_str(), shaderByteCode.length(), m_defaultInputLayout.GetAddressOf())))
     {
         DEBUG_ERROR("failed creating m_defaultInputLayout.\n");
         return false;

@@ -26,42 +26,42 @@ bool BasicPass::SetUpTextures()
 	targetDesc.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;
 	targetDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
 
-	HRESULT hr = D3D11Core::Get().Device()->CreateTexture2D(&desc, nullptr, &m_colorTexture);
+	HRESULT hr = D3D11Core::Get().Device()->CreateTexture2D(&desc, nullptr, m_colorTexture.GetAddressOf());
 	if (FAILED(hr))
 	{
 		DEBUG_ERROR("Couldnt create color texture for Basic Pass!\n")
 			return false;
 	}
 
-	hr = D3D11Core::Get().Device()->CreateShaderResourceView(m_colorTexture, &shaderDesc, &m_colorShader);
+	hr = D3D11Core::Get().Device()->CreateShaderResourceView(m_colorTexture.Get(), &shaderDesc, m_colorShader.GetAddressOf());
 	if (FAILED(hr))
 	{
 		DEBUG_ERROR("Couldnt create shader view of color texture for Basic Pass!\n")
 			return false;
 	}
 
-	hr = D3D11Core::Get().Device()->CreateRenderTargetView(m_colorTexture, &targetDesc, &m_colorTarget);
+	hr = D3D11Core::Get().Device()->CreateRenderTargetView(m_colorTexture.Get(), &targetDesc, m_colorTarget.GetAddressOf());
 	if (FAILED(hr))
 	{
 		DEBUG_ERROR("Couldnt create render target of color texture for Basic Pass!\n")
 			return false;
 	}
 
-	hr = D3D11Core::Get().Device()->CreateTexture2D(&desc, nullptr, &m_normalsTexture);
+	hr = D3D11Core::Get().Device()->CreateTexture2D(&desc, nullptr, m_normalsTexture.GetAddressOf());
 	if (FAILED(hr))
 	{
 		DEBUG_ERROR("Couldnt create normals texture for Basic Pass!\n")
 			return false;
 	}
 
-	hr = D3D11Core::Get().Device()->CreateShaderResourceView(m_normalsTexture, &shaderDesc, &m_normalsShader);
+	hr = D3D11Core::Get().Device()->CreateShaderResourceView(m_normalsTexture.Get(), &shaderDesc, m_normalsShader.GetAddressOf());
 	if (FAILED(hr))
 	{
 		DEBUG_ERROR("Couldnt create shader view of normals texture for Basic Pass!\n")
 			return false;
 	}
 
-	hr = D3D11Core::Get().Device()->CreateRenderTargetView(m_normalsTexture, &targetDesc, &m_normalsTarget);
+	hr = D3D11Core::Get().Device()->CreateRenderTargetView(m_normalsTexture.Get(), &targetDesc, m_normalsTarget.GetAddressOf());
 	if (FAILED(hr))
 	{
 		DEBUG_ERROR("Couldnt create render target of normals texture for Basic Pass!\n")
@@ -95,19 +95,19 @@ bool BasicPass::SetUpDepthTexture()
 	depthDesc.Texture2D.MipSlice = 0;
 
 
-	HRESULT hr = D3D11Core::Get().Device()->CreateTexture2D(&desc, nullptr, &m_depthTexture);
+	HRESULT hr = D3D11Core::Get().Device()->CreateTexture2D(&desc, nullptr, m_depthTexture.GetAddressOf());
 	if (FAILED(hr))
 	{
 		DEBUG_ERROR("Failed to create depth texture for Basic Pass!\n")
 			return false;
 	}
-	hr = D3D11Core::Get().Device()->CreateShaderResourceView(m_depthTexture, &shaderDesc, &m_depthShader);
+	hr = D3D11Core::Get().Device()->CreateShaderResourceView(m_depthTexture.Get(), &shaderDesc, m_depthShader.GetAddressOf());
 	if (FAILED(hr))
 	{
 		DEBUG_ERROR("Failed to create shader view of depth texture for Basic Pass!\n")
 			return false;
 	}
-	hr = D3D11Core::Get().Device()->CreateDepthStencilView(m_depthTexture, &depthDesc, &m_depthTarget);
+	hr = D3D11Core::Get().Device()->CreateDepthStencilView(m_depthTexture.Get(), &depthDesc, m_depthTarget.GetAddressOf());
 	if (FAILED(hr))
 	{
 		DEBUG_ERROR("Failed to create depth stencil view of depth texture for Basic Pass!\n")
@@ -126,15 +126,15 @@ void BasicPass::ClearRenderTargets()
 	D3D11Core::Get().Context()->OMSetRenderTargets(8, m_targets, nullptr);
 
 	const FLOAT clear[4] = { FLOAT(0), FLOAT(0), FLOAT(0), FLOAT(0) };
-	D3D11Core::Get().Context()->ClearRenderTargetView(m_colorTarget, clear);
-	D3D11Core::Get().Context()->ClearRenderTargetView(m_normalsTarget, clear);
-	D3D11Core::Get().Context()->ClearDepthStencilView(m_depthTarget, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+	D3D11Core::Get().Context()->ClearRenderTargetView(m_colorTarget.Get(), clear);
+	D3D11Core::Get().Context()->ClearRenderTargetView(m_normalsTarget.Get(), clear);
+	D3D11Core::Get().Context()->ClearDepthStencilView(m_depthTarget.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 }
 
 void BasicPass::SetLightPassValues()
 {
 	// Prepare for Light pass input.
-	ID3D11ShaderResourceView* const m_views[3] = { m_colorShader, m_normalsShader, m_depthShader };
+	ID3D11ShaderResourceView* const m_views[3] = { m_colorShader.Get(), m_normalsShader.Get(), m_depthShader.Get()};
 	D3D11Core::Get().Context()->PSSetShaderResources(0, 3, m_views);
 }
 
@@ -145,26 +145,6 @@ BasicPass::BasicPass(PipelineManager* pipe)
 
 BasicPass::~BasicPass()
 {
-	if (m_colorTexture)
-		m_colorTexture->Release();
-	if (m_colorShader)
-		m_colorShader->Release();
-	if (m_colorTarget)
-		m_colorTarget->Release();
-
-	if (m_normalsTexture)
-		m_normalsTexture->Release();
-	if (m_normalsShader)
-		m_normalsShader->Release();
-	if (m_normalsTarget)
-		m_normalsTarget->Release();
-
-	if (m_depthTexture)
-		m_depthTexture->Release();
-	if (m_depthShader)
-		m_depthShader->Release();
-	if (m_depthTarget)
-		m_depthTarget->Release();
 }
 
 void BasicPass::Prepass()
@@ -173,10 +153,10 @@ void BasicPass::Prepass()
 	D3D11Core::Get().Context()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	D3D11Core::Get().Context()->VSSetShader(m_pipeline->m_baseVertexShader.Get(), nullptr, 0);
 	D3D11Core::Get().Context()->PSSetShader(m_pipeline->m_basePixelShader.Get(), nullptr, 0);
-	D3D11Core::Get().Context()->IASetInputLayout(m_pipeline->m_defaultInputLayout);
-	ID3D11RenderTargetView* const m_targets[2] = { m_colorTarget, m_normalsTarget };
-	D3D11Core::Get().Context()->OMSetRenderTargets(2, m_targets, m_depthTarget);
-	DC->RSSetState(m_pipeline->m_rasterState);
+	D3D11Core::Get().Context()->IASetInputLayout(m_pipeline->m_defaultInputLayout.Get());
+	ID3D11RenderTargetView* const m_targets[2] = { m_colorTarget.Get(), m_normalsTarget.Get()};
+	D3D11Core::Get().Context()->OMSetRenderTargets(2, m_targets, m_depthTarget.Get());
+	DC->RSSetState(m_pipeline->m_rasterState.Get());
 	DC->OMSetBlendState(nullptr, NULL, 0xffffffff);
 }
 
@@ -199,7 +179,7 @@ void BasicPass::Postpass()
 		D3D11Core::Get().Context()->PSSetShaderResources(0, D3D11_COMMONSHADER_INPUT_RESOURCE_REGISTER_COUNT, temp);
 	}
 
-	DC->OMSetRenderTargets(1, &m_colorTarget, m_depthTarget);
+	DC->OMSetRenderTargets(1, m_colorTarget.GetAddressOf(), m_depthTarget.Get());
 }
 
 void BasicPass::Create()

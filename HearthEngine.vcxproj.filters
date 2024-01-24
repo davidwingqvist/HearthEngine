@@ -158,6 +158,9 @@
     <ClCompile Include="src\Engine\CubeMapPass.cpp">
       <Filter>RenderPass\Passes</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine\DXPointer.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Engine\Header.h">
@@ -264,6 +267,9 @@
     </ClInclude>
     <ClInclude Include="src\Engine\Texture.h">
       <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\DXPointer.h">
+      <Filter>Tools</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -64,7 +64,7 @@ bool WireFramePass::CreateInput()
 		{"POSITION",    0, DXGI_FORMAT_R32G32B32_FLOAT,    0,                0,                   D3D11_INPUT_PER_VERTEX_DATA, 0}
 	};
 
-	if (FAILED(hr = D3D11Core::Get().Device()->CreateInputLayout(defaultVertexShaderDesc, ARRAYSIZE(defaultVertexShaderDesc), shaderByteCode.c_str(), shaderByteCode.length(), &m_inputLayout)))
+	if (FAILED(hr = D3D11Core::Get().Device()->CreateInputLayout(defaultVertexShaderDesc, ARRAYSIZE(defaultVertexShaderDesc), shaderByteCode.c_str(), shaderByteCode.length(), m_inputLayout.GetAddressOf())))
 	{
 		DEBUG_ERROR("Failed creating input layout for WireFramePass\n");
 		return false;
@@ -78,7 +78,7 @@ bool WireFramePass::CreateInput()
 	D3D11_SUBRESOURCE_DATA data{};
 	data.pSysMem = &m_points[0];
 
-	hr = D3D11Core::Get().Device()->CreateBuffer(&desc, &data, &m_vertexBuffer);
+	hr = D3D11Core::Get().Device()->CreateBuffer(&desc, &data, m_vertexBuffer.GetAddressOf());
 	if (FAILED(hr))
 	{
 		DEBUG_ERROR("Failed creating Vertex buffer for Light pass!\n")
@@ -98,7 +98,7 @@ inline bool WireFramePass::CreateIndexBuffer()
 	D3D11_SUBRESOURCE_DATA indData{};
 	indData.pSysMem = &m_indices[0];
 
-	HRESULT hr = D3D11Core::Get().Device()->CreateBuffer(&indDesc, &indData, &m_indexBuffer);
+	HRESULT hr = D3D11Core::Get().Device()->CreateBuffer(&indDesc, &indData, m_indexBuffer.GetAddressOf());
 	if (FAILED(hr))
 	{
 		DEBUG_ERROR("Failed creating Index buffer for Light pass!\n")
@@ -119,7 +119,7 @@ inline bool WireFramePass::CreateColorBuffer()
 	D3D11_SUBRESOURCE_DATA indData{};
 	indData.pSysMem = &m_gridColor;
 
-	HRESULT hr = D3D11Core::Get().Device()->CreateBuffer(&indDesc, &indData, &m_gridColorBuffer);
+	HRESULT hr = D3D11Core::Get().Device()->CreateBuffer(&indDesc, &indData, m_gridColorBuffer.GetAddressOf());
 	if (FAILED(hr))
 	{
 		DEBUG_ERROR("Failed creating Index buffer for Light pass!\n")
@@ -132,14 +132,14 @@ inline bool WireFramePass::CreateColorBuffer()
 inline bool WireFramePass::UpdateColorBuffer()
 {
 	D3D11_MAPPED_SUBRESOURCE sub;
-	HRESULT hr = D3D11Core::Get().Context()->Map(m_gridColorBuffer, 0, D3D11_MAP_WRITE_DISCARD, NULL, &sub);
+	HRESULT hr = D3D11Core::Get().Context()->Map(m_gridColorBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, NULL, &sub);
 	if (FAILED(hr))
 	{
 		DEBUG_ERROR("Failed to update new color to the DirectX buffer\n");
 		return false;
 	}
 	std::memcpy(sub.pData, &m_gridColor, sizeof sm::Vector4);
-	D3D11Core::Get().Context()->Unmap(m_gridColorBuffer, 0);
+	D3D11Core::Get().Context()->Unmap(m_gridColorBuffer.Get(), 0);
 	return true;
 }
 
@@ -151,14 +151,6 @@ WireFramePass::WireFramePass()
   
 WireFramePass::~WireFramePass()
 {
-	if (m_inputLayout)
-		m_inputLayout->Release();
-	if (m_vertexBuffer)
-		m_vertexBuffer->Release();
-	if (m_indexBuffer)
-		m_indexBuffer->Release();
-	if (m_gridColorBuffer)
-		m_gridColorBuffer->Release();
 }
 
 void WireFramePass::Create()
@@ -181,14 +173,14 @@ void WireFramePass::Prepass()
 {
 	D3D11Core::Get().Context()->PSSetShader(m_pixelShader.Get(), NULL, 0);
 	D3D11Core::Get().Context()->VSSetShader(m_vertexShader.Get(), NULL, 0);
-	D3D11Core::Get().Context()->IASetInputLayout(m_inputLayout);
+	D3D11Core::Get().Context()->IASetInputLayout(m_inputLayout.Get());
 
 	const UINT stride = sizeof point_data;
 	const UINT offset = 0;
-	D3D11Core::Get().Context()->IASetVertexBuffers(0, 1, &m_vertexBuffer, &stride, &offset);
-	D3D11Core::Get().Context()->IASetIndexBuffer(m_indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+	D3D11Core::Get().Context()->IASetVertexBuffers(0, 1, m_vertexBuffer.GetAddressOf(), &stride, &offset);
+	D3D11Core::Get().Context()->IASetIndexBuffer(m_indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 	D3D11Core::Get().Context()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
-	D3D11Core::Get().Context()->PSSetConstantBuffers(0, 1, &m_gridColorBuffer);
+	D3D11Core::Get().Context()->PSSetConstantBuffers(0, 1, m_gridColorBuffer.GetAddressOf());
 }
 
 void WireFramePass::Pass(Scene* currentScene)

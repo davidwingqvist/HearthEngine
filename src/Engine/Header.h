@@ -36,6 +36,9 @@
 #include "imgui_impl_win32.h"
 #include "imgui_impl_dx11.h"
 
+// Helper classes
+#include "DXPointer.h"
+
 namespace dx = DirectX;
 namespace sm = DirectX::SimpleMath;
 

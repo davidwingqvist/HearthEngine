@@ -10,7 +10,7 @@ private:
 	VertexShader m_lightVertex;
 	PixelShader m_lightPixel;
 
-	ID3D11Buffer* m_vertexBuffer = nullptr;
+	DXPointer<ID3D11Buffer> m_vertexBuffer;
 	const vertex_data m_screenVertexes[4] = {
 		{{1.0f, 1.0f, .0f},   {1.0f, 0.0f}, {0.0f, 0.0f, 1.0f}},
 		{{1.0f, -1.0f, .0f},  {1.0f, 1.0f}, {0.0f, 0.0f, 1.0f}},
@@ -18,7 +18,7 @@ private:
 		{{-1.0f, 1.0f, .0f},  {0.0f, 0.0f}, {0.0f, 0.0f, 1.0f}}
 	};
 
-	ID3D11Buffer* m_indicesBuffer = nullptr;
+	DXPointer<ID3D11Buffer> m_indicesBuffer;
 	const UINT m_screenIndices[6] = {
 		0,1,2, // Triangle 1
 		3,0,2 // Triangle 2

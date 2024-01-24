@@ -30,7 +30,7 @@ bool CubeMapPass::CreateBoxBuffers()
 	D3D11_SUBRESOURCE_DATA data = {};
 	data.pSysMem = vertices;
 
-	HRESULT hr = D3D11Core::Get().Device()->CreateBuffer(&desc, &data, &m_vertexBuffer);
+	HRESULT hr = D3D11Core::Get().Device()->CreateBuffer(&desc, &data, m_vertexBuffer.GetAddressOf());
 	if (FAILED(hr))
 	{
 		DEBUG_ERROR("Couldnt create vertex buffer for cube map\n");
@@ -67,7 +67,7 @@ bool CubeMapPass::CreateBoxBuffers()
 	desc.BindFlags = D3D11_BIND_INDEX_BUFFER;
 	data.pSysMem = indices;
 
-	hr = D3D11Core::Get().Device()->CreateBuffer(&desc, &data, &m_indexBuffer);
+	hr = D3D11Core::Get().Device()->CreateBuffer(&desc, &data, m_indexBuffer.GetAddressOf());
 	if (FAILED(hr))
 	{
 		DEBUG_ERROR("Couldnt create index buffer for cube map\n");
@@ -123,7 +123,7 @@ bool CubeMapPass::CreateBoxTexture()
 		data[i].SysMemSlicePitch = 0;
 	}
 
-	HRESULT hr = D3D11Core::Get().Device()->CreateTexture2D(&desc, data, &m_cubeMap);
+	HRESULT hr = D3D11Core::Get().Device()->CreateTexture2D(&desc, data, m_cubeMap.GetAddressOf());
 
 	//Freeing up the images
 	for (int i = 0; i < 6; i++)
@@ -143,7 +143,7 @@ bool CubeMapPass::CreateBoxTexture()
 	viewDesc.Texture2D.MostDetailedMip = 0;
 	viewDesc.Texture2D.MipLevels = 1;
 
-	hr = D3D11Core::Get().Device()->CreateShaderResourceView(m_cubeMap, &viewDesc, &m_cubeMapView);
+	hr = D3D11Core::Get().Device()->CreateShaderResourceView(m_cubeMap.Get(), &viewDesc, m_cubeMapView.GetAddressOf());
 	if (FAILED(hr))
 	{
 		DEBUG_ERROR("Couldnt create resource view for cube map texture\n");
@@ -167,7 +167,7 @@ bool CubeMapPass::CreateSampler()
 	samplerDesc.MinLOD = 0;
 	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
 
-	if (FAILED(D3D11Core::Get().Device()->CreateSamplerState(&samplerDesc, &m_sampler)))
+	if (FAILED(D3D11Core::Get().Device()->CreateSamplerState(&samplerDesc, m_sampler.GetAddressOf())))
 	{
 		DEBUG_ERROR("Couldnt create sampler for skybox\n");
 		return false;
@@ -183,7 +183,7 @@ bool CubeMapPass::CreateInputLayout()
 	};
 
 	HRESULT hr = D3D11Core::Get().Device()->CreateInputLayout(layout, 1, m_vertexShader.GetShaderByteCode().c_str(),
-		m_vertexShader.GetShaderByteCode().length(), &m_inputLayout);
+		m_vertexShader.GetShaderByteCode().length(), m_inputLayout.GetAddressOf());
 
 	if (FAILED(hr))
 	{
@@ -207,7 +207,7 @@ bool CubeMapPass::CreateRasterizerState()
 	desc.AntialiasedLineEnable = false;
 	desc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
 
-	HRESULT hr = D3D11Core::Get().Device()->CreateRasterizerState(&desc, &m_rasterState);
+	HRESULT hr = D3D11Core::Get().Device()->CreateRasterizerState(&desc, m_rasterState.GetAddressOf());
 	if (FAILED(hr))
 	{
 		return false;
@@ -224,7 +224,7 @@ bool CubeMapPass::CreateDepthStencil()
 	depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
 	depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
 
-	HRESULT hr = D3D11Core::Get().Device()->CreateDepthStencilState(&depthStencilDesc, &m_lessEqualState);
+	HRESULT hr = D3D11Core::Get().Device()->CreateDepthStencilState(&depthStencilDesc, m_lessEqualState.GetAddressOf());
 	if (FAILED(hr))
 		return false;
 
@@ -237,23 +237,6 @@ CubeMapPass::CubeMapPass()
 
 CubeMapPass::~CubeMapPass()
 {
-	if (m_cubeMap)
-		m_cubeMap->Release();
-	if (m_cubeMapView)
-		m_cubeMapView->Release();
-	if (m_sampler)
-		m_sampler->Release();
-	if (m_inputLayout)
-		m_inputLayout->Release();
-	if (m_lessEqualState)
-		m_lessEqualState->Release();
-	if (m_rasterState)
-		m_rasterState->Release();
-
-	if (m_vertexBuffer)
-		m_vertexBuffer->Release();
-	if (m_indexBuffer)
-		m_indexBuffer->Release();
 }
 
 void CubeMapPass::Create()
@@ -276,24 +259,24 @@ void CubeMapPass::Prepass()
 	DC->PSSetShader(m_pixelShader.Get(), nullptr, 0);
 
 	// Input Assembly
-	DC->IASetInputLayout(m_inputLayout);
+	DC->IASetInputLayout(m_inputLayout.Get());
 
 	DC->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	const UINT stride = sizeof sm::Vector3;
 	const UINT offset = 0;
-	DC->IASetVertexBuffers(0, 1, &m_vertexBuffer, &stride, &offset);
-	DC->IASetIndexBuffer(m_indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+	DC->IASetVertexBuffers(0, 1, m_vertexBuffer.GetAddressOf(), &stride, &offset);
+	DC->IASetIndexBuffer(m_indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 	
 	// Output
-	DC->OMSetDepthStencilState(m_lessEqualState, 1);
+	DC->OMSetDepthStencilState(m_lessEqualState.Get(), 1);
 
 	// Raster state
-	DC->RSSetState(m_rasterState);
+	DC->RSSetState(m_rasterState.Get());
 	
 	// Pixel Shader Values
-	DC->PSSetSamplers(0, 1, &m_sampler);
-	DC->PSSetShaderResources(0, 1, &m_cubeMapView);
+	DC->PSSetSamplers(0, 1, m_sampler.GetAddressOf());
+	DC->PSSetShaderResources(0, 1, m_cubeMapView.GetAddressOf());
 }
 
 void CubeMapPass::Pass(Scene* currentScene)

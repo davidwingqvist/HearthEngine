@@ -13,7 +13,7 @@ bool LightPass::SetUpScreenTriangles()
 	D3D11_SUBRESOURCE_DATA data{};
 	data.pSysMem = &m_screenVertexes[0];
 
-	HRESULT hr = D3D11Core::Get().Device()->CreateBuffer(&desc, &data, &m_vertexBuffer);
+	HRESULT hr = D3D11Core::Get().Device()->CreateBuffer(&desc, &data, m_vertexBuffer.GetAddressOf());
 	if (FAILED(hr))
 	{
 		DEBUG_ERROR("Failed creating Vertex buffer for Light pass!\n")
@@ -28,7 +28,7 @@ bool LightPass::SetUpScreenTriangles()
 	D3D11_SUBRESOURCE_DATA indData{};
 	indData.pSysMem = &m_screenIndices[0];
 
-	hr = D3D11Core::Get().Device()->CreateBuffer(&indDesc, &indData, &m_indicesBuffer);
+	hr = D3D11Core::Get().Device()->CreateBuffer(&indDesc, &indData, m_indicesBuffer.GetAddressOf());
 	if (FAILED(hr))
 	{
 		DEBUG_ERROR("Failed creating Index buffer for Light pass!\n")
@@ -41,14 +41,11 @@ bool LightPass::SetUpScreenTriangles()
 LightPass::LightPass(PipelineManager* pipe)
 	:IRenderpass(pipe)
 {
+	m_basicPassRef = nullptr;
 }
 
 LightPass::~LightPass()
 {
-	if (m_vertexBuffer)
-		m_vertexBuffer->Release();
-	if (m_indicesBuffer)
-		m_indicesBuffer->Release();
 }
 
 void LightPass::Prepass()
@@ -57,17 +54,17 @@ void LightPass::Prepass()
 
 	D3D11Core::Get().Context()->VSSetShader(m_lightVertex.Get(), nullptr, 0);
 	D3D11Core::Get().Context()->PSSetShader(m_lightPixel.Get(), nullptr, 0);
-	D3D11Core::Get().Context()->IASetInputLayout(m_pipeline->m_defaultInputLayout);
+	D3D11Core::Get().Context()->IASetInputLayout(m_pipeline->m_defaultInputLayout.Get());
 
 	const UINT stride = sizeof(vertex_data);
 	const UINT offset = 0;
 	D3D11Core::Get().Context()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	D3D11Core::Get().Context()->IASetVertexBuffers(0, 1, &m_vertexBuffer, &stride, &offset);
-	D3D11Core::Get().Context()->IASetIndexBuffer(m_indicesBuffer, DXGI_FORMAT_R32_UINT, 0);
-	D3D11Core::Get().Context()->OMSetRenderTargets(1, &m_pipeline->m_backBuffer, nullptr);
-	D3D11Core::Get().Context()->OMSetBlendState(m_pipeline->m_blendStateAlphaBlending, NULL, 0xffffffff);
-	D3D11Core::Get().Context()->RSSetState(m_pipeline->m_rasterState);
-	D3D11Core::Get().Context()->PSSetSamplers(0, 1, &m_pipeline->m_linearSamplerState);
+	D3D11Core::Get().Context()->IASetVertexBuffers(0, 1, m_vertexBuffer.GetAddressOf(), &stride, &offset);
+	D3D11Core::Get().Context()->IASetIndexBuffer(m_indicesBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+	D3D11Core::Get().Context()->OMSetRenderTargets(1, m_pipeline->m_backBuffer.GetAddressOf(), nullptr);
+	D3D11Core::Get().Context()->OMSetBlendState(m_pipeline->m_blendStateAlphaBlending.Get(), NULL, 0xffffffff);
+	D3D11Core::Get().Context()->RSSetState(m_pipeline->m_rasterState.Get());
+	D3D11Core::Get().Context()->PSSetSamplers(0, 1, m_pipeline->m_linearSamplerState.GetAddressOf());
 }
 
 void LightPass::Pass(Scene* currentScene)

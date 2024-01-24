@@ -7,19 +7,19 @@ class PipelineManager
 {
 public:
 
-	ID3D11RenderTargetView* m_backBuffer;
-	ID3D11UnorderedAccessView* m_backBufferAccessView;
+	DXPointer<ID3D11RenderTargetView> m_backBuffer;
+	DXPointer<ID3D11UnorderedAccessView> m_backBufferAccessView;
 
-	ID3D11DepthStencilState* m_depthStencilStateLess;
-	ID3D11Texture2D* m_depthStencilTexture;
-	ID3D11DepthStencilView* m_depthStencilView;
-	ID3D11ShaderResourceView* m_depthBufferSRV;
+	DXPointer<ID3D11DepthStencilState> m_depthStencilStateLess;
+	DXPointer<ID3D11Texture2D> m_depthStencilTexture;
+	DXPointer<ID3D11DepthStencilView> m_depthStencilView;
+	DXPointer<ID3D11ShaderResourceView> m_depthBufferSRV;
 
-	ID3D11RasterizerState* m_rasterState;
-	ID3D11BlendState* m_blendStateAlphaBlending;
-	ID3D11SamplerState* m_anisotropicSamplerState;
-	ID3D11SamplerState* m_linearSamplerState;
-	ID3D11InputLayout* m_defaultInputLayout;
+	DXPointer<ID3D11RasterizerState> m_rasterState;
+	DXPointer<ID3D11BlendState> m_blendStateAlphaBlending;
+	DXPointer<ID3D11SamplerState> m_anisotropicSamplerState;
+	DXPointer<ID3D11SamplerState> m_linearSamplerState;
+	DXPointer<ID3D11InputLayout> m_defaultInputLayout;
 	D3D11_VIEWPORT m_viewport;
 	UINT m_windowWidth = 0;
 	UINT m_windowHeight = 0;

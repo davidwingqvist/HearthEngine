@@ -7,17 +7,17 @@ class BasicPass : public IRenderpass
 {
 private:
 
-	ID3D11Texture2D* m_colorTexture = nullptr;
-	ID3D11ShaderResourceView* m_colorShader = nullptr;
-	ID3D11RenderTargetView* m_colorTarget = nullptr;
+	DXPointer<ID3D11Texture2D> m_colorTexture;
+	DXPointer<ID3D11ShaderResourceView> m_colorShader;
+	DXPointer<ID3D11RenderTargetView> m_colorTarget;
 
-	ID3D11Texture2D* m_normalsTexture = nullptr;
-	ID3D11ShaderResourceView* m_normalsShader = nullptr;
-	ID3D11RenderTargetView* m_normalsTarget = nullptr;
+	DXPointer<ID3D11Texture2D> m_normalsTexture;
+	DXPointer<ID3D11ShaderResourceView> m_normalsShader;
+	DXPointer<ID3D11RenderTargetView> m_normalsTarget;
 
-	ID3D11Texture2D* m_depthTexture = nullptr;
-	ID3D11ShaderResourceView* m_depthShader = nullptr;
-	ID3D11DepthStencilView* m_depthTarget = nullptr;
+	DXPointer<ID3D11Texture2D> m_depthTexture;
+	DXPointer<ID3D11ShaderResourceView> m_depthShader;
+	DXPointer<ID3D11DepthStencilView> m_depthTarget;
 
 	bool SetUpTextures();
 	bool SetUpDepthTexture();

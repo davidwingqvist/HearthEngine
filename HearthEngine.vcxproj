@@ -27,6 +27,7 @@
     <ClCompile Include="src\Engine\Direct2DContext.cpp" />
     <ClCompile Include="src\Engine\DrawManager.cpp" />
     <ClCompile Include="src\Engine\DrawObject.cpp" />
+    <ClCompile Include="src\Engine\DXPointer.cpp" />
     <ClCompile Include="src\Engine\Engine.cpp" />
     <ClCompile Include="src\Engine\EngineGUI.cpp" />
     <ClCompile Include="src\Engine\HearthEngine.cpp" />
@@ -84,6 +85,7 @@
     <ClInclude Include="src\Engine\Direct2DContext.h" />
     <ClInclude Include="src\Engine\DrawManager.h" />
     <ClInclude Include="src\Engine\DrawObject.h" />
+    <ClInclude Include="src\Engine\DXPointer.h" />
     <ClInclude Include="src\Engine\Engine.h" />
     <ClInclude Include="src\Engine\EngineGUI.h" />
     <ClInclude Include="src\Engine\Header.h" />

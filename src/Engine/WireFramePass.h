@@ -34,15 +34,16 @@ private:
 		DIRECTX VALUES
 
 	*/
-	ID3D11InputLayout* m_inputLayout = nullptr;
-	ID3D11Buffer* m_vertexBuffer = nullptr;
-	ID3D11Buffer* m_indexBuffer = nullptr;
+
+	DXPointer<ID3D11InputLayout> m_inputLayout;
+	DXPointer<ID3D11Buffer> m_vertexBuffer;
+	DXPointer<ID3D11Buffer> m_indexBuffer;
 	VertexShader m_vertexShader;
 	PixelShader m_pixelShader;
 
 	// Graphical Values
 	sm::Vector4 m_gridColor;
-	ID3D11Buffer* m_gridColorBuffer = nullptr;
+	DXPointer<ID3D11Buffer> m_gridColorBuffer;
 
 	bool CreateShaders();
 	bool CreateInput();
