@@ -14,7 +14,7 @@ private:
 
 public:
 
-	DXPointer(){m_data = nullptr};
+	DXPointer() { m_data = nullptr; };
 	~DXPointer();
 
 	T* operator=(T* ptr)
