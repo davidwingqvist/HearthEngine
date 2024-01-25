@@ -44,6 +44,7 @@ private:
 		UINT indexCount = 0;
 	};
 	std::vector<submesh> m_meshes;
+	std::string m_name;
 
 	bool CreateVertexBuffer(std::vector<vertex_data>& modelData, submesh& mesh);
 
@@ -57,6 +58,7 @@ public:
 	~Model3D();
 
 	void Draw();
+	const std::string GetName() const;
 
 	// Inherited via IResource
 	virtual bool Create(const std::string& filename) override;

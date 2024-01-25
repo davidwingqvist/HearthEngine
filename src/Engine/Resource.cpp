@@ -159,9 +159,16 @@ void Model3D::Draw()
 
 }
 
+const std::string Model3D::GetName() const
+{
+    return m_name;
+}
+
 bool Model3D::Create(const std::string& filename)
 {
     Assimp::Importer importer;
+
+    m_name = filename;
 
     importer.SetPropertyBool(AI_CONFIG_IMPORT_FBX_PRESERVE_PIVOTS, false);
 

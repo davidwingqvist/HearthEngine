@@ -23,8 +23,9 @@ private:
 	bool m_showPropertiesTab = true;
 	char m_createScriptPathProp[36] = {};
 
-	// Bottom Bar Values
+	char m_modelinputField[100] = {};
 
+	// Bottom Bar Values
 	bool m_showBottomEntities = false;
 	bool m_showBottomConsole = false;
 

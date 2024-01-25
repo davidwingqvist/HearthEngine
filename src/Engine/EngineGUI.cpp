@@ -3,6 +3,7 @@
 #include "D3D11Context.h"
 #include "Debugger.h"
 #include "LuaState.h"
+#include "ResourceManager.h"
 
 constexpr ImGuiWindowFlags menuWindow = (ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoTitleBar);
 constexpr ImGuiWindowFlags bottomWindow = ImGuiWindowFlags_NoTitleBar;
@@ -17,7 +18,6 @@ EngineGUI::EngineGUI()
 {
 #ifdef _DEBUG
 	IMGUI_CHECKVERSION();
-	auto test = ImGui::CreateContext();
 	// Setup ImGUI
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -197,7 +197,7 @@ void EngineGUI::RenderTopBar()
 
 	if (m_showPropertiesTab)
 	{
-		ImGui::Begin("Properties", &m_showPropertiesTab);
+		ImGui::Begin("Properties", &m_showPropertiesTab, ImGuiWindowFlags_NoMove);
 
 		recs::recs_registry& reg = m_sceneManagerRef->GetCurrentScene()->GetRegistry();
 		
@@ -215,6 +215,22 @@ void EngineGUI::RenderTopBar()
 			if (ImGui::InputTextWithHint(name.c_str(), std::string("Input new name").c_str(), input, sizeof input, ImGuiInputTextFlags_EnterReturnsTrue))
 			{
 				currGameObject->name = input;
+			}
+			ImGui::EndChild();
+		}
+
+		Model* currModel = reg.GetComponent<Model>(m_currentEntity);
+		if (currModel)
+		{
+			ImGui::BeginChild(1, ImVec2(0, 0), ImGuiChildFlags_Border | ImGuiChildFlags_AlwaysUseWindowPadding | ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_AutoResizeX);
+			ImGui::TextColored(ImVec4(255, 0, 255, 255), "Model");
+			std::string modelName = "Current Model: " + currModel->data->GetName();
+			ImGui::Text(modelName.c_str());
+			if(ImGui::InputText("Insert model name", m_modelinputField, 100, ImGuiInputTextFlags_EnterReturnsTrue))
+			{
+				Model3D* newModel = ResourceManager::Get().GetResource<Model3D>(std::string(m_modelinputField)).get();
+				if (newModel)
+					currModel->data = newModel;
 			}
 			ImGui::EndChild();
 		}
