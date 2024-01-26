@@ -52,6 +52,7 @@ void EngineGUI::RenderGUI()
 	ImGui::NewFrame();
 	Get().RenderTopBar();
 	Get().RenderBottomBar();
+	Get().RenderHierarchy();
 #endif
 }
 
@@ -197,7 +198,7 @@ void EngineGUI::RenderTopBar()
 
 	if (m_showPropertiesTab)
 	{
-		ImGui::Begin("Properties", &m_showPropertiesTab, ImGuiWindowFlags_NoMove);
+		ImGui::Begin("Properties", &m_showPropertiesTab, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
 
 		recs::recs_registry& reg = m_sceneManagerRef->GetCurrentScene()->GetRegistry();
 		
@@ -370,5 +371,24 @@ void EngineGUI::RenderBottomBar()
 
 	ImGui::EndChild();
 
+	ImGui::End();
+}
+
+void EngineGUI::RenderHierarchy()
+{
+	ImGui::SetNextWindowPos(ImVec2(0, ImGui::GetWindowSize().y * 0.05f));
+	ImGui::SetNextWindowSize(ImVec2(ImGui::GetWindowSize().x * 0.6f, ImGui::GetWindowSize().y * 1.15f));
+	ImGui::Begin("Object View", 0, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove);
+	if (m_sceneManagerRef)
+	{
+		auto& reg = m_sceneManagerRef->GetCurrentScene()->GetRegistry();
+
+		auto& ent = reg.GetEntities();
+		for (auto& e : ent)
+		{
+			std::string ent_string = "Entity: " + std::to_string(e);
+			ImGui::Text(ent_string.c_str());
+		}
+	}
 	ImGui::End();
 }

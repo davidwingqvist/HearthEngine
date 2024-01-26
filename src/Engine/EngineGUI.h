@@ -29,6 +29,9 @@ private:
 	bool m_showBottomEntities = false;
 	bool m_showBottomConsole = false;
 
+	// Scene Hierarchy
+	bool m_showSceneHierarchy = false;
+
 	void BottomBarPutToFalse();
 public:
 	static auto& Get()
@@ -46,5 +49,6 @@ private:
 
 	void RenderTopBar();
 	void RenderBottomBar();
+	void RenderHierarchy();
 };
 
