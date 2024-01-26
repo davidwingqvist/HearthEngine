@@ -38,6 +38,11 @@ EngineGUI::~EngineGUI()
 #endif
 }
 
+void EngineGUI::ClearConsoleWindowText()
+{
+	m_consoleLogs.clear();
+}
+
 void EngineGUI::BottomBarPutToFalse()
 {
 	m_showBottomConsole = false;
@@ -69,6 +74,11 @@ void EngineGUI::SetSceneManagerRef(SceneManager* ref_pointer)
 #ifdef _DEBUG
 	Get().m_sceneManagerRef = ref_pointer;
 #endif
+}
+
+void EngineGUI::RegisterConsoleLog(const std::string& log, const ImVec4& color)
+{
+	Get().m_consoleLogs.push_back({ log, color });
 }
 
 void EngineGUI::RenderTopBar()
@@ -352,22 +362,26 @@ void EngineGUI::RenderBottomBar()
 	// Show entities tab in the bottom window.
 	if (m_showBottomEntities)
 	{
-		recs::recs_registry& reg = m_sceneManagerRef->GetCurrentScene()->GetRegistry();
-		auto& grp = reg.GetEntities();
+		//recs::recs_registry& reg = m_sceneManagerRef->GetCurrentScene()->GetRegistry();
+		//auto& grp = reg.GetEntities();
 
-		for (int i = 0; i < grp.size(); i++)
-		{
-			std::string label = "Entity " + std::to_string(i);
-			if (ImGui::Button(label.c_str()))
-			{
-				m_currentEntity = grp[i];
-				if (!m_showPropertiesTab)
-					m_showPropertiesTab;
-				break;
-			}
-		}
+		//for (int i = 0; i < grp.size(); i++)
+		//{
+		//	std::string label = "Entity " + std::to_string(i);
+		//	if (ImGui::Button(label.c_str()))
+		//	{
+		//		m_currentEntity = grp[i];
+		//		if (!m_showPropertiesTab)
+		//			m_showPropertiesTab;
+		//		break;
+		//	}
+		//}
 	}
 
+	if (m_showBottomConsole)
+	{
+		this->RenderConsole();
+	}
 
 	ImGui::EndChild();
 
@@ -387,8 +401,37 @@ void EngineGUI::RenderHierarchy()
 		for (auto& e : ent)
 		{
 			std::string ent_string = "Entity: " + std::to_string(e);
-			ImGui::Text(ent_string.c_str());
+			auto gameObject = reg.GetComponent<GameObject>(e);
+			if (gameObject)
+			{
+				ent_string = gameObject->name;
+			}
+			ImGui::TextWrapped(ent_string.c_str());
+			if (ImGui::IsItemClicked())
+			{
+				m_currentEntity = e;
+			}
+
 		}
 	}
 	ImGui::End();
+}
+
+void EngineGUI::RenderConsole()
+{
+	if (ImGui::Button("Clear Console"))
+	{
+		this->ClearConsoleWindowText();
+	}
+	ImGui::BeginListBox("###consoleLog", ImVec2(ImGui::GetWindowWidth(), ImGui::GetWindowSize().y * 0.72f));
+	for (int i = 0; i < m_consoleLogs.size(); i++)
+	{
+		ImGui::TextColored(m_consoleLogs[i].second, m_consoleLogs[i].first.c_str());
+	}
+	ImGui::EndListBox();
+	ImGui::SetNextItemWidth(ImGui::GetWindowWidth() * 0.93);
+	ImGui::InputText("###consoleWindowInput", m_consoleWindowInput, 100);
+	ImGui::SameLine();
+	ImGui::SetNextItemWidth(ImGui::GetWindowWidth() * 0.07);
+	ImGui::Button("Enter###consoleWindowEnter");
 }

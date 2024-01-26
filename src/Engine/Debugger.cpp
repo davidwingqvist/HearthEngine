@@ -1,5 +1,6 @@
 #include "Header.h"
 #include "Debugger.h"
+#include "EngineGUI.h"
 
 Debugger::Debugger()
 {
@@ -26,6 +27,7 @@ void Debugger::Print(const std::string& line)
 {
 #if _DEBUG
 	std::cout << line;
+	EngineGUI::Get().RegisterConsoleLog(line);
 #endif
 }
 
@@ -35,5 +37,17 @@ void Debugger::Print(const std::string& line, const ConsoleColor& color)
 	SetConsoleTextAttribute(hConsole, color);
 	std::cout << line;
 	SetConsoleTextAttribute(hConsole, m_color);
+
+	ImVec4 imColor = { 1.0f, 1.0f, 1.0f, 1.0f };
+	switch (color)
+	{
+	case COLOR_GREEN:
+		imColor = { 0.0f, 1.0f, 0.0f, 1.0f };
+		break;
+	case COLOR_RED:
+		imColor = { 1.0f, 0.0f, 0.0f, 1.0f };
+		break;
+	}
+	EngineGUI::Get().RegisterConsoleLog(line, imColor);
 #endif
 }

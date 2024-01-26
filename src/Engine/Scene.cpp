@@ -33,6 +33,7 @@ Scene::Scene()
 	recs::Entity entity = m_registry.CreateEntity();
 	Transform* transf = m_registry.AddComponent<Transform>(entity);
 	GameObject* gameObject = m_registry.AddComponent<GameObject>(entity);
+	gameObject->name = "Tree";
 	m_registry.AddComponent<Model>(entity)->data = ResourceManager::Get().GetResource<Model3D>("Tree1.obj").get();
 	Script* scr = m_registry.AddComponent<Script>(entity);
 

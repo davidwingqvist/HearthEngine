@@ -29,8 +29,10 @@ private:
 	bool m_showBottomEntities = false;
 	bool m_showBottomConsole = false;
 
-	// Scene Hierarchy
-	bool m_showSceneHierarchy = false;
+	// Console Window Values
+	std::vector<std::pair<std::string, ImVec4>> m_consoleLogs;
+	char m_consoleWindowInput[100] = {};
+	void ClearConsoleWindowText();
 
 	void BottomBarPutToFalse();
 public:
@@ -45,10 +47,13 @@ public:
 
 	static void SetSceneManagerRef(SceneManager* ref_pointer);
 
+	static void RegisterConsoleLog(const std::string& log, const ImVec4& color = ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
+
 private:
 
 	void RenderTopBar();
 	void RenderBottomBar();
 	void RenderHierarchy();
+	void RenderConsole();
 };
 
