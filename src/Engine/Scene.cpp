@@ -36,9 +36,18 @@ Scene::Scene()
 	gameObject->name = "Tree";
 	m_registry.AddComponent<Model>(entity)->data = ResourceManager::Get().GetResource<Model3D>("Tree1.obj").get();
 	Script* scr = m_registry.AddComponent<Script>(entity);
-
 	transf->pos = { 0, 0, -225.5 };
-	//UpdatePublicBuffer(m_publicBuffer, transf->GetMatrix());
+
+	recs::Entity entity2 = m_registry.CreateEntity();
+	recs::Entity entity3 = m_registry.CreateEntity();
+
+	Transform* transf2 = m_registry.AddComponent<Transform>(entity2);
+	transf = m_registry.AddComponent<Transform>(entity3);
+
+	transf2->rotation = {-1.0f, 0.0f, 0.0f};
+	transf->rotation = {1.0f, 0.0f, 0.0f};
+
+	DEBUG_INFO(std::to_string(std::acosh(transf->GetForward().Dot(transf2->GetForward()))));
 
 	LUA.m_currentRegistry = &m_registry;
 

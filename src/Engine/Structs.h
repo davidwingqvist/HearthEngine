@@ -67,6 +67,16 @@ struct Transform
 	{
 		return sm::Matrix::CreateTranslation(pos) * sm::Matrix::CreateFromYawPitchRoll(rotation) * sm::Matrix::CreateScale(scale);
 	}
+
+	const sm::Vector3 GetForward() const
+	{
+		return sm::Vector3::Transform(pos.Forward, sm::Matrix::CreateFromYawPitchRoll(rotation)) + pos;
+	}
+
+	const sm::Vector3 GetRight() const
+	{
+		return sm::Vector3::Transform(pos.Right, sm::Matrix::CreateFromYawPitchRoll(rotation)) + pos;
+	}
 };
 static int transform_get(lua_State* L);
 static int transform_set(lua_State* L);
@@ -116,4 +126,24 @@ struct Model
 {
 	Model3D* data;
 	bool isVisible = true;
+};
+
+/*
+
+	DEBUG STRUCTS
+
+*/
+
+enum class ConsoleLogEventType : UINT
+{
+	LOG_ERROR = 0,
+	LOG_INFO = 1,
+	LOG_SUCCESS = 2
+};
+
+struct ConsoleLogEvent
+{
+	ImVec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
+	ConsoleLogEventType type = ConsoleLogEventType::LOG_INFO;
+	std::string data;
 };

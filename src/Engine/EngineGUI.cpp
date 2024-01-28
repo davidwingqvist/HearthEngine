@@ -76,9 +76,9 @@ void EngineGUI::SetSceneManagerRef(SceneManager* ref_pointer)
 #endif
 }
 
-void EngineGUI::RegisterConsoleLog(const std::string& log, const ImVec4& color)
+void EngineGUI::RegisterConsoleLog(const ConsoleLogEvent& event)
 {
-	Get().m_consoleLogs.push_back({ log, color });
+	Get().m_consoleLogs.push_back(event);
 }
 
 void EngineGUI::RenderTopBar()
@@ -419,14 +419,28 @@ void EngineGUI::RenderHierarchy()
 
 void EngineGUI::RenderConsole()
 {
+	// Upper line button bar.
 	if (ImGui::Button("Clear Console"))
 	{
 		this->ClearConsoleWindowText();
 	}
+
+	ImGui::SameLine();
+	ImGui::Text("Display:");
+	ImGui::SameLine();
+	ImGui::Button("All");
+	ImGui::SameLine();
+	ImGui::Button("Info");
+	ImGui::SameLine();
+	ImGui::Button("Error");
+	ImGui::SameLine();
+	ImGui::Button("Success");
+	// Upper line button bar.
+
 	ImGui::BeginListBox("###consoleLog", ImVec2(ImGui::GetWindowWidth(), ImGui::GetWindowSize().y * 0.72f));
 	for (int i = 0; i < m_consoleLogs.size(); i++)
 	{
-		ImGui::TextColored(m_consoleLogs[i].second, m_consoleLogs[i].first.c_str());
+		ImGui::TextColored(m_consoleLogs[i].color, m_consoleLogs[i].data.c_str());
 	}
 	ImGui::EndListBox();
 	ImGui::SetNextItemWidth(ImGui::GetWindowWidth() * 0.93);

@@ -27,7 +27,10 @@ void Debugger::Print(const std::string& line)
 {
 #if _DEBUG
 	std::cout << line;
-	EngineGUI::Get().RegisterConsoleLog(line);
+
+	ConsoleLogEvent event;
+	event.data = line;
+	EngineGUI::Get().RegisterConsoleLog(event);
 #endif
 }
 
@@ -38,16 +41,22 @@ void Debugger::Print(const std::string& line, const ConsoleColor& color)
 	std::cout << line;
 	SetConsoleTextAttribute(hConsole, m_color);
 
+	ConsoleLogEvent event;
 	ImVec4 imColor = { 1.0f, 1.0f, 1.0f, 1.0f };
 	switch (color)
 	{
 	case COLOR_GREEN:
 		imColor = { 0.0f, 1.0f, 0.0f, 1.0f };
+		event.type = ConsoleLogEventType::LOG_SUCCESS;
 		break;
 	case COLOR_RED:
 		imColor = { 1.0f, 0.0f, 0.0f, 1.0f };
+		event.type = ConsoleLogEventType::LOG_ERROR;
 		break;
 	}
-	EngineGUI::Get().RegisterConsoleLog(line, imColor);
+
+	event.color = imColor;
+	event.data = line;
+	EngineGUI::Get().RegisterConsoleLog(event);
 #endif
 }

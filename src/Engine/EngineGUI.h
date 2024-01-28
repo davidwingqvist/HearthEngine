@@ -30,7 +30,7 @@ private:
 	bool m_showBottomConsole = false;
 
 	// Console Window Values
-	std::vector<std::pair<std::string, ImVec4>> m_consoleLogs;
+	std::vector<ConsoleLogEvent> m_consoleLogs;
 	char m_consoleWindowInput[100] = {};
 	void ClearConsoleWindowText();
 
@@ -47,7 +47,7 @@ public:
 
 	static void SetSceneManagerRef(SceneManager* ref_pointer);
 
-	static void RegisterConsoleLog(const std::string& log, const ImVec4& color = ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
+	static void RegisterConsoleLog(const ConsoleLogEvent& event);
 
 private:
 
