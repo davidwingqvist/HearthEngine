@@ -10,15 +10,11 @@ Texture::Texture()
 
 Texture::~Texture()
 {
-    if (m_texture)
-        m_texture->Release();
-    if (m_textureView)
-        m_textureView->Release();
 }
 
-const ID3D11ShaderResourceView* Texture::GetShaderView() const
+ID3D11ShaderResourceView** Texture::GetShaderView()
 {
-    return m_textureView;
+    return m_textureView.GetAddressOf();
 }
 
 bool Texture::Create(const std::string& filename)
@@ -31,8 +27,9 @@ bool Texture::Create(const std::string& filename)
     desc.Width = m_width;
     desc.Height = m_height;
     desc.MiscFlags = 0;
-    desc.MipLevels = 0;
+    desc.MipLevels = 1;
     desc.ArraySize = 1;
+    desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
     desc.SampleDesc.Count = 1;
     desc.SampleDesc.Quality = 0;
     desc.Usage = D3D11_USAGE_DEFAULT;
@@ -41,15 +38,17 @@ bool Texture::Create(const std::string& filename)
 
     D3D11_SUBRESOURCE_DATA data{};
     data.pSysMem = image;
+    data.SysMemPitch = static_cast<UINT>(m_width * m_format);
+    data.SysMemSlicePitch = 0;
 
-    HRESULT hr = D3D11Core::Get().Device()->CreateTexture2D(&desc, &data, &m_texture);
+    HRESULT hr = D3D11Core::Get().Device()->CreateTexture2D(&desc, &data, m_texture.GetAddressOf());
     if (FAILED(hr))
     {
-        DEBUG_ERROR("Couldnt create texture for " + filename + " !\n")
+        DEBUG_ERROR("Couldnt create texture for " + filename + "\n")
     }
     else
     {
-        hr = D3D11Core::Get().Device()->CreateShaderResourceView(m_texture, 0, &m_textureView);
+        hr = D3D11Core::Get().Device()->CreateShaderResourceView(m_texture.Get(), 0, m_textureView.GetAddressOf());
     }
 
     stbi_image_free(image);

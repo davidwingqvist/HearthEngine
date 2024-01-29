@@ -2,13 +2,8 @@
 #include "Resource.h"
 #include "Debugger.h"
 #include "D3D11Context.h"
-
-/*
-* 
-*   MEMORY LEAKS ARE HAPPENING HERE BECAUSE OF DIRECTX pointer
-* 
-* 
-*/
+#include "ResourceManager.h"
+#include "Texture.h"
 
 
 Image2D::Image2D()
@@ -18,18 +13,16 @@ Image2D::Image2D()
 
 Image2D::~Image2D()
 {
-    if (m_image)
-        m_image->Release();
 }
 
-ID2D1Bitmap* const Image2D::GetImage() const
+ID2D1Bitmap* Image2D::GetImage()
 {
-    return m_image;
+    return m_image.Get();
 }
 
 bool Image2D::Create(const std::string& filename)
 {
-    return D2D1Core::Get().CreateImage(filename, &m_image);
+    return D2D1Core::Get().CreateImage(filename, m_image.GetAddressOf());
 }
 
 bool Model3D::CreateVertexBuffer(std::vector<vertex_data>& modelData, submesh& mesh)
@@ -149,6 +142,9 @@ void Model3D::Draw()
     UINT offset = 0;
     UINT stride = sizeof(vertex_data);
 
+    if(m_texture)
+        DC->PSSetShaderResources(0, 1, m_texture->GetShaderView());
+
     D3D11Core::Get().Context()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
     for (size_t m = 0; m < m_meshes.size(); m++)
     {
@@ -162,6 +158,11 @@ void Model3D::Draw()
 const std::string Model3D::GetName() const
 {
     return m_name;
+}
+
+void Model3D::SetTexture(const std::string& texName)
+{
+    m_texture = ResourceManager::Get().GetResource<Texture>(texName).get();
 }
 
 bool Model3D::Create(const std::string& filename)

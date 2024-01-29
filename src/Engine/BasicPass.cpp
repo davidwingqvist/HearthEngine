@@ -158,6 +158,7 @@ void BasicPass::Prepass()
 	D3D11Core::Get().Context()->OMSetRenderTargets(2, m_targets, m_depthTarget.Get());
 	DC->RSSetState(m_pipeline->m_rasterState.Get());
 	DC->OMSetBlendState(nullptr, NULL, 0xffffffff);
+	DC->PSSetSamplers(0, 1, m_pipeline->m_anisotropicSamplerState.GetAddressOf());
 }
 
 void BasicPass::Pass(Scene* currentScene)

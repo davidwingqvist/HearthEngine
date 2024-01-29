@@ -30,11 +30,16 @@ Scene::Scene()
 	m_registry.RegisterComponent<Transform>();
 	m_registry.RegisterComponent<Script>();
 
+	// Temporary testing entities...
+
 	recs::Entity entity = m_registry.CreateEntity();
 	Transform* transf = m_registry.AddComponent<Transform>(entity);
 	GameObject* gameObject = m_registry.AddComponent<GameObject>(entity);
-	gameObject->name = "Tree";
-	m_registry.AddComponent<Model>(entity)->data = ResourceManager::Get().GetResource<Model3D>("Tree1.obj").get();
+	gameObject->name = "Trunk";
+	
+	m_registry.AddComponent<Model>(entity)->data = ResourceManager::Get().GetResource<Model3D>("Chest.obj").get();
+	ResourceManager::Get().GetResource<Model3D>("Chest.obj")->SetTexture("Chest_Albedo.png");
+	
 	Script* scr = m_registry.AddComponent<Script>(entity);
 	transf->pos = { 0, 0, -225.5 };
 

@@ -2,6 +2,8 @@
 #include <string>
 #include "Direct2DContext.h"
 
+class Texture;
+
 class IResource
 {
 private:
@@ -18,14 +20,14 @@ class Image2D : public IResource
 {
 private:
 
-	ID2D1Bitmap* m_image;
+	DXPointer<ID2D1Bitmap> m_image;
 
 public:
 
 	Image2D();
 	~Image2D();
 
-	ID2D1Bitmap* const GetImage() const;
+	ID2D1Bitmap* GetImage();
 
 	// Inherited via IResource
 	virtual bool Create(const std::string& filename) override;
@@ -45,6 +47,7 @@ private:
 	};
 	std::vector<submesh> m_meshes;
 	std::string m_name;
+	Texture* m_texture;
 
 	bool CreateVertexBuffer(std::vector<vertex_data>& modelData, submesh& mesh);
 
@@ -59,6 +62,7 @@ public:
 
 	void Draw();
 	const std::string GetName() const;
+	void SetTexture(const std::string& texName);
 
 	// Inherited via IResource
 	virtual bool Create(const std::string& filename) override;

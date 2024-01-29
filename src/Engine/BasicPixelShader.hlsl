@@ -1,3 +1,6 @@
+sampler samp : register(s0);
+Texture2D albedo : register(s0);
+
 struct PxIn
 {
 	float4 position : SV_POSITION;
@@ -14,7 +17,7 @@ struct PxOut
 PxOut main(PxIn input)
 {
     PxOut output;
-    output.color = float4(1.0f, 1.0f, 1.0f, 1.0f);
+    output.color = albedo.Sample(samp, input.uv);
     output.normals = float4(input.normal, 1.0f);
     return output;
 }

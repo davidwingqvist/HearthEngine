@@ -208,7 +208,7 @@ void EngineGUI::RenderTopBar()
 
 	if (m_showPropertiesTab)
 	{
-		ImGui::Begin("Properties", &m_showPropertiesTab, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
+		ImGui::Begin("Properties", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
 
 		recs::recs_registry& reg = m_sceneManagerRef->GetCurrentScene()->GetRegistry();
 		
@@ -321,6 +321,8 @@ void EngineGUI::RenderTopBar()
 			
 			ImGui::EndChild();
 		}
+
+		ImGui::Button("+ Add Component");
 
 		ImGui::End();
 	}
