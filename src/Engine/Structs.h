@@ -136,9 +136,12 @@ struct Model
 
 enum class ConsoleLogEventType : UINT
 {
-	LOG_ERROR = 0,
-	LOG_INFO = 1,
-	LOG_SUCCESS = 2
+	ALL = 0b111, // DO NOT USE!!!
+
+
+	LOG_ERROR = 0b1,
+	LOG_INFO = 0b10,
+	LOG_SUCCESS = 0b100
 };
 
 struct ConsoleLogEvent

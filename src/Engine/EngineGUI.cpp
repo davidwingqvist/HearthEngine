@@ -428,19 +428,40 @@ void EngineGUI::RenderConsole()
 	ImGui::SameLine();
 	ImGui::Text("Display:");
 	ImGui::SameLine();
-	ImGui::Button("All");
+	if (ImGui::Button("All"))
+	{
+		m_filter = (UINT)ConsoleLogEventType::ALL;
+	}
 	ImGui::SameLine();
-	ImGui::Button("Info");
+	if (ImGui::Button("None"))
+	{
+		m_filter = 0;
+	}
 	ImGui::SameLine();
-	ImGui::Button("Error");
+	if (ImGui::Button("Info"))
+	{
+		m_filter = 0;
+		m_filter |= (UINT)ConsoleLogEventType::LOG_INFO;
+	}
 	ImGui::SameLine();
-	ImGui::Button("Success");
+	if (ImGui::Button("Error"))
+	{
+		m_filter = 0;
+		m_filter |= (UINT)ConsoleLogEventType::LOG_ERROR;
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("Success"))
+	{
+		m_filter = 0;
+		m_filter |= (UINT)ConsoleLogEventType::LOG_SUCCESS;
+	}
 	// Upper line button bar.
 
 	ImGui::BeginListBox("###consoleLog", ImVec2(ImGui::GetWindowWidth(), ImGui::GetWindowSize().y * 0.72f));
 	for (int i = 0; i < m_consoleLogs.size(); i++)
 	{
-		ImGui::TextColored(m_consoleLogs[i].color, m_consoleLogs[i].data.c_str());
+		if(m_filter & (UINT)m_consoleLogs[i].type)
+			ImGui::TextColored(m_consoleLogs[i].color, m_consoleLogs[i].data.c_str());
 	}
 	ImGui::EndListBox();
 	ImGui::SetNextItemWidth(ImGui::GetWindowWidth() * 0.93);

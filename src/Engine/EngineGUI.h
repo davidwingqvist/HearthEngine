@@ -33,6 +33,8 @@ private:
 	std::vector<ConsoleLogEvent> m_consoleLogs;
 	char m_consoleWindowInput[100] = {};
 	void ClearConsoleWindowText();
+	// Console window log filter.
+	UINT m_filter = (UINT)ConsoleLogEventType::ALL;
 
 	void BottomBarPutToFalse();
 public:
