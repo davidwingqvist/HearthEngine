@@ -156,3 +156,8 @@ void Camera::Activate() const
 {
 	D3D11Core::Get().Context()->VSSetConstantBuffers(1, 1, &m_buffer);
 }
+
+const camera_data& Camera::GetData() const
+{
+	return m_matData;
+}

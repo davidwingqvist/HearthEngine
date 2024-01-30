@@ -207,136 +207,7 @@ void EngineGUI::RenderTopBar()
 		ImGui::End();
 	}
 
-	if (m_showPropertiesTab)
-	{
-		ImGui::Begin("Properties", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
-
-		recs::recs_registry& reg = m_sceneManagerRef->GetCurrentScene()->GetRegistry();
-		
-		GameObject* currGameObject = reg.GetComponent<GameObject>(m_currentEntity);
-
-		if (currGameObject)
-		{
-			ImGui::BeginChild(1, ImVec2(0, 0), ImGuiChildFlags_Border | ImGuiChildFlags_AlwaysUseWindowPadding | ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_AutoResizeX);
-			ImGui::TextColored(ImVec4(255, 0, 255, 255), "GameObject");
-			std::string gameObjectName = "Name: " + currGameObject->name;
-			ImGui::Text(gameObjectName.c_str());
-			ImGui::SameLine();
-			char input[32] = { '\0' };
-			std::string name = "###PropInputName";
-			if (ImGui::InputTextWithHint(name.c_str(), std::string("Input new name").c_str(), input, sizeof input, ImGuiInputTextFlags_EnterReturnsTrue))
-			{
-				currGameObject->name = input;
-			}
-			ImGui::EndChild();
-		}
-
-		Model* currModel = reg.GetComponent<Model>(m_currentEntity);
-		if (currModel)
-		{
-			ImGui::BeginChild(1, ImVec2(0, 0), ImGuiChildFlags_Border | ImGuiChildFlags_AlwaysUseWindowPadding | ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_AutoResizeX);
-			ImGui::TextColored(ImVec4(255, 0, 255, 255), "Model");
-			std::string modelName = "Current Model: " + currModel->model_data->GetName();
-			ImGui::Text(modelName.c_str());
-			if(ImGui::InputText("Insert model name", m_modelinputField, 100, ImGuiInputTextFlags_EnterReturnsTrue))
-			{
-				Model3D* newModel = ResourceManager::Get().GetResource<Model3D>(std::string(m_modelinputField)).get();
-				if (newModel)
-					currModel->model_data = newModel;
-			}
-
-			std::string textureName = "Current Texture: " + currModel->model_texture->GetName();
-			ImGui::Text(textureName.c_str());
-			if (ImGui::InputText("Insert texture name", m_textureInputField, 100, ImGuiInputTextFlags_EnterReturnsTrue))
-			{
-				Texture* newTexture = ResourceManager::Get().GetResource<Texture>(std::string(m_textureInputField)).get();
-				if (newTexture)
-					currModel->model_texture = newTexture;
-			}
-			ImGui::EndChild();
-		}
-
-		Transform* currTransform = reg.GetComponent<Transform>(m_currentEntity);
-		if (currTransform)
-		{
-			ImGui::BeginChild(2, ImVec2(0, 0), ImGuiChildFlags_Border | ImGuiChildFlags_AlwaysUseWindowPadding | ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_AutoResizeX);
-			ImGui::TextColored(ImVec4(255, 0, 255, 255), "Transform");
-			ImGui::BeginGroup();
-			ImGui::Text("Position");
-			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 3.6f);
-			ImGui::InputFloat("x###Posx", &currTransform->pos.x, 1, 10, "%.2f");
-			ImGui::SameLine();
-			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 3.6f);
-			ImGui::InputFloat("y###Posy", &currTransform->pos.y, 1, 10, "%.2f");
-			ImGui::SameLine();
-			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 3.6f);
-			ImGui::InputFloat("z###Posz", &currTransform->pos.z, 1, 10, "%.2f");
-
-			ImGui::Text("Rotation");
-			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 4.0f);
-			ImGui::SliderFloat("x###Rotx", &currTransform->rotation.x, -3.1415, 3.1415, "%.3f");
-			ImGui::SameLine();
-			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 4.0f);
-			ImGui::SliderFloat("y###Roty", &currTransform->rotation.y, -3.1415, 3.1415, "%.3f");
-			ImGui::SameLine();
-			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 4.0f);
-			ImGui::SliderFloat("z###Rotz", &currTransform->rotation.z, -3.1415, 3.1415, "%.3f");
-
-			ImGui::Text("Scale");
-			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 4.0f);
-			ImGui::SliderFloat("x###Scalex", &currTransform->scale.x, 0.1, 10, "%.2f");
-			ImGui::SameLine();
-			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 4.0f);
-			ImGui::SliderFloat("y###Scaley", &currTransform->scale.y, 0.1, 10, "%.2f");
-			ImGui::SameLine();
-			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 4.0f);
-			ImGui::SliderFloat("z###Scalez", &currTransform->scale.z, 0.1, 10, "%.2f");
-			ImGui::EndGroup();
-			ImGui::EndChild();
-		}
-
-		Script* currScripts = reg.GetComponent<Script>(m_currentEntity);
-
-		if (currScripts)
-		{
-			ImGui::BeginChild(3, ImVec2(0, 0), ImGuiChildFlags_Border | ImGuiChildFlags_AlwaysUseWindowPadding | ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_AutoResizeX);
-
-			ImGui::TextColored(ImVec4(255, 0, 255, 255), "Scripts");
-			std::string scriptId = "";
-
-			ImGui::InputTextWithHint("###InputScriptNameProps", "Input script name", m_createScriptPathProp, sizeof m_createScriptPathProp);
-			ImGui::SameLine();
-			if (ImGui::Button("Add Script"))
-			{
-				if (LUA.LookUpScript(m_createScriptPathProp))
-				{
-					currScripts->scripts.push_back(std::string(m_createScriptPathProp) + ".lua");
-				}
-				memset(m_createScriptPathProp, '\0', sizeof m_createScriptPathProp);
-			}
-
-			for (int i = 0; i < currScripts->scripts.size(); i++)
-			{
-				scriptId = "Open###Script" + std::to_string(i);
-				ImGui::Text(currScripts->scripts[i].c_str());
-				ImGui::SameLine();
-				if (ImGui::Button(scriptId.c_str()))
-				{
-					LUA.OpenScriptFile(currScripts->scripts[i].c_str());
-				}
-				ImGui::SameLine();
-				scriptId = "Delete###Script" + std::to_string(i);
-				ImGui::Button(scriptId.c_str());
-			}
-			
-			ImGui::EndChild();
-		}
-
-		ImGui::Button("+ Add Component");
-
-		ImGui::End();
-	}
-
+	this->RenderProperties();
 }
 
 void EngineGUI::RenderBottomBar()
@@ -481,4 +352,138 @@ void EngineGUI::RenderConsole()
 	ImGui::SameLine();
 	ImGui::SetNextItemWidth(ImGui::GetWindowWidth() * 0.07);
 	ImGui::Button("Enter###consoleWindowEnter");
+}
+
+void EngineGUI::RenderProperties()
+{
+	if (m_showPropertiesTab && m_currentEntity != (recs::Entity)-1)
+	{
+		ImGui::Begin("Properties", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
+
+		recs::recs_registry& reg = m_sceneManagerRef->GetCurrentScene()->GetRegistry();
+
+		GameObject* currGameObject = reg.GetComponent<GameObject>(m_currentEntity);
+
+		if (currGameObject)
+		{
+			ImGui::BeginChild(1, ImVec2(0, 0), ImGuiChildFlags_Border | ImGuiChildFlags_AlwaysUseWindowPadding | ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_AutoResizeX);
+			ImGui::TextColored(ImVec4(255, 0, 255, 255), "GameObject");
+			std::string gameObjectName = "Name: " + currGameObject->name;
+			ImGui::Text(gameObjectName.c_str());
+			ImGui::SameLine();
+			char input[32] = { '\0' };
+			std::string name = "###PropInputName";
+			if (ImGui::InputTextWithHint(name.c_str(), std::string("Input new name").c_str(), input, sizeof input, ImGuiInputTextFlags_EnterReturnsTrue))
+			{
+				currGameObject->name = input;
+			}
+			ImGui::EndChild();
+		}
+
+		Model* currModel = reg.GetComponent<Model>(m_currentEntity);
+		if (currModel)
+		{
+			ImGui::BeginChild(1, ImVec2(0, 0), ImGuiChildFlags_Border | ImGuiChildFlags_AlwaysUseWindowPadding | ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_AutoResizeX);
+			ImGui::TextColored(ImVec4(255, 0, 255, 255), "Model");
+			std::string modelName = "Current Model: " + currModel->model_data->GetName();
+			ImGui::Text(modelName.c_str());
+			if (ImGui::InputText("Insert model name", m_modelinputField, 100, ImGuiInputTextFlags_EnterReturnsTrue))
+			{
+				Model3D* newModel = ResourceManager::Get().GetResource<Model3D>(std::string(m_modelinputField)).get();
+				if (newModel)
+					currModel->model_data = newModel;
+			}
+
+			std::string textureName = "Current Texture: " + currModel->model_texture->GetName();
+			ImGui::Text(textureName.c_str());
+			if (ImGui::InputText("Insert texture name", m_textureInputField, 100, ImGuiInputTextFlags_EnterReturnsTrue))
+			{
+				Texture* newTexture = ResourceManager::Get().GetResource<Texture>(std::string(m_textureInputField)).get();
+				if (newTexture)
+					currModel->model_texture = newTexture;
+			}
+			ImGui::EndChild();
+		}
+
+		Transform* currTransform = reg.GetComponent<Transform>(m_currentEntity);
+		if (currTransform)
+		{
+			ImGui::BeginChild(2, ImVec2(0, 0), ImGuiChildFlags_Border | ImGuiChildFlags_AlwaysUseWindowPadding | ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_AutoResizeX);
+			ImGui::TextColored(ImVec4(255, 0, 255, 255), "Transform");
+			ImGui::BeginGroup();
+			ImGui::Text("Position");
+			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 3.6f);
+			ImGui::InputFloat("x###Posx", &currTransform->pos.x, 1, 10, "%.2f");
+			ImGui::SameLine();
+			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 3.6f);
+			ImGui::InputFloat("y###Posy", &currTransform->pos.y, 1, 10, "%.2f");
+			ImGui::SameLine();
+			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 3.6f);
+			ImGui::InputFloat("z###Posz", &currTransform->pos.z, 1, 10, "%.2f");
+
+			ImGui::Text("Rotation");
+			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 4.0f);
+			ImGui::SliderFloat("x###Rotx", &currTransform->rotation.x, -3.1415, 3.1415, "%.3f");
+			ImGui::SameLine();
+			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 4.0f);
+			ImGui::SliderFloat("y###Roty", &currTransform->rotation.y, -3.1415, 3.1415, "%.3f");
+			ImGui::SameLine();
+			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 4.0f);
+			ImGui::SliderFloat("z###Rotz", &currTransform->rotation.z, -3.1415, 3.1415, "%.3f");
+
+			ImGui::Text("Scale");
+			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 4.0f);
+			ImGui::SliderFloat("x###Scalex", &currTransform->scale.x, 0.1, 10, "%.2f");
+			ImGui::SameLine();
+			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 4.0f);
+			ImGui::SliderFloat("y###Scaley", &currTransform->scale.y, 0.1, 10, "%.2f");
+			ImGui::SameLine();
+			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 4.0f);
+			ImGui::SliderFloat("z###Scalez", &currTransform->scale.z, 0.1, 10, "%.2f");
+			ImGui::EndGroup();
+			ImGui::EndChild();
+		}
+
+		Script* currScripts = reg.GetComponent<Script>(m_currentEntity);
+
+		if (currScripts)
+		{
+			ImGui::BeginChild(3, ImVec2(0, 0), ImGuiChildFlags_Border | ImGuiChildFlags_AlwaysUseWindowPadding | ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_AutoResizeX);
+
+			ImGui::TextColored(ImVec4(255, 0, 255, 255), "Scripts");
+			std::string scriptId = "";
+
+			ImGui::InputTextWithHint("###InputScriptNameProps", "Input script name", m_createScriptPathProp, sizeof m_createScriptPathProp);
+			ImGui::SameLine();
+			if (ImGui::Button("Add Script"))
+			{
+				if (LUA.LookUpScript(m_createScriptPathProp))
+				{
+					currScripts->scripts.push_back(std::string(m_createScriptPathProp) + ".lua");
+				}
+				memset(m_createScriptPathProp, '\0', sizeof m_createScriptPathProp);
+			}
+
+			for (int i = 0; i < currScripts->scripts.size(); i++)
+			{
+				scriptId = "Open###Script" + std::to_string(i);
+				ImGui::Text(currScripts->scripts[i].c_str());
+				ImGui::SameLine();
+				if (ImGui::Button(scriptId.c_str()))
+				{
+					LUA.OpenScriptFile(currScripts->scripts[i].c_str());
+				}
+				ImGui::SameLine();
+				scriptId = "Delete###Script" + std::to_string(i);
+				ImGui::Button(scriptId.c_str());
+			}
+
+			ImGui::EndChild();
+		}
+
+		ImGui::Button("+ Add Component");
+
+		ImGui::End();
+	}
+
 }

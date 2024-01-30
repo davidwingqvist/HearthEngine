@@ -19,6 +19,10 @@ private:
 	DXPointer<ID3D11ShaderResourceView> m_depthShader;
 	DXPointer<ID3D11DepthStencilView> m_depthTarget;
 
+	DXPointer<ID3D11Texture2D> m_worldPositionTexture;
+	DXPointer<ID3D11ShaderResourceView> m_worldPositionShader;
+	DXPointer<ID3D11RenderTargetView> m_worldPositionTarget;
+
 	bool SetUpTextures();
 	bool SetUpDepthTexture();
 

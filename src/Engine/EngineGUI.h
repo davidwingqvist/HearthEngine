@@ -58,5 +58,6 @@ private:
 	void RenderBottomBar();
 	void RenderHierarchy();
 	void RenderConsole();
+	void RenderProperties();
 };
 

@@ -26,6 +26,12 @@ bool BasicPass::SetUpTextures()
 	targetDesc.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;
 	targetDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
 
+	/*
+	
+		ALBEDO TEXTURE
+
+	*/
+
 	HRESULT hr = D3D11Core::Get().Device()->CreateTexture2D(&desc, nullptr, m_colorTexture.GetAddressOf());
 	if (FAILED(hr))
 	{
@@ -47,6 +53,12 @@ bool BasicPass::SetUpTextures()
 			return false;
 	}
 
+	/*
+	
+		NORMAL TEXTURE
+	
+	*/
+
 	hr = D3D11Core::Get().Device()->CreateTexture2D(&desc, nullptr, m_normalsTexture.GetAddressOf());
 	if (FAILED(hr))
 	{
@@ -62,6 +74,33 @@ bool BasicPass::SetUpTextures()
 	}
 
 	hr = D3D11Core::Get().Device()->CreateRenderTargetView(m_normalsTexture.Get(), &targetDesc, m_normalsTarget.GetAddressOf());
+	if (FAILED(hr))
+	{
+		DEBUG_ERROR("Couldnt create render target of normals texture for Basic Pass!\n")
+			return false;
+	}
+
+	/*
+	
+		WORLD POSITION TEXTURE
+
+	*/
+
+	hr = D3D11Core::Get().Device()->CreateTexture2D(&desc, nullptr, m_worldPositionTexture.GetAddressOf());
+	if (FAILED(hr))
+	{
+		DEBUG_ERROR("Couldnt create world position texture for Basic Pass!\n")
+			return false;
+	}
+
+	hr = D3D11Core::Get().Device()->CreateShaderResourceView(m_worldPositionTexture.Get(), &shaderDesc, m_worldPositionShader.GetAddressOf());
+	if (FAILED(hr))
+	{
+		DEBUG_ERROR("Couldnt create shader view of world position texture for Basic Pass!\n")
+			return false;
+	}
+
+	hr = D3D11Core::Get().Device()->CreateRenderTargetView(m_worldPositionTexture.Get(), &targetDesc, m_worldPositionTarget.GetAddressOf());
 	if (FAILED(hr))
 	{
 		DEBUG_ERROR("Couldnt create render target of normals texture for Basic Pass!\n")
@@ -134,8 +173,8 @@ void BasicPass::ClearRenderTargets()
 void BasicPass::SetLightPassValues()
 {
 	// Prepare for Light pass input.
-	ID3D11ShaderResourceView* const m_views[3] = { m_colorShader.Get(), m_normalsShader.Get(), m_depthShader.Get()};
-	D3D11Core::Get().Context()->PSSetShaderResources(0, 3, m_views);
+	ID3D11ShaderResourceView* const m_views[4] = { m_colorShader.Get(), m_normalsShader.Get(), m_depthShader.Get(), m_worldPositionShader.Get()};
+	D3D11Core::Get().Context()->PSSetShaderResources(0, 4, m_views);
 }
 
 BasicPass::BasicPass(PipelineManager* pipe)
@@ -154,8 +193,8 @@ void BasicPass::Prepass()
 	D3D11Core::Get().Context()->VSSetShader(m_pipeline->m_baseVertexShader.Get(), nullptr, 0);
 	D3D11Core::Get().Context()->PSSetShader(m_pipeline->m_basePixelShader.Get(), nullptr, 0);
 	D3D11Core::Get().Context()->IASetInputLayout(m_pipeline->m_defaultInputLayout.Get());
-	ID3D11RenderTargetView* const m_targets[2] = { m_colorTarget.Get(), m_normalsTarget.Get()};
-	D3D11Core::Get().Context()->OMSetRenderTargets(2, m_targets, m_depthTarget.Get());
+	ID3D11RenderTargetView* const m_targets[] = { m_colorTarget.Get(), m_normalsTarget.Get(), m_worldPositionTarget.Get()};
+	D3D11Core::Get().Context()->OMSetRenderTargets(3, m_targets, m_depthTarget.Get());
 	DC->RSSetState(m_pipeline->m_rasterState.Get());
 	DC->OMSetBlendState(nullptr, NULL, 0xffffffff);
 	DC->PSSetSamplers(0, 1, m_pipeline->m_anisotropicSamplerState.GetAddressOf());

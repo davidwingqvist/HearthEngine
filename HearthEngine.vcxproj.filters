@@ -161,6 +161,9 @@
     <ClCompile Include="src\Engine\DXPointer.cpp">
       <Filter>Tools</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine\Utility.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Engine\Header.h">
@@ -269,6 +272,9 @@
       <Filter>Resource</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\DXPointer.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Utility.h">
       <Filter>Tools</Filter>
     </ClInclude>
   </ItemGroup>
