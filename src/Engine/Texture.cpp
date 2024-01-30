@@ -17,6 +17,12 @@ ID3D11ShaderResourceView** Texture::GetShaderView()
     return m_textureView.GetAddressOf();
 }
 
+void Texture::SetAsTexture()
+{
+    if(m_textureView.Get())
+        DC->PSSetShaderResources(0, 1, m_textureView.GetAddressOf());
+}
+
 bool Texture::Create(const std::string& filename)
 {
     const std::string path = TEXTUREPATH + filename;
@@ -51,6 +57,12 @@ bool Texture::Create(const std::string& filename)
         hr = D3D11Core::Get().Device()->CreateShaderResourceView(m_texture.Get(), 0, m_textureView.GetAddressOf());
     }
 
+    m_filename = filename;
     stbi_image_free(image);
     return !FAILED(hr);
+}
+
+const std::string& Texture::GetName() const
+{
+    return m_filename;
 }

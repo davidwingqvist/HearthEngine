@@ -142,9 +142,6 @@ void Model3D::Draw()
     UINT offset = 0;
     UINT stride = sizeof(vertex_data);
 
-    if(m_texture)
-        DC->PSSetShaderResources(0, 1, m_texture->GetShaderView());
-
     D3D11Core::Get().Context()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
     for (size_t m = 0; m < m_meshes.size(); m++)
     {
@@ -158,11 +155,6 @@ void Model3D::Draw()
 const std::string Model3D::GetName() const
 {
     return m_name;
-}
-
-void Model3D::SetTexture(const std::string& texName)
-{
-    m_texture = ResourceManager::Get().GetResource<Texture>(texName).get();
 }
 
 bool Model3D::Create(const std::string& filename)

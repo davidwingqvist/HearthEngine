@@ -47,7 +47,6 @@ private:
 	};
 	std::vector<submesh> m_meshes;
 	std::string m_name;
-	Texture* m_texture;
 
 	bool CreateVertexBuffer(std::vector<vertex_data>& modelData, submesh& mesh);
 
@@ -62,7 +61,6 @@ public:
 
 	void Draw();
 	const std::string GetName() const;
-	void SetTexture(const std::string& texName);
 
 	// Inherited via IResource
 	virtual bool Create(const std::string& filename) override;

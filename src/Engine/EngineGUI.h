@@ -24,6 +24,7 @@ private:
 	char m_createScriptPathProp[36] = {};
 
 	char m_modelinputField[100] = {};
+	char m_textureInputField[100] = {};
 
 	// Bottom Bar Values
 	bool m_showBottomEntities = false;

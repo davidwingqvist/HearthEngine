@@ -1,6 +1,7 @@
 #pragma once
 
 class Model3D;
+class Texture;
 
 enum class LIGHTTYPE : UINT
 {
@@ -124,7 +125,8 @@ struct Script
 
 struct Model
 {
-	Model3D* data;
+	Model3D* model_data;
+	Texture* model_texture;
 	bool isVisible = true;
 };
 

@@ -5,6 +5,7 @@
 #include "EngineGUI.h"
 #include "LuaState.h"
 #include "Time.h"
+#include "Texture.h"
 
 void UpdatePublicBuffer(ID3D11Buffer*& buffer, const sm::Matrix& matrix_data)
 {
@@ -37,9 +38,9 @@ Scene::Scene()
 	GameObject* gameObject = m_registry.AddComponent<GameObject>(entity);
 	gameObject->name = "Trunk";
 	
-	m_registry.AddComponent<Model>(entity)->data = ResourceManager::Get().GetResource<Model3D>("Chest.obj").get();
-	ResourceManager::Get().GetResource<Model3D>("Chest.obj")->SetTexture("Chest_Albedo.png");
-	
+	Model* model = m_registry.AddComponent<Model>(entity);
+	model->model_data = ResourceManager::Get().GetResource<Model3D>("Chest.obj").get();
+	model->model_texture = ResourceManager::Get().GetResource<Texture>("Chest_Albedo.png").get();
 	Script* scr = m_registry.AddComponent<Script>(entity);
 	transf->pos = { 0, 0, -225.5 };
 
@@ -108,8 +109,9 @@ void Scene::Draw()
 		{
 			UpdatePublicBuffer(m_publicBuffer, pos.GetMatrix());
 
+			model.model_texture->SetAsTexture();
 			// draw each model.
-			model.data->Draw();
+			model.model_data->Draw();
 		}
 
 		});

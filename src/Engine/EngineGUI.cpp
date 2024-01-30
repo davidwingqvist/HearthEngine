@@ -4,6 +4,7 @@
 #include "Debugger.h"
 #include "LuaState.h"
 #include "ResourceManager.h"
+#include "Texture.h"
 
 constexpr ImGuiWindowFlags menuWindow = (ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoTitleBar);
 constexpr ImGuiWindowFlags bottomWindow = ImGuiWindowFlags_NoTitleBar;
@@ -235,13 +236,22 @@ void EngineGUI::RenderTopBar()
 		{
 			ImGui::BeginChild(1, ImVec2(0, 0), ImGuiChildFlags_Border | ImGuiChildFlags_AlwaysUseWindowPadding | ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_AutoResizeX);
 			ImGui::TextColored(ImVec4(255, 0, 255, 255), "Model");
-			std::string modelName = "Current Model: " + currModel->data->GetName();
+			std::string modelName = "Current Model: " + currModel->model_data->GetName();
 			ImGui::Text(modelName.c_str());
 			if(ImGui::InputText("Insert model name", m_modelinputField, 100, ImGuiInputTextFlags_EnterReturnsTrue))
 			{
 				Model3D* newModel = ResourceManager::Get().GetResource<Model3D>(std::string(m_modelinputField)).get();
 				if (newModel)
-					currModel->data = newModel;
+					currModel->model_data = newModel;
+			}
+
+			std::string textureName = "Current Texture: " + currModel->model_texture->GetName();
+			ImGui::Text(textureName.c_str());
+			if (ImGui::InputText("Insert texture name", m_textureInputField, 100, ImGuiInputTextFlags_EnterReturnsTrue))
+			{
+				Texture* newTexture = ResourceManager::Get().GetResource<Texture>(std::string(m_textureInputField)).get();
+				if (newTexture)
+					currModel->model_texture = newTexture;
 			}
 			ImGui::EndChild();
 		}
