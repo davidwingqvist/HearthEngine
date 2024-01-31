@@ -19,6 +19,14 @@ void pushTransform(lua_State* L, Transform* inst)
 	lua_setmetatable(L, -2);
 }
 
+sm::Matrix GetMatrix(const Transform& transform)
+{
+	sm::Matrix mat = sm::Matrix::CreateScale(transform.scale);
+	mat *= sm::Matrix::CreateFromQuaternion(transform.rotation);
+	mat.Translation(transform.pos);
+	return mat;
+}
+
 static int transform_get(lua_State* L)
 {
 	Transform* inst = *(Transform**)luaL_checkudata(L, 1, tname);

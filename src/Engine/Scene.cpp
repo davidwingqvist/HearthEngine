@@ -50,11 +50,6 @@ Scene::Scene()
 	Transform* transf2 = m_registry.AddComponent<Transform>(entity2);
 	transf = m_registry.AddComponent<Transform>(entity3);
 
-	transf2->rotation = {-1.0f, 0.0f, 0.0f};
-	transf->rotation = {1.0f, 0.0f, 0.0f};
-
-	DEBUG_INFO(std::to_string(std::acosh(transf->GetForward().Dot(transf2->GetForward()))));
-
 	LUA.m_currentRegistry = &m_registry;
 
 	pushTransform(LUA.State(), transf);
@@ -103,11 +98,11 @@ void Scene::Draw()
 	D3D11Core::Get().Context()->VSSetConstantBuffers(0, 1, &m_publicBuffer);
 	m_camera.Move();
 
-	m_registry.Group<Model, Transform>().ForEach([&](Model& model, Transform& pos){
+	m_registry.Group<Model, Transform>().ForEach([&](Model& model, Transform& transform){
 
 		if (model.isVisible)
 		{
-			UpdatePublicBuffer(m_publicBuffer, pos.GetMatrix());
+			UpdatePublicBuffer(m_publicBuffer, GetMatrix(transform));
 
 			model.model_texture->SetAsTexture();
 			// draw each model.

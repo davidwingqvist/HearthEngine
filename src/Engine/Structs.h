@@ -61,24 +61,12 @@ static const char* const tmap_set[] = { "xPosition", "yPosition", "zPosition", "
 struct Transform
 {
 	sm::Vector3 pos = {0.0f, 0.0f, 0.0f};
-	sm::Vector3 rotation = {0.0f, 0.0f, 0.0f};
+	sm::Quaternion rotation = {0.0f, 0.0f, 0.0f, 0.0f};
 	sm::Vector3 scale = {1.0f, 1.0f, 1.0f};
-
-	const sm::Matrix GetMatrix() const
-	{
-		return sm::Matrix::CreateTranslation(pos) * sm::Matrix::CreateFromYawPitchRoll(rotation) * sm::Matrix::CreateScale(scale);
-	}
-
-	const sm::Vector3 GetForward() const
-	{
-		return sm::Vector3::Transform(pos.Forward, sm::Matrix::CreateFromYawPitchRoll(rotation)) + pos;
-	}
-
-	const sm::Vector3 GetRight() const
-	{
-		return sm::Vector3::Transform(pos.Right, sm::Matrix::CreateFromYawPitchRoll(rotation)) + pos;
-	}
 };
+
+sm::Matrix GetMatrix(const Transform& transform);
+
 static int transform_get(lua_State* L);
 static int transform_set(lua_State* L);
 

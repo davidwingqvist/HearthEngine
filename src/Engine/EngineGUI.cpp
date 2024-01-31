@@ -9,12 +9,6 @@
 constexpr ImGuiWindowFlags menuWindow = (ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoTitleBar);
 constexpr ImGuiWindowFlags bottomWindow = ImGuiWindowFlags_NoTitleBar;
 
-/*
-
-	Memory leaks in this singleton class.
-
-*/
-
 EngineGUI::EngineGUI()
 {
 #ifdef _DEBUG
