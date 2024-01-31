@@ -18,7 +18,8 @@ public:
 
 		COLOR_GREEN = 10,
 		COLOR_WHITE = 15,
-		COLOR_RED = 12
+		COLOR_RED = 12,
+		COLOR_PURPLE = 13
 
 	};
 
@@ -31,6 +32,7 @@ public:
 	void SetColor(const ConsoleColor& color);
 	void Print(const std::string& line);
 	void Print(const std::string& line, const ConsoleColor& color);
+	void AdjustPrint(const std::string& line);
 
 };
 
@@ -38,4 +40,5 @@ public:
 #define DEBUG_SUCCESS(string) Debugger::Get().Print(string, Debugger::COLOR_GREEN);
 #define DEBUG_INFO(string) Debugger::Get().Print(string, Debugger::COLOR_WHITE);
 
+#define DEBUG_SAMELINE(string) Debugger::Get().AdjustPrint(string);
 #define DEBUG_NEWLINE() Debugger::Get().Print("\n");

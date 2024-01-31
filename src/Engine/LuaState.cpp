@@ -46,28 +46,27 @@ lua_State* LuaHandler::State()
 
 void LuaHandler::DumpStack()
 {
-	DEBUG_INFO("------- STACK DUMP -------\n");
+	Debugger::Get().Print("------- STACK DUMP -------\n", Debugger::COLOR_PURPLE);
 	std::string line;
 	for (int i = lua_gettop(Get().m_luaState); i > 0; i--)
 	{
-		DEBUG_INFO("Index " + std::to_string(i) + ": " + lua_typename(Get().m_luaState, lua_type(Get().m_luaState, i)));
+		Debugger::Get().Print("Index " + std::to_string(i) + ": " + lua_typename(Get().m_luaState, lua_type(Get().m_luaState, i)), Debugger::COLOR_PURPLE);
 
 		//Print out more info about the data in the stack
 		switch (lua_type(Get().m_luaState, i))
 		{
 		case LUA_TNUMBER:
-			DEBUG_INFO(" '" + std::to_string(lua_tonumber(Get().m_luaState, i)) + "'");
+			DEBUG_SAMELINE(" '" + std::to_string(lua_tonumber(Get().m_luaState, i)) + "'");
 			break;
 		case LUA_TSTRING:
 			line = lua_tostring(Get().m_luaState, i);
-			DEBUG_INFO(" '" + line + "'");
+			DEBUG_SAMELINE(" '" + line + "'");
 			break;
 		default:
 			break;
 		}
-		DEBUG_NEWLINE();
 	}
-	DEBUG_INFO("--------------------------\n");
+	Debugger::Get().Print("--------------------------\n", Debugger::COLOR_PURPLE);
 }
 
 void LuaHandler::ClearStack()

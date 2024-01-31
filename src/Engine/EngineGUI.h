@@ -34,6 +34,8 @@ private:
 	std::vector<ConsoleLogEvent> m_consoleLogs;
 	char m_consoleWindowInput[100] = {};
 	void ClearConsoleWindowText();
+	void ClearConsoleLogToLimit();
+	int m_consoleLogLimit = 200;
 	// Console window log filter.
 	UINT m_filter = (UINT)ConsoleLogEventType::ALL;
 
@@ -52,6 +54,7 @@ public:
 
 	static void RegisterConsoleLog(const ConsoleLogEvent& event);
 	static ConsoleLogEvent& AdjustConsoleLog(const size_t& pos);
+	static const size_t& GetConsoleLogSize();
 
 private:
 

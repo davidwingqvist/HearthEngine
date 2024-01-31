@@ -38,6 +38,14 @@ void EngineGUI::ClearConsoleWindowText()
 	m_consoleLogs.clear();
 }
 
+void EngineGUI::ClearConsoleLogToLimit()
+{
+	while(m_consoleLogs.size() > m_consoleLogLimit)
+	{
+		m_consoleLogs.erase(m_consoleLogs.begin());
+	}
+}
+
 void EngineGUI::BottomBarPutToFalse()
 {
 	m_showBottomConsole = false;
@@ -79,6 +87,11 @@ void EngineGUI::RegisterConsoleLog(const ConsoleLogEvent& event)
 ConsoleLogEvent& EngineGUI::AdjustConsoleLog(const size_t& pos)
 {
 	return Get().m_consoleLogs[pos];
+}
+
+const size_t& EngineGUI::GetConsoleLogSize()
+{
+	return Get().m_consoleLogs.size();
 }
 
 void EngineGUI::RenderTopBar()
@@ -337,6 +350,12 @@ void EngineGUI::RenderConsole()
 		m_filter = 0;
 		m_filter |= (UINT)ConsoleLogEventType::LOG_SUCCESS;
 	}
+	ImGui::SameLine();
+	ImGui::SetNextItemWidth(ImGui::GetWindowWidth() * 0.1f);
+	ImGui::InputInt("Log limit", &m_consoleLogLimit, 1, 10, ImGuiInputTextFlags_EnterReturnsTrue);
+
+	this->ClearConsoleLogToLimit();
+
 	// Upper line button bar.
 
 	ImGui::BeginListBox("###consoleLog", ImVec2(ImGui::GetWindowWidth(), ImGui::GetWindowSize().y * 0.72f));
