@@ -91,9 +91,10 @@ struct camera_data
 	sm::Matrix projectionMatrix;
 };
 
-struct Physics
+struct RigidBody
 {
-	float mass;
+	float mass = 0;
+	bool hasCollision = true;
 };
 
 /*

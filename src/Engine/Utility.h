@@ -2,6 +2,8 @@
 
 class Camera;
 
+constexpr float GRAVITY = 9.82f;
+
 /*
 	Various utility functions that can be used for
 	easier calculations.

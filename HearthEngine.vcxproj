@@ -21,7 +21,7 @@
   <ItemGroup>
     <ClCompile Include="src\Engine\BasicPass.cpp" />
     <ClCompile Include="src\Engine\Camera.cpp" />
-    <ClCompile Include="src\Engine\CppToLua.cpp" />
+    <ClCompile Include="src\Engine\LuaToCpp.cpp" />
     <ClCompile Include="src\Engine\CubeMapPass.cpp" />
     <ClCompile Include="src\Engine\D3D11Context.cpp" />
     <ClCompile Include="src\Engine\Debugger.cpp" />
@@ -81,7 +81,7 @@
   <ItemGroup>
     <ClInclude Include="src\Engine\BasicPass.h" />
     <ClInclude Include="src\Engine\Camera.h" />
-    <ClInclude Include="src\Engine\CppToLua.h" />
+    <ClInclude Include="src\Engine\LuaToCpp.h" />
     <ClInclude Include="src\Engine\CubeMapPass.h" />
     <ClInclude Include="src\Engine\D3D11Context.h" />
     <ClInclude Include="src\Engine\Debugger.h" />

@@ -16,6 +16,11 @@ private:
 	bool CreatePublicBuffer();
 	void PreDraw();
 
+private:
+
+	void SetupComponents();
+	void RegisterComponentsToLua();
+
 public:
 
 	Scene();

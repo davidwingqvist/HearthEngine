@@ -4,7 +4,7 @@
 #include <Windows.h>
 #include <shellapi.h>
 #include <filesystem>
-#include "CppToLua.h"
+#include "LuaToCpp.h"
 
 // Open up a fresh lua state.
 LuaHandler::LuaHandler()
@@ -35,6 +35,8 @@ void LuaHandler::LoadInFunctions()
 void LuaHandler::LoadInDebugFunctions()
 {
 	this->RegisterFunction(Debug_LogInfo, "DEBUG_INFO");
+	this->RegisterFunction(Debug_LogError, "DEBUG_ERROR");
+	this->RegisterFunction(Debug_LogSuccess, "DEBUG_SUCCESS");
 }
 
 lua_State* LuaHandler::State()
@@ -44,29 +46,28 @@ lua_State* LuaHandler::State()
 
 void LuaHandler::DumpStack()
 {
-	std::cout << "------- STACK DUMP -------\n";
+	DEBUG_INFO("------- STACK DUMP -------\n");
+	std::string line;
 	for (int i = lua_gettop(Get().m_luaState); i > 0; i--)
 	{
-		std::cout << "Index " << i << ": " << lua_typename(Get().m_luaState, lua_type(Get().m_luaState, i));
+		DEBUG_INFO("Index " + std::to_string(i) + ": " + lua_typename(Get().m_luaState, lua_type(Get().m_luaState, i)));
 
 		//Print out more info about the data in the stack
 		switch (lua_type(Get().m_luaState, i))
 		{
 		case LUA_TNUMBER:
-			std::cout << " '" << lua_tonumber(Get().m_luaState, i) << "'";
+			DEBUG_INFO(" '" + std::to_string(lua_tonumber(Get().m_luaState, i)) + "'");
 			break;
 		case LUA_TSTRING:
-			std::cout << " '" << lua_tostring(Get().m_luaState, i) << "'";
-			break;
-		case LUA_TBOOLEAN:
-			std::cout << " '" << lua_toboolean(Get().m_luaState, i) << "'";
+			line = lua_tostring(Get().m_luaState, i);
+			DEBUG_INFO(" '" + line + "'");
 			break;
 		default:
 			break;
 		}
-		std::cout << '\n';
+		DEBUG_NEWLINE();
 	}
-	std::cout << "--------------------------\n";
+	DEBUG_INFO("--------------------------\n");
 }
 
 void LuaHandler::ClearStack()

@@ -27,33 +27,8 @@ Scene::Scene()
 	{
 		DEBUG_ERROR("Creating public buffer failed for scene!\n")
 	}
-	m_registry.RegisterComponent<GameObject>();
-	m_registry.RegisterComponent<Transform>();
-	m_registry.RegisterComponent<Script>();
-
-	// Temporary testing entities...
-
-	recs::Entity entity = m_registry.CreateEntity();
-	Transform* transf = m_registry.AddComponent<Transform>(entity);
-	GameObject* gameObject = m_registry.AddComponent<GameObject>(entity);
-	gameObject->name = "Trunk";
-	
-	Model* model = m_registry.AddComponent<Model>(entity);
-	model->model_data = ResourceManager::Get().GetResource<Model3D>("Chest.obj").get();
-	model->model_texture = ResourceManager::Get().GetResource<Texture>("Chest_Albedo.png").get();
-	Script* scr = m_registry.AddComponent<Script>(entity);
-	transf->pos = { 0, 0, -225.5 };
-
-	recs::Entity entity2 = m_registry.CreateEntity();
-	recs::Entity entity3 = m_registry.CreateEntity();
-
-	Transform* transf2 = m_registry.AddComponent<Transform>(entity2);
-	transf = m_registry.AddComponent<Transform>(entity3);
-
-	LUA.m_currentRegistry = &m_registry;
-
-	pushTransform(LUA.State(), transf);
-	lua_setglobal(LUA.State(), "Transform");
+	this->SetupComponents();
+	this->RegisterComponentsToLua();
 	m_camera.Activate();
 }
 
@@ -88,6 +63,44 @@ void Scene::Update()
 }
 
 void Scene::PreDraw()
+{
+
+}
+
+void Scene::SetupComponents()
+{
+	m_registry.RegisterComponent<GameObject>();
+	m_registry.RegisterComponent<Transform>();
+	m_registry.RegisterComponent<Script>();
+	m_registry.RegisterComponent<Light>();
+	m_registry.RegisterComponent<RigidBody>();
+
+	// Temporary testing entities...
+
+	recs::Entity entity = m_registry.CreateEntity();
+	Transform* transf = m_registry.AddComponent<Transform>(entity);
+	GameObject* gameObject = m_registry.AddComponent<GameObject>(entity);
+	gameObject->name = "Trunk";
+
+	Model* model = m_registry.AddComponent<Model>(entity);
+	model->model_data = ResourceManager::Get().GetResource<Model3D>("Chest.obj").get();
+	model->model_texture = ResourceManager::Get().GetResource<Texture>("Chest_Albedo.png").get();
+	Script* scr = m_registry.AddComponent<Script>(entity);
+	transf->pos = { 0, 0, -225.5 };
+
+	recs::Entity entity2 = m_registry.CreateEntity();
+	recs::Entity entity3 = m_registry.CreateEntity();
+
+	Transform* transf2 = m_registry.AddComponent<Transform>(entity2);
+	transf = m_registry.AddComponent<Transform>(entity3);
+
+	LUA.m_currentRegistry = &m_registry;
+
+	pushTransform(LUA.State(), transf);
+	lua_setglobal(LUA.State(), "Transform");
+}
+
+void Scene::RegisterComponentsToLua()
 {
 
 }

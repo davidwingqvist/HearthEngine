@@ -76,6 +76,11 @@ void EngineGUI::RegisterConsoleLog(const ConsoleLogEvent& event)
 	Get().m_consoleLogs.push_back(event);
 }
 
+ConsoleLogEvent& EngineGUI::AdjustConsoleLog(const size_t& pos)
+{
+	return Get().m_consoleLogs[pos];
+}
+
 void EngineGUI::RenderTopBar()
 {
 	ImGui::SetNextWindowPos(ImVec2(0, 0));

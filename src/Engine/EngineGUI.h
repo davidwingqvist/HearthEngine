@@ -51,6 +51,7 @@ public:
 	static void SetSceneManagerRef(SceneManager* ref_pointer);
 
 	static void RegisterConsoleLog(const ConsoleLogEvent& event);
+	static ConsoleLogEvent& AdjustConsoleLog(const size_t& pos);
 
 private:
 

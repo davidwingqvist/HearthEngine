@@ -164,7 +164,7 @@
     <ClCompile Include="src\Engine\Utility.cpp">
       <Filter>Tools</Filter>
     </ClCompile>
-    <ClCompile Include="src\Engine\CppToLua.cpp">
+    <ClCompile Include="src\Engine\LuaToCpp.cpp">
       <Filter>Lua</Filter>
     </ClCompile>
   </ItemGroup>
@@ -280,7 +280,7 @@
     <ClInclude Include="src\Engine\Utility.h">
       <Filter>Tools</Filter>
     </ClInclude>
-    <ClInclude Include="src\Engine\CppToLua.h">
+    <ClInclude Include="src\Engine\LuaToCpp.h">
       <Filter>Lua</Filter>
     </ClInclude>
   </ItemGroup>
