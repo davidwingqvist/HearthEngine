@@ -1,5 +1,4 @@
 #pragma once
-
 #define LUA LuaHandler::Get()
 
 class LuaHandler
@@ -12,6 +11,17 @@ private:
 	~LuaHandler();
 
 	std::vector<std::string> m_scriptNames;
+
+private:
+
+	// Helper function for function registry.
+	void RegisterFunction(lua_CFunction func, const std::string& funcName);
+
+	// All functions for lua.
+	void LoadInFunctions();
+
+	// Debug functions for lua.
+	void LoadInDebugFunctions();
 
 public:
 

@@ -4,17 +4,37 @@
 #include <Windows.h>
 #include <shellapi.h>
 #include <filesystem>
+#include "CppToLua.h"
 
 // Open up a fresh lua state.
 LuaHandler::LuaHandler()
 {
 	m_luaState = luaL_newstate();
 	luaL_openlibs(m_luaState);
+	m_currentRegistry = nullptr;
+
+	this->LoadInFunctions();
 }
 
 LuaHandler::~LuaHandler()
 {
 	lua_close(m_luaState);
+}
+
+void LuaHandler::RegisterFunction(lua_CFunction func, const std::string& funcName)
+{
+	lua_pushcfunction(m_luaState, func);
+	lua_setglobal(m_luaState, funcName.c_str());
+}
+
+void LuaHandler::LoadInFunctions()
+{
+	this->LoadInDebugFunctions();
+}
+
+void LuaHandler::LoadInDebugFunctions()
+{
+	this->RegisterFunction(Debug_LogInfo, "DEBUG_INFO");
 }
 
 lua_State* LuaHandler::State()

@@ -1,6 +1,6 @@
 Test={}
 
-print('z position is: ' .. Transform.zPosition)
+DEBUG_INFO("Test")
 
 function OnAwake()
 
