@@ -96,6 +96,10 @@ void Scene::SetupComponents()
 
 	LUA.m_currentRegistry = &m_registry;
 
+	recs::Entity lightEnt = m_registry.CreateEntity();
+	transf = m_registry.AddComponent<Transform>(lightEnt);
+	Light* light = m_registry.AddComponent<Light>(lightEnt);
+
 	pushTransform(LUA.State(), transf);
 	lua_setglobal(LUA.State(), "Transform");
 }

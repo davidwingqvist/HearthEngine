@@ -103,8 +103,11 @@ struct RigidBody
 */
 struct Light
 {
-	sm::Vector3 position = {};
-	LIGHTTYPE type = LIGHTTYPE::NONE;
+	sm::Vector4 ambient = {};
+	sm::Vector4 diffuse = {};
+	sm::Vector4 specular = {};
+	sm::Vector3 data = {};
+	LIGHTTYPE type = LIGHTTYPE::DIRECTIONAL;
 };
 
 struct Script

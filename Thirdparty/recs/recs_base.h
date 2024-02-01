@@ -5,6 +5,7 @@
 #include "recs_component_array.h"
 #include "recs_event_handler.h"
 #include "recs_thread.h"
+#include "recs_state_handler.h"
 
 
 /*
@@ -16,6 +17,7 @@
 
 	Ideas:
 	* Limit some entities to not be looped through?
+	* Remove ability to adjust size of component arrays. [Make it faster, with the draw back of more memory being used.]
 */
 
 namespace recs
@@ -42,6 +44,7 @@ namespace recs
 		recs_component_registry m_componentRegistry;
 		recs_thread_pool m_threadpool;
 		bool m_useOpenMp = false;
+		recs_state_handler m_stateHandler;
 		
 
 		/*
@@ -102,6 +105,9 @@ namespace recs
 		// Return a bool that indicates whether an entity contains said component.
 		template<typename T>
 		const bool HasComponent(const Entity& entity) const;
+
+		template<typename T>
+		const size_t& GetSize() const;
 
 
 		/*
@@ -195,6 +201,16 @@ namespace recs
 			Return a vector of all active entities.
 		*/
 		const std::vector<Entity>& GetEntities() const;
+
+		/*
+			Save the active state of the registry. NOT IMPLEMENTED YET
+		*/
+		void SaveState();
+
+		/*
+			Load saved state of registry. NOT IMPLEMENTED YET
+		*/
+		void LoadState();
 	};
 
 	template<typename T>
@@ -233,9 +249,15 @@ namespace recs
 	template<typename T>
 	inline const bool recs_registry::HasComponent(const Entity& entity) const
 	{
-		T* comp = this->GetComponent<T>(entity);
+		const T* const comp = this->GetComponent<T>(entity);
 
 		return comp ? true : false;
+	}
+
+	template<typename T>
+	inline const size_t& recs_registry::GetSize() const
+	{
+		return m_componentRegistry.GetSizeOfComponentArray<T>();
 	}
 
 	template<typename T>

@@ -173,6 +173,12 @@ namespace recs
 			return m_size;
 		}
 
+		// Return the number of active components.
+		const size_t& GetActiveSize() const
+		{
+			return m_activeComponents.size();
+		}
+
 		// Get a pointer towards the raw array.
 		T* GetArray()
 		{

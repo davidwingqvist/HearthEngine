@@ -3,6 +3,7 @@
 #include <iostream>
 
 recs::recs_registry::recs_registry(const size_t& size)
+	:m_stateHandler(this)
 {
 	m_size = size;
 	for (Entity i = 0; i < m_size; i++)
@@ -72,4 +73,12 @@ const bool& recs::recs_registry::IsUsingOpenMP() const
 const std::vector<recs::Entity>& recs::recs_registry::GetEntities() const
 {
 	return m_activeEntities;
+}
+
+void recs::recs_registry::SaveState()
+{
+}
+
+void recs::recs_registry::LoadState()
+{
 }

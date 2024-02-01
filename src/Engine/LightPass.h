@@ -29,6 +29,21 @@ private:
 
 	bool SetUpScreenTriangles();
 
+	/*
+	
+		Lightning values
+
+	*/
+	DXPointer<ID3D11Buffer> m_lightData;
+	std::vector<Light> m_lightDataVector;
+	UINT m_nrOfRegLights = (UINT)-1;
+
+	void SetUpLightBuffer();
+	void UpdateLightBuffer();
+
+	// Gather all the lights data.
+	void GatherLights(recs::recs_registry* reg);
+
 public:
 
 	BasicPass* m_basicPassRef;

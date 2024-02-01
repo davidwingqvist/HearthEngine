@@ -3,6 +3,8 @@
 #include "D3D11Context.h"
 #include "Debugger.h"
 
+constexpr UINT MAX_LIGHTS = 50;
+
 bool LightPass::SetUpScreenTriangles()
 {
 	D3D11_BUFFER_DESC desc{};
@@ -48,6 +50,39 @@ LightPass::~LightPass()
 {
 }
 
+void LightPass::GatherLights(recs::recs_registry* reg)
+{
+	m_lightDataVector.clear();
+	m_lightDataVector.reserve(reg->GetComponentRegistry().GetEntityLinks<Light>().size());
+	
+	reg->Group<Light, Transform>().ForEach([&](Light& light, Transform& transf) {
+
+		light.data = transf.pos;
+
+		m_lightDataVector.push_back(light);
+
+		});
+
+	m_nrOfRegLights = m_lightDataVector.size();
+
+	this->UpdateLightBuffer();
+}
+
+void LightPass::SetUpLightBuffer()
+{
+	D3D11_BUFFER_DESC desc{};
+	desc.ByteWidth = sizeof(Light) * MAX_LIGHTS;
+	desc.Usage = D3D11_USAGE_DYNAMIC;
+	desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+
+	HRESULT hr = D3D11Core::Get().Device()->CreateBuffer(&desc, 0, m_lightData.GetAddressOf());
+	if (FAILED(hr))
+	{
+		DEBUG_ERROR("Failed creating Vertex buffer for Light pass!\n")
+	}
+}
+
 void LightPass::Prepass()
 {
 	m_basicPassRef->SetLightPassValues();
@@ -69,7 +104,29 @@ void LightPass::Prepass()
 
 void LightPass::Pass(Scene* currentScene)
 {
+	/*
+	
+		TODOOOO
+
+	*/
+	if (m_nrOfRegLights != currentScene->GetRegistry().GetSize<Light>())
+	{
+		this->GatherLights(&currentScene->GetRegistry());
+	}
+
 	D3D11Core::Get().Context()->DrawIndexed(6, 0, 0);
+}
+
+void LightPass::UpdateLightBuffer()
+{
+	D3D11_MAPPED_SUBRESOURCE sub;
+	HRESULT hr = D3D11Core::Get().Context()->Map(m_lightData.Get(), 0, D3D11_MAP_WRITE_DISCARD, NULL, &sub);
+	if (FAILED(hr))
+	{
+		DEBUG_ERROR("Failed to map public buffer for scene!\n");
+	}
+	std::memcpy(sub.pData, &m_lightDataVector[0], sizeof(Light) * m_lightDataVector.size());
+	D3D11Core::Get().Context()->Unmap(m_lightData.Get(), 0);
 }
 
 void LightPass::Postpass()
@@ -82,4 +139,5 @@ void LightPass::Create()
 	m_lightVertex.Create("LightVertexShader");
 	m_lightPixel.Create("LightPixelShader");
 	SetUpScreenTriangles();
+	this->SetUpLightBuffer();
 }
