@@ -224,14 +224,14 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Lua\include;C:\Users\Main\Desktop\Game Ground\HearthEngine\Thirdparty\recs;C:\Users\Main\Desktop\Game Ground\HearthEngine\Thirdparty\assimp\include;$(IncludePath)</IncludePath>
-    <ReferencePath>C:\Lua;$(ReferencePath)</ReferencePath>
-    <LibraryPath>C:\Lua;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)Thirdparty\Lua\include;$(ProjectDir)Thirdparty\recs;$(ProjectDir)Thirdparty\assimp\include;$(IncludePath)</IncludePath>
+    <ReferencePath>$(ProjectDir)Thirdparty\Lua;$(ReferencePath)</ReferencePath>
+    <LibraryPath>$(ProjectDir)Thirdparty\Lua;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>C:\Lua\include;C:\Users\Main\Desktop\Game Ground\HearthEngine\Thirdparty\recs;C:\Users\Main\Desktop\Game Ground\HearthEngine\Thirdparty\assimp\include;$(IncludePath)</IncludePath>
-    <ReferencePath>C:\Lua;$(ReferencePath)</ReferencePath>
-    <LibraryPath>C:\Lua;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)Thirdparty\Lua\include;$(ProjectDir)Thirdparty\recs;$(ProjectDir)Thirdparty\assimp\include;$(IncludePath)</IncludePath>
+    <ReferencePath>$(ProjectDir)Thirdparty\Lua;$(ReferencePath)</ReferencePath>
+    <LibraryPath>$(ProjectDir)Thirdparty\Lua;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -271,7 +271,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Create</PrecompiledHeader>
       <PrecompiledHeaderFile>Header.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>C:\Users\Main\Desktop\Game Ground\HearthEngine\Thirdparty\imgui;C:\Users\Main\Desktop\Game Ground\HearthEngine\Thirdparty\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Thirdparty\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName).pch</PrecompiledHeaderOutputFile>
     </ClCompile>
@@ -279,7 +279,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>assimp-vc143-mtd.lib;RECS.lib;d3d11.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Users\Main\Desktop\Game Ground\HearthEngine\Thirdparty\recs\lib;C:\Users\Main\Desktop\Game Ground\HearthEngine\Thirdparty\assimp;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)Thirdparty\recs\lib;$(ProjectDir)Thirdparty\assimp;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <FxCompile>
       <ShaderModel>5.0</ShaderModel>
@@ -295,7 +295,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Create</PrecompiledHeader>
       <PrecompiledHeaderFile>Header.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>C:\Users\Main\Desktop\Game Ground\HearthEngine\Thirdparty\imgui;C:\Users\Main\Desktop\Game Ground\HearthEngine\Thirdparty\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Thirdparty\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName).pch</PrecompiledHeaderOutputFile>
     </ClCompile>
@@ -305,7 +305,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>assimp-vc143-mtd.lib;RECS.lib;d3d11.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Users\Main\Desktop\Game Ground\HearthEngine\Thirdparty\recs\lib;C:\Users\Main\Desktop\Game Ground\HearthEngine\Thirdparty\assimp;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)Thirdparty\recs\lib;$(ProjectDir)Thirdparty\assimp;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <FxCompile>
       <ShaderModel>5.0</ShaderModel>
