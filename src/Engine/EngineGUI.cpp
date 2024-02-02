@@ -372,6 +372,11 @@ void EngineGUI::RenderConsole()
 	ImGui::Button("Enter###consoleWindowEnter");
 }
 
+/*
+
+	Huge function that checks for each individual component and
+	allows editing through ImGUI API.
+*/
 void EngineGUI::RenderProperties()
 {
 	if (m_showPropertiesTab && m_currentEntity != (recs::Entity)-1)
@@ -384,11 +389,10 @@ void EngineGUI::RenderProperties()
 
 		if (currGameObject)
 		{
-			ImGui::BeginChild(1, ImVec2(0, 0), ImGuiChildFlags_Border | ImGuiChildFlags_AlwaysUseWindowPadding | ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_AutoResizeX);
+			ImGui::BeginChild(1, ImVec2(ImGui::GetContentRegionAvail().x, 0), ImGuiChildFlags_Border | ImGuiChildFlags_AlwaysUseWindowPadding | ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_AutoResizeX);
 			ImGui::TextColored(ImVec4(255, 0, 255, 255), "GameObject");
 			std::string gameObjectName = "Name: " + currGameObject->name;
 			ImGui::Text(gameObjectName.c_str());
-			ImGui::SameLine();
 			char input[32] = { '\0' };
 			std::string name = "###PropInputName";
 			if (ImGui::InputTextWithHint(name.c_str(), std::string("Input new name").c_str(), input, sizeof input, ImGuiInputTextFlags_EnterReturnsTrue))
@@ -401,11 +405,13 @@ void EngineGUI::RenderProperties()
 		Model* currModel = reg.GetComponent<Model>(m_currentEntity);
 		if (currModel)
 		{
-			ImGui::BeginChild(1, ImVec2(0, 0), ImGuiChildFlags_Border | ImGuiChildFlags_AlwaysUseWindowPadding | ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_AutoResizeX);
+			ImGui::BeginChild(2, ImVec2(ImGui::GetContentRegionAvail().x, 0), ImGuiChildFlags_Border | ImGuiChildFlags_AlwaysUseWindowPadding | ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_AutoResizeX);
 			ImGui::TextColored(ImVec4(255, 0, 255, 255), "Model");
 			std::string modelName = "Current Model: " + currModel->model_data->GetName();
 			ImGui::Text(modelName.c_str());
-			if (ImGui::InputText("Insert model name", m_modelinputField, 100, ImGuiInputTextFlags_EnterReturnsTrue))
+			ImGui::Button("..##ModelTabButton");
+			ImGui::SameLine();
+			if (ImGui::InputTextWithHint("###Insertmodelname", "Insert Model Name", m_modelinputField, 100, ImGuiInputTextFlags_EnterReturnsTrue))
 			{
 				Model3D* newModel = ResourceManager::Get().GetResource<Model3D>(std::string(m_modelinputField)).get();
 				if (newModel)
@@ -414,7 +420,9 @@ void EngineGUI::RenderProperties()
 
 			std::string textureName = "Current Texture: " + currModel->model_texture->GetName();
 			ImGui::Text(textureName.c_str());
-			if (ImGui::InputText("Insert texture name", m_textureInputField, 100, ImGuiInputTextFlags_EnterReturnsTrue))
+			ImGui::Button("..##TextureTabButton");
+			ImGui::SameLine();
+			if (ImGui::InputTextWithHint("###Inserttexturename", "Insert Texture Name", m_textureInputField, 100, ImGuiInputTextFlags_EnterReturnsTrue))
 			{
 				Texture* newTexture = ResourceManager::Get().GetResource<Texture>(std::string(m_textureInputField)).get();
 				if (newTexture)
@@ -426,7 +434,7 @@ void EngineGUI::RenderProperties()
 		Transform* currTransform = reg.GetComponent<Transform>(m_currentEntity);
 		if (currTransform)
 		{
-			ImGui::BeginChild(2, ImVec2(0, 0), ImGuiChildFlags_Border | ImGuiChildFlags_AlwaysUseWindowPadding | ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_AutoResizeX);
+			ImGui::BeginChild(3, ImVec2(ImGui::GetContentRegionAvail().x, 0), ImGuiChildFlags_Border | ImGuiChildFlags_AlwaysUseWindowPadding | ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_AutoResizeX);
 			ImGui::TextColored(ImVec4(255, 0, 255, 255), "Transform");
 			ImGui::BeginGroup();
 			ImGui::Text("Position");
@@ -462,11 +470,48 @@ void EngineGUI::RenderProperties()
 			ImGui::EndChild();
 		}
 
+		Light* currLight = reg.GetComponent<Light>(m_currentEntity);
+
+		if (currLight)
+		{
+			ImGui::BeginChild(4, ImVec2(ImGui::GetContentRegionAvail().x, 0), ImGuiChildFlags_Border | ImGuiChildFlags_AlwaysUseWindowPadding | ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_AutoResizeX);
+			ImGui::TextColored(ImVec4(255, 0, 255, 255), "Light");
+			ImGui::Text("Ambient");
+			ImGui::SliderFloat4("###AmbientInput", (float*)&currLight->ambient, 0.0f, 1.0f, "%.2f");
+			ImGui::Text("Diffuse");
+			ImGui::SliderFloat4("###DiffuseInput", (float*)&currLight->diffuse, 0.0f, 1.0f, "%.2f");
+			ImGui::Text("Specular");
+			ImGui::SliderFloat4("###SpecularInput", (float*)&currLight->specular, 0.0f, 1.0f, "%.2f");
+			if (ImGui::Button("Directional##LightType"))
+				currLight->type = LIGHTTYPE::DIRECTIONAL;
+			ImGui::SameLine();
+			if (ImGui::Button("SpotLight##LightType"))
+				currLight->type = LIGHTTYPE::SPOTLIGHT;
+			ImGui::SameLine();
+			if (ImGui::Button("PointLight##LightType"))
+				currLight->type = LIGHTTYPE::POINTLIGHT;
+			switch (currLight->type)
+			{
+			case LIGHTTYPE::DIRECTIONAL:
+				ImGui::Text("Direction");
+				break;
+			case LIGHTTYPE::POINTLIGHT:
+				ImGui::Text("Position");
+				break;
+			default:
+				ImGui::Text("Type specific Data");
+				break;
+			}
+			
+			ImGui::InputFloat3("###TypeSpecificInput", (float*)&currLight->data, "%.2f");
+			ImGui::EndChild();
+		}
+
 		Script* currScripts = reg.GetComponent<Script>(m_currentEntity);
 
 		if (currScripts)
 		{
-			ImGui::BeginChild(3, ImVec2(0, 0), ImGuiChildFlags_Border | ImGuiChildFlags_AlwaysUseWindowPadding | ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_AutoResizeX);
+			ImGui::BeginChild(5, ImVec2(ImGui::GetContentRegionAvail().x, 0), ImGuiChildFlags_Border | ImGuiChildFlags_AlwaysUseWindowPadding | ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_AutoResizeX);
 
 			ImGui::TextColored(ImVec4(255, 0, 255, 255), "Scripts");
 			std::string scriptId = "";

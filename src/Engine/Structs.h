@@ -106,8 +106,8 @@ struct Light
 	sm::Vector4 ambient = {};
 	sm::Vector4 diffuse = {};
 	sm::Vector4 specular = {};
-	sm::Vector3 data = {};
-	LIGHTTYPE type = LIGHTTYPE::DIRECTIONAL;
+	sm::Vector3 data = {}; // Type specific data.
+	LIGHTTYPE type = LIGHTTYPE::DIRECTIONAL; // Type
 };
 
 struct Script
