@@ -9,32 +9,34 @@ SceneManager::SceneManager()
 
 SceneManager::~SceneManager()
 {
-	delete m_currentScene;
+	for (auto& scene : m_scenes)
+	{
+		delete scene.second;
+	}
 }
 
 void SceneManager::AddScene(const std::string& sceneName)
 {
-	m_currentScene = new Scene();
-	/*Scene newScene;
-	m_scenes.emplace(sceneName, std::move(newScene));
-	Debugger::Get().Print("Added Scene: '" + sceneName + "'\n", Debugger::COLOR_GREEN);*/
+	Scene* newScene = new Scene();
+	m_scenes[sceneName] = newScene;
+	Debugger::Get().Print("Added Scene: '" + sceneName + "'\n", Debugger::COLOR_GREEN);
 }
 
 void SceneManager::SetScene(const std::string& sceneName)
 {
 	if (m_scenes.find(sceneName) == m_scenes.end())
 	{
-		Debugger::Get().Print("No scene with the name: '" + sceneName + "' found.\n", Debugger::COLOR_RED);
+		DEBUG_ERROR("No scene with the name: '" + sceneName + "' found.")
 		return;
 	}
 
-	Debugger::Get().Print("Scene set to: '" + sceneName + "'\n", Debugger::COLOR_GREEN);
-	m_currentScene = &m_scenes[sceneName];
+	DEBUG_INFO("Scene set to: '" + sceneName + "'\n")
+	m_currentScene = m_scenes[sceneName];
 }
 
 Scene* SceneManager::GetScene(const std::string& sceneName)
 {
-	return &m_scenes[sceneName];
+	return m_scenes[sceneName];
 }
 
 Scene* SceneManager::GetCurrentScene() const

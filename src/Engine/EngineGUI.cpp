@@ -498,6 +498,9 @@ void EngineGUI::RenderProperties()
 			case LIGHTTYPE::POINTLIGHT:
 				ImGui::Text("Position");
 				break;
+			case LIGHTTYPE::SPOTLIGHT:
+				ImGui::Text("Position");
+				break;
 			default:
 				ImGui::Text("Type specific Data");
 				break;

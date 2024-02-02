@@ -7,16 +7,16 @@
 #include "Time.h"
 #include "Texture.h"
 
-void UpdatePublicBuffer(ID3D11Buffer*& buffer, const sm::Matrix& matrix_data)
+void UpdatePublicBuffer(ID3D11Buffer** buffer, const sm::Matrix& matrix_data)
 {
 	D3D11_MAPPED_SUBRESOURCE sub;
-	HRESULT hr = D3D11Core::Get().Context()->Map(buffer, 0, D3D11_MAP_WRITE_DISCARD, NULL, &sub);
+	HRESULT hr = D3D11Core::Get().Context()->Map(*buffer, 0, D3D11_MAP_WRITE_DISCARD, NULL, &sub);
 	if (FAILED(hr))
 	{
 		DEBUG_ERROR("Failed to map public buffer for scene!\n");
 	}
 	std::memcpy(sub.pData, &matrix_data, sizeof(float) * 16);
-	D3D11Core::Get().Context()->Unmap(buffer, 0);
+	D3D11Core::Get().Context()->Unmap(*buffer, 0);
 
 }
 
@@ -34,8 +34,10 @@ Scene::Scene()
 
 Scene::~Scene()
 {
-	if (m_publicBuffer != nullptr)
-		m_publicBuffer->Release();
+}
+
+void Scene::Update()
+{
 }
 
 bool Scene::CreatePublicBuffer()
@@ -48,18 +50,7 @@ bool Scene::CreatePublicBuffer()
 	desc.MiscFlags = 0;
 	desc.StructureByteStride = 0;
 
-	return !FAILED(D3D11Core::Get().Device()->CreateBuffer(&desc, NULL, &m_publicBuffer));
-}
-
-void Scene::SetLogic(std::function<void(recs::recs_registry&)> function)
-{
-	m_function = function;
-}
-
-void Scene::Update()
-{
-	if (m_function)
-		m_function(m_registry);
+	return !FAILED(D3D11Core::Get().Device()->CreateBuffer(&desc, NULL, m_publicBuffer.GetAddressOf()));
 }
 
 void Scene::PreDraw()
@@ -97,6 +88,7 @@ void Scene::SetupComponents()
 	LUA.m_currentRegistry = &m_registry;
 
 	recs::Entity lightEnt = m_registry.CreateEntity();
+	m_registry.AddComponent<GameObject>(lightEnt)->name = "Light";
 	transf = m_registry.AddComponent<Transform>(lightEnt);
 	Light* light = m_registry.AddComponent<Light>(lightEnt);
 
@@ -112,14 +104,14 @@ void Scene::RegisterComponentsToLua()
 void Scene::Draw()
 {
 	// Public buffer is set to the first slot in Vertex Shader
-	D3D11Core::Get().Context()->VSSetConstantBuffers(0, 1, &m_publicBuffer);
+	D3D11Core::Get().Context()->VSSetConstantBuffers(0, 1, m_publicBuffer.GetAddressOf());
 	m_camera.Move();
 
 	m_registry.Group<Model, Transform>().ForEach([&](Model& model, Transform& transform){
 
 		if (model.isVisible)
 		{
-			UpdatePublicBuffer(m_publicBuffer, GetMatrix(transform));
+			UpdatePublicBuffer(m_publicBuffer.GetAddressOf(), GetMatrix(transform));
 
 			model.model_texture->SetAsTexture();
 			// draw each model.
@@ -128,7 +120,7 @@ void Scene::Draw()
 
 		});
 
-	//m_drawManager.Draw();
+	m_drawManager.Draw();
 
 	
 }

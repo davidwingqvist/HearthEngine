@@ -5,7 +5,7 @@ class SceneManager
 {
 private:
 
-	std::unordered_map<std::string, Scene> m_scenes;
+	std::unordered_map<std::string, Scene*> m_scenes;
 	Scene* m_currentScene;
 
 public:
