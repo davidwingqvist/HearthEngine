@@ -11,6 +11,14 @@ enum class LIGHTTYPE : UINT
 	NONE = 0U
 };
 
+enum class ACTIVITY : UINT
+{
+	ACTIVE = 0b1,
+	INACTIVE = 0b10,
+
+	NONE = 0b0
+};
+
 struct object2D
 {
 	float x;
@@ -45,7 +53,9 @@ struct object2D
 
 struct GameObject
 {
-	std::string name = "Object";
+	// Maximum 28 characters
+	char name[28] = "Object";
+	ACTIVITY activity = ACTIVITY::ACTIVE;
 };
 
 /*
@@ -126,7 +136,6 @@ struct Model
 	DEBUG STRUCTS
 
 */
-
 enum class ConsoleLogEventType : UINT
 {
 	ALL = 0b111, // DO NOT USE!!!

@@ -7,6 +7,24 @@
 #include "Time.h"
 #include "Texture.h"
 
+
+/*
+
+	HOW TO TRANSFER DATA FROM ONE STRUCT TO ANOTHER
+	WITH THE USE OF CHAR POINTER
+
+*/
+
+//char* testcpy = new char[sizeof Transform];
+
+//memcpy(testcpy, transf2, sizeof Transform);
+
+//Transform testdest{};
+
+//memcpy(&testdest, testcpy, sizeof Transform);
+
+//delete[] testcpy;
+
 void UpdatePublicBuffer(ID3D11Buffer** buffer, const sm::Matrix& matrix_data)
 {
 	D3D11_MAPPED_SUBRESOURCE sub;
@@ -71,7 +89,7 @@ void Scene::SetupComponents()
 	recs::Entity entity = m_registry.CreateEntity();
 	Transform* transf = m_registry.AddComponent<Transform>(entity);
 	GameObject* gameObject = m_registry.AddComponent<GameObject>(entity);
-	gameObject->name = "Trunk";
+	std::strcpy(gameObject->name, "Trunk");
 
 	Model* model = m_registry.AddComponent<Model>(entity);
 	model->model_data = ResourceManager::Get().GetResource<Model3D>("Chest.obj").get();
@@ -83,12 +101,14 @@ void Scene::SetupComponents()
 	recs::Entity entity3 = m_registry.CreateEntity();
 
 	Transform* transf2 = m_registry.AddComponent<Transform>(entity2);
+	transf2->rotation = { 1.0f, 2.0f, 5.0f };
+	transf2->scale = { 99999, 999, 2000 };
 	transf = m_registry.AddComponent<Transform>(entity3);
 
 	LUA.m_currentRegistry = &m_registry;
 
 	recs::Entity lightEnt = m_registry.CreateEntity();
-	m_registry.AddComponent<GameObject>(lightEnt)->name = "Light";
+	std::strcpy(m_registry.AddComponent<GameObject>(lightEnt)->name, "Light");
 	transf = m_registry.AddComponent<Transform>(lightEnt);
 	Light* light = m_registry.AddComponent<Light>(lightEnt);
 

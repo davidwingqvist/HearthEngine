@@ -391,13 +391,13 @@ void EngineGUI::RenderProperties()
 		{
 			ImGui::BeginChild(1, ImVec2(ImGui::GetContentRegionAvail().x, 0), ImGuiChildFlags_Border | ImGuiChildFlags_AlwaysUseWindowPadding | ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_AutoResizeX);
 			ImGui::TextColored(ImVec4(255, 0, 255, 255), "GameObject");
-			std::string gameObjectName = "Name: " + currGameObject->name;
+			std::string gameObjectName = "Name: " + std::string(currGameObject->name);
 			ImGui::Text(gameObjectName.c_str());
-			char input[32] = { '\0' };
+			char input[28] = { '\0' };
 			std::string name = "###PropInputName";
 			if (ImGui::InputTextWithHint(name.c_str(), std::string("Input new name").c_str(), input, sizeof input, ImGuiInputTextFlags_EnterReturnsTrue))
 			{
-				currGameObject->name = input;
+				std::strncpy(currGameObject->name, input, 28);
 			}
 			ImGui::EndChild();
 		}
