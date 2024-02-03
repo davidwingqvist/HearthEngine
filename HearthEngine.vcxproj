@@ -169,6 +169,7 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Functions.hlsli" />
     <None Include="packages.config" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

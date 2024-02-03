@@ -6,8 +6,7 @@ class Texture;
 enum class LIGHTTYPE : UINT
 {
 	DIRECTIONAL = 1U,
-	SPOTLIGHT = 2U,
-	POINTLIGHT = 3U,
+	POINTLIGHT = 2U,
 
 	NONE = 0U
 };

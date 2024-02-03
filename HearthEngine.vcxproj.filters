@@ -54,6 +54,9 @@
     <Filter Include="Shaders\HLSL">
       <UniqueIdentifier>{da5fe207-8bc6-49dc-9deb-c571aeae0dd1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders\HLSL Functions">
+      <UniqueIdentifier>{c1113578-d190-4e89-b3d1-00239fa6d1bc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Engine\HearthEngine.cpp">
@@ -312,5 +315,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Functions.hlsli">
+      <Filter>Shaders\HLSL Functions</Filter>
+    </None>
   </ItemGroup>
 </Project>

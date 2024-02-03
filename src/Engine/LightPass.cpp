@@ -65,7 +65,13 @@ void LightPass::GatherLights(recs::recs_registry* reg)
 
 	m_nrOfRegLights = m_lightDataVector.size();
 
+	m_lightInfo.x = (float)m_nrOfRegLights;
+
 	this->UpdateLightBuffer();
+
+	// Set buffers to pipeline.
+	DC->PSSetConstantBuffers(0, 1, m_lightData.GetAddressOf());
+	DC->PSSetConstantBuffers(1, 1, m_lightInfoBuffer.GetAddressOf());
 }
 
 void LightPass::SetUpLightBuffer()
@@ -81,6 +87,9 @@ void LightPass::SetUpLightBuffer()
 	{
 		DEBUG_ERROR("Failed creating Vertex buffer for Light pass!\n")
 	}
+
+	desc.ByteWidth = sizeof sm::Vector4;
+	hr = DD->CreateBuffer(&desc, 0, m_lightInfoBuffer.GetAddressOf());
 }
 
 void LightPass::Prepass()
@@ -104,11 +113,6 @@ void LightPass::Prepass()
 
 void LightPass::Pass(Scene* currentScene)
 {
-	/*
-	
-		TODOOOO
-
-	*/
 	if (m_nrOfRegLights != currentScene->GetRegistry().GetSize<Light>())
 	{
 		this->GatherLights(&currentScene->GetRegistry());
@@ -123,10 +127,19 @@ void LightPass::UpdateLightBuffer()
 	HRESULT hr = D3D11Core::Get().Context()->Map(m_lightData.Get(), 0, D3D11_MAP_WRITE_DISCARD, NULL, &sub);
 	if (FAILED(hr))
 	{
-		DEBUG_ERROR("Failed to map public buffer for scene!\n");
+		DEBUG_ERROR("Failed to update light data buffer\n");
 	}
 	std::memcpy(sub.pData, &m_lightDataVector[0], sizeof(Light) * m_lightDataVector.size());
 	D3D11Core::Get().Context()->Unmap(m_lightData.Get(), 0);
+
+	D3D11_MAPPED_SUBRESOURCE sub2;
+	hr = D3D11Core::Get().Context()->Map(m_lightInfoBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, NULL, &sub2);
+	if (FAILED(hr))
+	{
+		DEBUG_ERROR("Failed to update light info buffer\n");
+	}
+	std::memcpy(sub2.pData, &m_lightInfo, sizeof(sm::Vector4));
+	D3D11Core::Get().Context()->Unmap(m_lightInfoBuffer.Get(), 0);
 }
 
 void LightPass::Postpass()

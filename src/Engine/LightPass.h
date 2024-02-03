@@ -35,8 +35,10 @@ private:
 
 	*/
 	DXPointer<ID3D11Buffer> m_lightData;
+	DXPointer<ID3D11Buffer> m_lightInfoBuffer;
 	std::vector<Light> m_lightDataVector;
 	UINT m_nrOfRegLights = (UINT)-1;
+	sm::Vector4 m_lightInfo = {};
 
 	void SetUpLightBuffer();
 	void UpdateLightBuffer();

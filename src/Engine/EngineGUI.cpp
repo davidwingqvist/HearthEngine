@@ -485,9 +485,6 @@ void EngineGUI::RenderProperties()
 			if (ImGui::Button("Directional##LightType"))
 				currLight->type = LIGHTTYPE::DIRECTIONAL;
 			ImGui::SameLine();
-			if (ImGui::Button("SpotLight##LightType"))
-				currLight->type = LIGHTTYPE::SPOTLIGHT;
-			ImGui::SameLine();
 			if (ImGui::Button("PointLight##LightType"))
 				currLight->type = LIGHTTYPE::POINTLIGHT;
 			switch (currLight->type)
@@ -498,11 +495,8 @@ void EngineGUI::RenderProperties()
 			case LIGHTTYPE::POINTLIGHT:
 				ImGui::Text("Position");
 				break;
-			case LIGHTTYPE::SPOTLIGHT:
-				ImGui::Text("Position");
-				break;
 			default:
-				ImGui::Text("Type specific Data");
+				ImGui::Text("No type selected...");
 				break;
 			}
 			
