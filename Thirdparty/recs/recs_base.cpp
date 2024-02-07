@@ -3,7 +3,7 @@
 #include <iostream>
 
 recs::recs_registry::recs_registry(const size_t& size)
-	:m_stateHandler(this)
+	:m_stateHandler(this, &this->GetComponentRegistry())
 {
 	m_size = size;
 	for (Entity i = 0; i < m_size; i++)
@@ -27,6 +27,26 @@ recs::Entity recs::recs_registry::CreateEntity()
 recs::recs_registry::~recs_registry()
 {
 
+}
+
+void recs::recs_registry::SetDataFolderPath(const std::string& path)
+{
+	m_stateHandler.SetFolderPath(path);
+}
+
+void recs::recs_registry::SaveData()
+{
+	m_stateHandler.SaveData();
+}
+
+void recs::recs_registry::LoadData()
+{
+	m_stateHandler.LoadData();
+}
+
+const size_t& recs::recs_registry::GetMaxSize() const
+{
+	return m_size;
 }
 
 void recs::recs_registry::DestroyEntity(const Entity& entity)
@@ -73,12 +93,4 @@ const bool& recs::recs_registry::IsUsingOpenMP() const
 const std::vector<recs::Entity>& recs::recs_registry::GetEntities() const
 {
 	return m_activeEntities;
-}
-
-void recs::recs_registry::SaveState()
-{
-}
-
-void recs::recs_registry::LoadState()
-{
 }

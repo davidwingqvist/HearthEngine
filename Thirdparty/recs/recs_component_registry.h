@@ -50,6 +50,11 @@ namespace recs
 		T* GetComponentArray() const;
 
 		template<typename T>
+		T* GetComponentArray(const T& compArr) const;
+
+		void* GetComponentArray(const size_t& compArrId) const;
+
+		template<typename T>
 		const size_t& GetSizeOfComponentArray() const;
 
 		void EntityRemoved(const Entity& entity);
@@ -159,6 +164,19 @@ namespace recs
 
 	template<typename T>
 	inline T* recs_component_registry::GetComponentArray() const
+	{
+		const size_t type = typeid(T).hash_code();
+
+		if (m_componentArrays.find(type) == m_componentArrays.end())
+		{
+			return nullptr;
+		}
+
+		return dynamic_cast<recs_component_array<T>*>(m_componentArrays.at(type).get())->GetArray();
+	}
+
+	template<typename T>
+	inline T* recs_component_registry::GetComponentArray(const T& compArr) const
 	{
 		const size_t type = typeid(T).hash_code();
 

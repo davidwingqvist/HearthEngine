@@ -103,6 +103,22 @@ void EngineGUI::RenderTopBar()
 
 	ImGui::BeginMenuBar();
 
+	if (ImGui::Button("Save"))
+	{
+		if (m_sceneManagerRef)
+		{
+			m_sceneManagerRef->GetCurrentScene()->GetRegistry().SaveData();
+		}
+	}
+
+	if (ImGui::Button("Load"))
+	{
+		if (m_sceneManagerRef)
+		{
+			m_sceneManagerRef->GetCurrentScene()->GetRegistry().LoadData();
+		}
+	}
+
 	ImGui::Button("Settings");
 	if (ImGui::Button("Edit"))
 		m_showEditTab = !m_showEditTab;

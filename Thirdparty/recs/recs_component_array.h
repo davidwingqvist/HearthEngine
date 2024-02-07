@@ -10,6 +10,7 @@ namespace recs
 		virtual ~recs_component_array_interface() = default;
 		virtual void RemoveEntity(const recs::Entity& entity) = 0;
 		virtual void UpdateComponents() = 0;
+		virtual void* GetData() = 0;
 	};
 
 	template<typename T>
@@ -227,5 +228,12 @@ namespace recs
 			}
 		}
 
-	};
+
+		// Inherited via recs_component_array_interface
+		void* GetData() override
+		{
+			return (void*)&m_components[0];
+		}
+
+};
 }

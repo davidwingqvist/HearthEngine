@@ -30,9 +30,8 @@ namespace recs
 	class recs_entity_group;
 
 	/*
-		A registry that holds each available entities.
+		A registry that holds each available entities and components.
 		This is the base class of the ECS system.
-		Usually only one instance of this object should be present.
 		Take a look at the functions present to get familiarized with the system.
 	*/
 	class recs_registry
@@ -106,8 +105,19 @@ namespace recs
 		template<typename T>
 		const bool HasComponent(const Entity& entity) const;
 
+		/*
+		
+			Get the size of active components for
+			specified component array.
+		
+		*/
 		template<typename T>
 		const size_t& GetSize() const;
+
+		/*
+			Get the maximum size of any component array.
+		*/
+		const size_t& GetMaxSize() const;
 
 
 		/*
@@ -203,14 +213,47 @@ namespace recs
 		const std::vector<Entity>& GetEntities() const;
 
 		/*
-			Save the active state of the registry. NOT IMPLEMENTED YET
+		
+			Register data to be saved onto file,
+			it can then be loaded with LoadData function,
+			and saved with SaveData() function.
+			
+			Make sure to call this function before SaveData()
+			or LoadData(), otherwise it might not load/save, or
+			undefined behavior might occur.
+
+			This function will also Register the component to the system
+			if not already done.
 		*/
-		void SaveState();
+		template<typename T>
+		void RegisterDataToState(const T& dataType);
 
 		/*
-			Load saved state of registry. NOT IMPLEMENTED YET
+		
+			Set the folder path for data to be stored.
+			
 		*/
-		void LoadState();
+		void SetDataFolderPath(const std::string& path);
+
+		/*
+		
+			Save data to a file specified by SetDataFolderPath(string)
+			otherwise uses default path.
+
+			BEFORE USING THIS FUNCTION, REGISTER DATA TO STATE BY
+			USING THE RegisterDataToState(struct()) FUNCTION!
+		*/
+		void SaveData();
+
+		/*
+
+		Load data to a file specified by SetDataFolderPath(string)
+		otherwise uses default path.
+
+		BEFORE USING THIS FUNCTION, REGISTER DATA TO STATE BY
+		USING THE RegisterDataToState(struct()) FUNCTION!
+		*/
+		void LoadData();
 	};
 
 	template<typename T>
@@ -314,6 +357,18 @@ namespace recs
 	inline recs_entity_group<types...> recs_registry::Group()
 	{
 		return std::move(recs_entity_group<types...>(this));
+	}
+
+	template<typename T>
+	inline void recs_registry::RegisterDataToState(const T& dataType)
+	{
+		T* compArray = m_componentRegistry.GetComponentArray<T>();
+		if (compArray == nullptr) // Register if not existant.
+		{
+			this->RegisterComponent<T>();
+		}
+
+		m_stateHandler.RegisterData(dataType, (void*)this->GetComponentRegistry().GetComponentArray<T>());
 	}
 }
 

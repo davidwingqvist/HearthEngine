@@ -84,6 +84,11 @@ void Scene::SetupComponents()
 	m_registry.RegisterComponent<Light>();
 	m_registry.RegisterComponent<RigidBody>();
 
+	m_registry.RegisterDataToState(GameObject());
+	m_registry.RegisterDataToState(Transform());
+	m_registry.RegisterDataToState(Light());
+	m_registry.RegisterDataToState(RigidBody());
+
 	// Temporary testing entities...
 
 	recs::Entity entity = m_registry.CreateEntity();
