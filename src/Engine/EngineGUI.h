@@ -27,7 +27,7 @@ private:
 	char m_textureInputField[100] = {};
 
 	// Bottom Bar Values
-	bool m_showBottomEntities = false;
+	bool m_showBottomFiles = false;
 	bool m_showBottomConsole = false;
 
 	// Console Window Values

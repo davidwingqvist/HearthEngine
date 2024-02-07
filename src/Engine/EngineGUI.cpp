@@ -49,7 +49,7 @@ void EngineGUI::ClearConsoleLogToLimit()
 void EngineGUI::BottomBarPutToFalse()
 {
 	m_showBottomConsole = false;
-	m_showBottomEntities = false;
+	m_showBottomFiles = false;
 }
 
 void EngineGUI::RenderGUI()
@@ -146,6 +146,10 @@ void EngineGUI::RenderTopBar()
 		{
 
 		}
+		if (ImGui::Button("Effects", ImVec2(ImGui::GetWindowContentRegionMax().x, 0)))
+		{
+
+		}
 
 		ImGui::End();
 	}
@@ -231,10 +235,10 @@ void EngineGUI::RenderBottomBar()
 
 	ImGui::BeginChild("Sidebar", {ImGui::GetWindowWidth() / 5.0f, ImGui::GetContentRegionAvail().y }, ImGuiChildFlags_Border);
 
-	if (ImGui::Button("Entities", { ImGui::GetWindowWidth(), ImGui::GetWindowHeight() / 10.0f }))
+	if (ImGui::Button("Files", { ImGui::GetWindowWidth(), ImGui::GetWindowHeight() / 10.0f }))
 	{
 		BottomBarPutToFalse();
-		m_showBottomEntities = true;
+		m_showBottomFiles = true;
 	}
 
 	if (ImGui::Button("Scenes", { ImGui::GetWindowWidth(), ImGui::GetWindowHeight() / 10.0f }))
@@ -253,25 +257,6 @@ void EngineGUI::RenderBottomBar()
 	ImGui::SameLine();
 
 	ImGui::BeginChild("SideWindow", { ImGui::GetWindowWidth() / 1.3f, ImGui::GetContentRegionAvail().y }, ImGuiChildFlags_Border);
-
-	// Show entities tab in the bottom window.
-	if (m_showBottomEntities)
-	{
-		//recs::recs_registry& reg = m_sceneManagerRef->GetCurrentScene()->GetRegistry();
-		//auto& grp = reg.GetEntities();
-
-		//for (int i = 0; i < grp.size(); i++)
-		//{
-		//	std::string label = "Entity " + std::to_string(i);
-		//	if (ImGui::Button(label.c_str()))
-		//	{
-		//		m_currentEntity = grp[i];
-		//		if (!m_showPropertiesTab)
-		//			m_showPropertiesTab;
-		//		break;
-		//	}
-		//}
-	}
 
 	if (m_showBottomConsole)
 	{
