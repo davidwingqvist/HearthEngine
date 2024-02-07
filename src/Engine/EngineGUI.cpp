@@ -406,28 +406,34 @@ void EngineGUI::RenderProperties()
 		Model* currModel = reg.GetComponent<Model>(m_currentEntity);
 		if (currModel)
 		{
-			ImGui::BeginChild(2, ImVec2(ImGui::GetContentRegionAvail().x, 0), ImGuiChildFlags_Border | ImGuiChildFlags_AlwaysUseWindowPadding | ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_AutoResizeX);
-			ImGui::TextColored(ImVec4(255, 0, 255, 255), "Model");
-			std::string modelName = "Current Model: " + currModel->model_data->GetName();
-			ImGui::Text(modelName.c_str());
-			ImGui::Button("..##ModelTabButton");
-			ImGui::SameLine();
-			if (ImGui::InputTextWithHint("###Insertmodelname", "Insert Model Name", m_modelinputField, 100, ImGuiInputTextFlags_EnterReturnsTrue))
+			if (currModel->model_data)
 			{
-				Model3D* newModel = ResourceManager::Get().GetResource<Model3D>(std::string(m_modelinputField)).get();
-				if (newModel)
-					currModel->model_data = newModel;
+				ImGui::BeginChild(2, ImVec2(ImGui::GetContentRegionAvail().x, 0), ImGuiChildFlags_Border | ImGuiChildFlags_AlwaysUseWindowPadding | ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_AutoResizeX);
+				ImGui::TextColored(ImVec4(255, 0, 255, 255), "Model");
+				std::string modelName = "Current Model: " + currModel->model_data->GetName();
+				ImGui::Text(modelName.c_str());
+				ImGui::Button("..##ModelTabButton");
+				ImGui::SameLine();
+				if (ImGui::InputTextWithHint("###Insertmodelname", "Insert Model Name", m_modelinputField, 100, ImGuiInputTextFlags_EnterReturnsTrue))
+				{
+					Model3D* newModel = ResourceManager::Get().GetResource<Model3D>(std::string(m_modelinputField)).get();
+					if (newModel)
+						currModel->model_data = newModel;
+				}
 			}
 
-			std::string textureName = "Current Texture: " + currModel->model_texture->GetName();
-			ImGui::Text(textureName.c_str());
-			ImGui::Button("..##TextureTabButton");
-			ImGui::SameLine();
-			if (ImGui::InputTextWithHint("###Inserttexturename", "Insert Texture Name", m_textureInputField, 100, ImGuiInputTextFlags_EnterReturnsTrue))
+			if (currModel->model_texture)
 			{
-				Texture* newTexture = ResourceManager::Get().GetResource<Texture>(std::string(m_textureInputField)).get();
-				if (newTexture)
-					currModel->model_texture = newTexture;
+				std::string textureName = "Current Texture: " + currModel->model_texture->GetName();
+				ImGui::Text(textureName.c_str());
+				ImGui::Button("..##TextureTabButton");
+				ImGui::SameLine();
+				if (ImGui::InputTextWithHint("###Inserttexturename", "Insert Texture Name", m_textureInputField, 100, ImGuiInputTextFlags_EnterReturnsTrue))
+				{
+					Texture* newTexture = ResourceManager::Get().GetResource<Texture>(std::string(m_textureInputField)).get();
+					if (newTexture)
+						currModel->model_texture = newTexture;
+				}
 			}
 			ImGui::EndChild();
 		}
@@ -440,13 +446,13 @@ void EngineGUI::RenderProperties()
 			ImGui::BeginGroup();
 			ImGui::Text("Position");
 			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 3.6f);
-			ImGui::InputFloat("x###Posx", &currTransform->pos.x, 1, 10, "%.2f");
+			ImGui::DragFloat("x###Posx", &currTransform->pos.x, 1, 10, 0.0f, "%.2f");
 			ImGui::SameLine();
 			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 3.6f);
-			ImGui::InputFloat("y###Posy", &currTransform->pos.y, 1, 10, "%.2f");
+			ImGui::DragFloat("y###Posy", &currTransform->pos.y, 1, 10, 0.0f, "%.2f");
 			ImGui::SameLine();
 			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 3.6f);
-			ImGui::InputFloat("z###Posz", &currTransform->pos.z, 1, 10, "%.2f");
+			ImGui::DragFloat("z###Posz", &currTransform->pos.z, 1, 10, 0.0f, "%.2f");
 
 			ImGui::Text("Rotation");
 			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 4.0f);
@@ -460,13 +466,13 @@ void EngineGUI::RenderProperties()
 
 			ImGui::Text("Scale");
 			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 4.0f);
-			ImGui::SliderFloat("x###Scalex", &currTransform->scale.x, 0.1, 10, "%.2f");
+			ImGui::DragFloat("x###Scalex", &currTransform->scale.x, 0.1, 10, 0.0f, "%.2f");
 			ImGui::SameLine();
 			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 4.0f);
-			ImGui::SliderFloat("y###Scaley", &currTransform->scale.y, 0.1, 10, "%.2f");
+			ImGui::DragFloat("y###Scaley", &currTransform->scale.y, 0.1, 10, 0.0f, "%.2f");
 			ImGui::SameLine();
 			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 4.0f);
-			ImGui::SliderFloat("z###Scalez", &currTransform->scale.z, 0.1, 10, "%.2f");
+			ImGui::DragFloat("z###Scalez", &currTransform->scale.z, 0.1, 10, 0.0f, "%.2f");
 			ImGui::EndGroup();
 			ImGui::EndChild();
 		}

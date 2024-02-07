@@ -100,14 +100,20 @@ void Scene::SetupComponents()
 	model->model_data = ResourceManager::Get().GetResource<Model3D>("Chest.obj").get();
 	model->model_texture = ResourceManager::Get().GetResource<Texture>("Chest_Albedo.png").get();
 	Script* scr = m_registry.AddComponent<Script>(entity);
-	transf->pos = { 0, 0, -225.5 };
 
 	recs::Entity entity2 = m_registry.CreateEntity();
 	recs::Entity entity3 = m_registry.CreateEntity();
 
+	m_registry.AddComponent<GameObject>(entity2);
+	m_registry.AddComponent<GameObject>(entity3);
+
+	model = m_registry.AddComponent<Model>(entity2);
+	model->model_data = ResourceManager::Get().GetResource<Model3D>("throwingknife.obj").get();
+	
+	model = m_registry.AddComponent<Model>(entity3);
+	model->model_data = ResourceManager::Get().GetResource<Model3D>("doublebarrelshotugn.obj").get();
+
 	Transform* transf2 = m_registry.AddComponent<Transform>(entity2);
-	transf2->rotation = { 1.0f, 2.0f, 5.0f };
-	transf2->scale = { 99999, 999, 2000 };
 	transf = m_registry.AddComponent<Transform>(entity3);
 
 	LUA.m_currentRegistry = &m_registry;
@@ -138,9 +144,12 @@ void Scene::Draw()
 		{
 			UpdatePublicBuffer(m_publicBuffer.GetAddressOf(), GetMatrix(transform));
 
-			model.model_texture->SetAsTexture();
+			if(model.model_texture)
+				model.model_texture->SetAsTexture();
+
 			// draw each model.
-			model.model_data->Draw();
+			if(model.model_data)
+				model.model_data->Draw();
 		}
 
 		});
