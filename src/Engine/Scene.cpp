@@ -7,24 +7,6 @@
 #include "Time.h"
 #include "Texture.h"
 
-
-/*
-
-	HOW TO TRANSFER DATA FROM ONE STRUCT TO ANOTHER
-	WITH THE USE OF CHAR POINTER
-
-*/
-
-//char* testcpy = new char[sizeof Transform];
-
-//memcpy(testcpy, transf2, sizeof Transform);
-
-//Transform testdest{};
-
-//memcpy(&testdest, testcpy, sizeof Transform);
-
-//delete[] testcpy;
-
 void UpdatePublicBuffer(ID3D11Buffer** buffer, const sm::Matrix& matrix_data)
 {
 	D3D11_MAPPED_SUBRESOURCE sub;
