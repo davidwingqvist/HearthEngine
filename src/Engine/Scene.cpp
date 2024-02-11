@@ -60,53 +60,52 @@ void Scene::PreDraw()
 
 void Scene::SetupComponents()
 {
-	m_registry.RegisterComponent<GameObject>();
-	m_registry.RegisterComponent<Transform>();
 	m_registry.RegisterComponent<Script>();
-	m_registry.RegisterComponent<Light>();
-	m_registry.RegisterComponent<RigidBody>();
+	m_registry.RegisterComponent<Model>();
 
 	m_registry.RegisterDataToState(GameObject());
 	m_registry.RegisterDataToState(Transform());
 	m_registry.RegisterDataToState(Light());
 	m_registry.RegisterDataToState(RigidBody());
 
+
+
 	// Temporary testing entities...
 
-	recs::Entity entity = m_registry.CreateEntity();
-	Transform* transf = m_registry.AddComponent<Transform>(entity);
-	GameObject* gameObject = m_registry.AddComponent<GameObject>(entity);
-	std::strcpy(gameObject->name, "Trunk");
+	//recs::Entity entity = m_registry.CreateEntity();
+	//Transform* transf = m_registry.AddComponent<Transform>(entity);
+	//GameObject* gameObject = m_registry.AddComponent<GameObject>(entity);
+	//std::strcpy(gameObject->name, "Trunk");
 
-	Model* model = m_registry.AddComponent<Model>(entity);
-	model->model_data = ResourceManager::Get().GetResource<Model3D>("Chest.obj").get();
-	model->model_texture = ResourceManager::Get().GetResource<Texture>("Chest_Albedo.png").get();
-	Script* scr = m_registry.AddComponent<Script>(entity);
+	//Model* model = m_registry.AddComponent<Model>(entity);
+	//model->model_data = ResourceManager::Get().GetResource<Model3D>("Chest.obj").get();
+	//model->model_texture = ResourceManager::Get().GetResource<Texture>("Chest_Albedo.png").get();
+	//Script* scr = m_registry.AddComponent<Script>(entity);
 
-	recs::Entity entity2 = m_registry.CreateEntity();
-	recs::Entity entity3 = m_registry.CreateEntity();
+	//recs::Entity entity2 = m_registry.CreateEntity();
+	//recs::Entity entity3 = m_registry.CreateEntity();
 
-	m_registry.AddComponent<GameObject>(entity2);
-	m_registry.AddComponent<GameObject>(entity3);
+	//m_registry.AddComponent<GameObject>(entity2);
+	//m_registry.AddComponent<GameObject>(entity3);
 
-	model = m_registry.AddComponent<Model>(entity2);
-	model->model_data = ResourceManager::Get().GetResource<Model3D>("throwingknife.obj").get();
-	
-	model = m_registry.AddComponent<Model>(entity3);
-	model->model_data = ResourceManager::Get().GetResource<Model3D>("doublebarrelshotugn.obj").get();
+	//model = m_registry.AddComponent<Model>(entity2);
+	//model->model_data = ResourceManager::Get().GetResource<Model3D>("throwingknife.obj").get();
+	//
+	//model = m_registry.AddComponent<Model>(entity3);
+	//model->model_data = ResourceManager::Get().GetResource<Model3D>("doublebarrelshotugn.obj").get();
 
-	Transform* transf2 = m_registry.AddComponent<Transform>(entity2);
-	transf = m_registry.AddComponent<Transform>(entity3);
+	//Transform* transf2 = m_registry.AddComponent<Transform>(entity2);
+	//transf = m_registry.AddComponent<Transform>(entity3);
 
-	LUA.m_currentRegistry = &m_registry;
+	//LUA.m_currentRegistry = &m_registry;
 
-	recs::Entity lightEnt = m_registry.CreateEntity();
-	std::strcpy(m_registry.AddComponent<GameObject>(lightEnt)->name, "Light");
-	transf = m_registry.AddComponent<Transform>(lightEnt);
-	Light* light = m_registry.AddComponent<Light>(lightEnt);
+	//recs::Entity lightEnt = m_registry.CreateEntity();
+	//std::strcpy(m_registry.AddComponent<GameObject>(lightEnt)->name, "Light");
+	//transf = m_registry.AddComponent<Transform>(lightEnt);
+	//Light* light = m_registry.AddComponent<Light>(lightEnt);
 
-	pushTransform(LUA.State(), transf);
-	lua_setglobal(LUA.State(), "Transform");
+	//pushTransform(LUA.State(), transf);
+	//lua_setglobal(LUA.State(), "Transform");
 }
 
 void Scene::RegisterComponentsToLua()

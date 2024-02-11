@@ -39,6 +39,14 @@ namespace recs
 	{
 		Entity entity;
 		size_t pos;
+
+		bool operator==(const EntityLink& other)
+		{
+			if (entity == other.entity && pos == other.pos)
+				return true;
+			else
+				return false;
+		}
 	};
 
 	constexpr Entity NULL_ENTITY = -1;

@@ -6,11 +6,17 @@ namespace recs
 {
 	class recs_component_array_interface
 	{
+		virtual void LinkEntityToPos(const Entity& entity, const size_t& pos) = 0;
 	public:
 		virtual ~recs_component_array_interface() = default;
 		virtual void RemoveEntity(const recs::Entity& entity) = 0;
 		virtual void UpdateComponents() = 0;
 		virtual void* GetData() = 0;
+		virtual std::vector<EntityLink>& GetLinks() = 0;
+		virtual void Clear() = 0;
+
+		friend class recs_state_handler;
+		friend class recs_component_registry;
 	};
 
 	template<typename T>
@@ -21,7 +27,7 @@ namespace recs
 		std::vector<T> m_components;
 		//T* m_components;
 		size_t m_size = DEFAULT_MAX_ENTITIES;
-		std::queue<size_t> m_availableComponents;
+		std::vector<size_t> m_availableComponents;
 		std::vector<EntityLink> m_activeComponents;
 		std::unordered_map<size_t, Entity> m_posToEntity;
 		Link m_entityToPos;
@@ -29,15 +35,19 @@ namespace recs
 		std::function<void(const Entity&, T&)> m_onDestroyFunction;
 		std::function<void(const Entity&, T&)> m_onUpdateFunction;
 
+	protected:
+
+		bool RemoveFromAvailablePool(const Entity& entity, const size_t& pos);
+
 	public:
 
 		recs_component_array()
 		{
 			m_components = std::vector<T>(m_size, T());
-			//m_components = new T[m_size];
-			for (size_t i = 0; i < m_size; i++)
+			m_availableComponents.reserve(m_size);
+			for (Entity i = m_size - 1; i != NULL_ENTITY; i--)
 			{
-				m_availableComponents.push(i);
+				m_availableComponents.push_back(i);
 			}
 			m_activeComponents.reserve(m_size);
 		}
@@ -46,18 +56,16 @@ namespace recs
 		{
 			m_size = size;
 			m_components = std::vector<T>(m_size, T());
-			//m_components = new T[m_size];
-			for (size_t i = 0; i < m_size; i++)
+			m_availableComponents.reserve(m_size);
+			for (Entity i = m_size - 1; i != NULL_ENTITY; i--)
 			{
-				m_availableComponents.push(i);
+				m_availableComponents.push_back(i);
 			}
 			m_activeComponents.reserve(m_size);
 		}
 
 		~recs_component_array()
 		{
-			//if (m_components)
-			//	delete m_components;
 		}
 
 		// Assign an on create function that is called each time a component is created.
@@ -109,8 +117,8 @@ namespace recs
 				return nullptr;
 			}
 
-			const size_t pos = m_availableComponents.front();
-			m_availableComponents.pop();
+			const size_t pos = m_availableComponents.back();
+			m_availableComponents.pop_back();
 
 			EntityLink newLink = { entity, pos };
 			m_activeComponents.push_back(newLink);
@@ -138,8 +146,8 @@ namespace recs
 			}
 
 			// Add the component.
-			const size_t pos = m_availableComponents.front();
-			m_availableComponents.pop();
+			const size_t pos = m_availableComponents.back();
+			m_availableComponents.pop_back();
 
 			EntityLink newLink = { entity, pos };
 			m_activeComponents.push_back(newLink);
@@ -202,7 +210,7 @@ namespace recs
 			m_entityToPos.erase(entity);
 			m_posToEntity.erase(entity);
 
-			m_availableComponents.push(entity);
+			m_availableComponents.push_back(entity);
 
 			for (size_t i = 0; i < m_activeComponents.size(); i++)
 			{
@@ -235,5 +243,54 @@ namespace recs
 			return (void*)&m_components[0];
 		}
 
+
+		// Inherited via recs_component_array_interface
+		void LinkEntityToPos(const Entity& entity, const size_t& pos) override
+		{
+			if (RemoveFromAvailablePool(entity, pos))
+			{
+				m_activeComponents.push_back({ entity, pos });
+				m_posToEntity[pos] = entity;
+				m_entityToPos[entity] = pos;
+			}
+		}
+
+		friend class recs_state_handler;
+		friend class recs_component_registry;
+
+		// Inherited via recs_component_array_interface
+		std::vector<EntityLink>& GetLinks() override
+		{
+			return m_activeComponents;
+		}
+
+		// Inherited via recs_component_array_interface
+		void Clear() override
+		{
+			m_availableComponents.clear();
+			m_activeComponents.clear();
+			m_posToEntity.clear();
+			m_entityToPos.clear();
+		}
 };
+
+template<typename T>
+inline bool recs_component_array<T>::RemoveFromAvailablePool(const Entity& entity, const size_t& pos)
+{
+	//if (m_availableComponents.size() <= 0)
+	//	return true;
+
+	//EntityLink link = { entity, pos };
+	//if (std::find(m_activeComponents.begin(), m_activeComponents.end(), link) != m_activeComponents.end())
+	//{
+	//	return false;
+	//}
+
+	//if(std::find(m_active))
+
+	//m_availableComponents.erase(std::remove(m_availableComponents.begin(), m_availableComponents.end(), pos), m_availableComponents.end());
+
+	return true;
+}
+
 }

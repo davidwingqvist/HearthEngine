@@ -27,8 +27,8 @@ namespace recs
 		// Set the folder path for data files.
 		void SetFolderPath(const std::string& path);
 
-		void SaveData();
-		void LoadData();
+		bool SaveData();
+		bool LoadData();
 	};
 
 	template<typename T>

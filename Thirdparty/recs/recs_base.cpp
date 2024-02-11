@@ -2,13 +2,21 @@
 #include "recs_base.h"
 #include <iostream>
 
+bool recs::recs_registry::CheckIfExist(const Entity& entId) const
+{
+	if (m_activeEntities.size() <= 0)
+		return false;
+
+	return std::find(m_activeEntities.begin(), m_activeEntities.end(), entId) != m_activeEntities.end();
+}
+
 recs::recs_registry::recs_registry(const size_t& size)
 	:m_stateHandler(this, &this->GetComponentRegistry())
 {
 	m_size = size;
-	for (Entity i = 0; i < m_size; i++)
+	for (Entity i = m_size - 1; i != NULL_ENTITY; i--)
 	{
-		m_availableEntities.push(i);
+		m_availableEntities.push_back(i);
 	}
 }
 
@@ -17,11 +25,38 @@ recs::Entity recs::recs_registry::CreateEntity()
 	if (m_availableEntities.empty())
 		std::cout << "RECS [Warning!]: Too many entities has been created! Undefined behavior will happen!" << std::endl;
 
-	const Entity entity = m_availableEntities.front();
+	const Entity entity = m_availableEntities.back();
 	m_activeEntities.push_back(entity);
-	m_availableEntities.pop();
+	m_availableEntities.pop_back();
 
 	return entity;
+}
+
+void recs::recs_registry::CreateEntity(const Entity& entityId)
+{
+	int spot = 0;
+	if (!CheckIfExist(entityId))
+	{
+		for (int i = 0; i < m_availableEntities.size(); i++)
+		{
+			if (m_availableEntities[i] == entityId)
+			{
+				// found, so lets remove it, and add it to active entities.
+				goto good_exit;
+			}
+			spot++;
+		}
+		// wasn't found :/
+		return;
+	}
+
+	return;
+good_exit:
+
+	m_activeEntities.push_back(entityId);
+	m_availableEntities.erase(m_availableEntities.begin() + spot);
+
+	return;
 }
 
 recs::recs_registry::~recs_registry()
@@ -34,14 +69,27 @@ void recs::recs_registry::SetDataFolderPath(const std::string& path)
 	m_stateHandler.SetFolderPath(path);
 }
 
-void recs::recs_registry::SaveData()
+bool recs::recs_registry::SaveData()
 {
-	m_stateHandler.SaveData();
+	return m_stateHandler.SaveData();
 }
 
-void recs::recs_registry::LoadData()
+bool recs::recs_registry::LoadData()
 {
-	m_stateHandler.LoadData();
+	this->Reset();
+	return m_stateHandler.LoadData();
+}
+
+void recs::recs_registry::Reset()
+{
+	m_availableEntities.clear();
+	m_activeEntities.clear();
+	for (Entity i = m_size - 1; i != NULL_ENTITY; i--)
+	{
+		m_availableEntities.push_back(i);
+	}
+
+	m_componentRegistry.Clear();
 }
 
 const size_t& recs::recs_registry::GetMaxSize() const
@@ -61,7 +109,7 @@ void recs::recs_registry::DestroyEntity(const Entity& entity)
 		Entity freeEntity = m_activeEntities.at(dist);
 
 		// pushes it back into available entities.
-		m_availableEntities.push(freeEntity);
+		m_availableEntities.push_back(freeEntity);
 		m_activeEntities.erase(it);
 	}
 	else

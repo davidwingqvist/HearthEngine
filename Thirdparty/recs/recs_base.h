@@ -38,7 +38,7 @@ namespace recs
 	{
 	private:
 
-		std::queue<recs::Entity> m_availableEntities;
+		std::vector<recs::Entity> m_availableEntities;
 		std::vector<Entity> m_activeEntities;
 		recs_component_registry m_componentRegistry;
 		recs_thread_pool m_threadpool;
@@ -53,6 +53,12 @@ namespace recs
 
 		size_t m_size = DEFAULT_MAX_ENTITIES;
 
+		/*
+		* Check if an entity already exists.
+		* Returns true if it exists, otherwise false.
+		*/
+		bool CheckIfExist(const Entity& entId) const;
+
 		template<typename T>
 		recs_event_handler<T>* GetEventHandler()
 		{
@@ -64,6 +70,11 @@ namespace recs
 
 			return dynamic_cast<recs_event_handler<T>*>(m_eventHandler.at(type).get());
 		}
+
+	protected:
+
+		// Generate an entity from id.
+		void CreateEntity(const Entity& entityId);
 
 	public:
 
@@ -243,17 +254,30 @@ namespace recs
 			BEFORE USING THIS FUNCTION, REGISTER DATA TO STATE BY
 			USING THE RegisterDataToState(struct()) FUNCTION!
 		*/
-		void SaveData();
+		bool SaveData();
 
 		/*
 
 		Load data to a file specified by SetDataFolderPath(string)
 		otherwise uses default path.
 
+		Will clear any data stored in component arrays.
+		Raw data may be untouched.
+
 		BEFORE USING THIS FUNCTION, REGISTER DATA TO STATE BY
 		USING THE RegisterDataToState(struct()) FUNCTION!
 		*/
-		void LoadData();
+		bool LoadData();
+
+		/*
+			Reset all values.
+			Does not remove/shorten any data.
+		*/
+		void Reset();
+
+		// Friend classes
+		friend class recs_state_handler;
+
 	};
 
 	template<typename T>
@@ -316,7 +340,10 @@ namespace recs
 		if (m_size < size)
 		{
 			m_componentRegistry.RegisterComponent<T>(m_size);
+
+#ifdef _DEBUG
 			std::cout << "RECS [NOTICE]: Size was higher than available entities, size was adjusted to: " << m_size << " components.\n";
+#endif
 			return;
 		}
 
@@ -365,7 +392,7 @@ namespace recs
 		T* compArray = m_componentRegistry.GetComponentArray<T>();
 		if (compArray == nullptr) // Register if not existant.
 		{
-			this->RegisterComponent<T>();
+			this->RegisterComponent<T>(m_size);
 		}
 
 		m_stateHandler.RegisterData(dataType, (void*)this->GetComponentRegistry().GetComponentArray<T>());
@@ -512,9 +539,9 @@ namespace recs
 
 			Link const* link = nullptr;
 			((size == dynamic_cast<recs_entity_handle<views>*>(this)->Size() ? link = &dynamic_cast<recs_entity_handle<views>*>(this)->GetLink() : link = link), ...);
-
+#ifdef _DEBUG
 			assert(link != nullptr && "RECS [ASSERT ERROR]: Couldn't find the lowest link.");
-
+#endif
 			return link;
 		}
 
@@ -578,7 +605,9 @@ namespace recs
 		*/
 		void Next() const
 		{
+#ifdef _DEBUG
 			std::cout << "This function is not implemented.\n";
+#endif
 		}
 
 		/*
@@ -586,7 +615,9 @@ namespace recs
 		*/
 		void ResetNext() const
 		{
+#ifdef _DEBUG
 			std::cout << "This function is not implemented.\n";
+#endif
 		}
 
 		/*
