@@ -252,6 +252,9 @@ namespace recs
 				m_activeComponents.push_back({ entity, pos });
 				m_posToEntity[pos] = entity;
 				m_entityToPos[entity] = pos;
+
+				if (m_onCreateFunction)
+					m_onCreateFunction(entity, m_components[m_entityToPos[entity]]);
 			}
 		}
 
@@ -271,6 +274,13 @@ namespace recs
 			m_activeComponents.clear();
 			m_posToEntity.clear();
 			m_entityToPos.clear();
+
+			m_availableComponents.reserve(m_size);
+			for (Entity i = m_size - 1; i != NULL_ENTITY; i--)
+			{
+				m_availableComponents.push_back(i);
+			}
+			m_activeComponents.reserve(m_size);
 		}
 };
 

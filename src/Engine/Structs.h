@@ -124,6 +124,12 @@ struct Script
 	std::vector<std::string> scripts;
 };
 
+struct ModelID
+{
+	size_t model_id = 0;
+	size_t texture_id = 0;
+};
+
 struct Model
 {
 	Model3D* model_data;

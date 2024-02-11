@@ -67,8 +67,20 @@ void Scene::SetupComponents()
 	m_registry.RegisterDataToState(Transform());
 	m_registry.RegisterDataToState(Light());
 	m_registry.RegisterDataToState(RigidBody());
+	m_registry.RegisterDataToState(ModelID());
 
+	m_registry.RegisterOnCreate<ModelID>([&](const recs::Entity& entity, ModelID& id)
+		{
+		
+			Model* model = m_registry.AddComponent<Model>(entity);
+			model->model_data = ResourceManager::Get().GetResource<Model3D>(id.model_id).get();
+			//model->model_texture = ResourceManager::Get().GetResource<Texture>(id.texture_id).get();
+		});
 
+	ResourceManager::Get().GetResource<Model3D>("Chest.obj");
+	ResourceManager::Get().GetResource<Texture>("Chest_Albedo.png");
+	ResourceManager::Get().GetResource<Model3D>("throwingknife.obj");
+	ResourceManager::Get().GetResource<Model3D>("doublebarrelshotugn.obj");
 
 	// Temporary testing entities...
 
@@ -77,10 +89,13 @@ void Scene::SetupComponents()
 	//GameObject* gameObject = m_registry.AddComponent<GameObject>(entity);
 	//std::strcpy(gameObject->name, "Trunk");
 
+
 	//Model* model = m_registry.AddComponent<Model>(entity);
 	//model->model_data = ResourceManager::Get().GetResource<Model3D>("Chest.obj").get();
 	//model->model_texture = ResourceManager::Get().GetResource<Texture>("Chest_Albedo.png").get();
 	//Script* scr = m_registry.AddComponent<Script>(entity);
+
+	//m_registry.AddComponent<ModelID>(entity)->model_id = ResourceManager::Get().GetHashCode("Chest.obj");
 
 	//recs::Entity entity2 = m_registry.CreateEntity();
 	//recs::Entity entity3 = m_registry.CreateEntity();
@@ -91,8 +106,12 @@ void Scene::SetupComponents()
 	//model = m_registry.AddComponent<Model>(entity2);
 	//model->model_data = ResourceManager::Get().GetResource<Model3D>("throwingknife.obj").get();
 	//
+	//m_registry.AddComponent<ModelID>(entity2)->model_id = ResourceManager::Get().GetHashCode("throwingknife.obj");
+
 	//model = m_registry.AddComponent<Model>(entity3);
 	//model->model_data = ResourceManager::Get().GetResource<Model3D>("doublebarrelshotugn.obj").get();
+
+	//m_registry.AddComponent<ModelID>(entity3)->model_id = ResourceManager::Get().GetHashCode("doublebarrelshotugn.obj");
 
 	//Transform* transf2 = m_registry.AddComponent<Transform>(entity2);
 	//transf = m_registry.AddComponent<Transform>(entity3);
@@ -129,7 +148,7 @@ void Scene::Draw()
 				model.model_texture->SetAsTexture();
 
 			// draw each model.
-			if(model.model_data)
+			if (model.model_data)
 				model.model_data->Draw();
 		}
 
