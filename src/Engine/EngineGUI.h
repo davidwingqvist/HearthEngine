@@ -23,6 +23,8 @@ private:
 	bool m_showPropertiesTab = true;
 	char m_createScriptPathProp[36] = {};
 
+	bool m_showNewComponentTab = false;
+
 	char m_modelinputField[100] = {};
 	char m_textureInputField[100] = {};
 
@@ -69,5 +71,6 @@ private:
 	void RenderConsole();
 	void RenderProperties();
 	void RenderFileKeepingWindow();
+	void RenderNewComponentTab();
 };
 

@@ -70,6 +70,7 @@ void EngineGUI::RenderGUI()
 	Get().RenderBottomBar();
 	Get().RenderHierarchy();
 	Get().RenderFileKeepingWindow();
+	Get().RenderNewComponentTab();
 }
 
 void EngineGUI::CommitGUI()
@@ -423,34 +424,40 @@ void EngineGUI::RenderProperties()
 		Model* currModel = reg.GetComponent<Model>(m_currentEntity);
 		if (currModel)
 		{
+			ImGui::BeginChild(2, ImVec2(ImGui::GetContentRegionAvail().x, 0), ImGuiChildFlags_Border | ImGuiChildFlags_AlwaysUseWindowPadding | ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_AutoResizeX);
+			ImGui::TextColored(ImVec4(255, 0, 255, 255), "Model");
+			std::string modelName = "Current Model: None";
+
 			if (currModel->model_data)
 			{
-				ImGui::BeginChild(2, ImVec2(ImGui::GetContentRegionAvail().x, 0), ImGuiChildFlags_Border | ImGuiChildFlags_AlwaysUseWindowPadding | ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_AutoResizeX);
-				ImGui::TextColored(ImVec4(255, 0, 255, 255), "Model");
-				std::string modelName = "Current Model: " + currModel->model_data->GetName();
-				ImGui::Text(modelName.c_str());
-				ImGui::Button("..##ModelTabButton");
-				ImGui::SameLine();
-				if (ImGui::InputTextWithHint("###Insertmodelname", "Insert Model Name", m_modelinputField, 100, ImGuiInputTextFlags_EnterReturnsTrue))
-				{
-					Model3D* newModel = ResourceManager::Get().GetResource<Model3D>(std::string(m_modelinputField)).get();
-					if (newModel)
-						currModel->model_data = newModel;
-				}
+				modelName = "Current Model: " + currModel->model_data->GetName();
 			}
 
+			ImGui::Text(modelName.c_str());
+			ImGui::Button("..##ModelTabButton");
+			ImGui::SameLine();
+
+			if (ImGui::InputTextWithHint("###Insertmodelname", "Insert Model Name", m_modelinputField, 100, ImGuiInputTextFlags_EnterReturnsTrue))
+			{
+				Model3D* newModel = ResourceManager::Get().GetResource<Model3D>(std::string(m_modelinputField)).get();
+				if (newModel)
+					currModel->model_data = newModel;
+			}
+
+			std::string textureName = "Current Texture: None";
 			if (currModel->model_texture)
 			{
-				std::string textureName = "Current Texture: " + currModel->model_texture->GetName();
-				ImGui::Text(textureName.c_str());
-				ImGui::Button("..##TextureTabButton");
-				ImGui::SameLine();
-				if (ImGui::InputTextWithHint("###Inserttexturename", "Insert Texture Name", m_textureInputField, 100, ImGuiInputTextFlags_EnterReturnsTrue))
-				{
-					Texture* newTexture = ResourceManager::Get().GetResource<Texture>(std::string(m_textureInputField)).get();
-					if (newTexture)
-						currModel->model_texture = newTexture;
-				}
+				textureName = "Current Texture: " + currModel->model_texture->GetName();
+			}
+			ImGui::Text(textureName.c_str());
+			ImGui::Button("..##TextureTabButton");
+			ImGui::SameLine();
+
+			if (ImGui::InputTextWithHint("###Inserttexturename", "Insert Texture Name", m_textureInputField, 100, ImGuiInputTextFlags_EnterReturnsTrue))
+			{
+				Texture* newTexture = ResourceManager::Get().GetResource<Texture>(std::string(m_textureInputField)).get();
+				if (newTexture)
+					currModel->model_texture = newTexture;
 			}
 			ImGui::EndChild();
 		}
@@ -565,7 +572,8 @@ void EngineGUI::RenderProperties()
 			ImGui::EndChild();
 		}
 
-		ImGui::Button("+ Add Component");
+		if (ImGui::Button("+ Add Component"))
+			m_showNewComponentTab = !m_showNewComponentTab;
 
 		ImGui::End();
 	}
@@ -597,6 +605,46 @@ void EngineGUI::RenderFileKeepingWindow()
 		}
 
 		ImGui::EndMenuBar();
+
+		ImGui::End();
+	}
+}
+
+void EngineGUI::RenderNewComponentTab()
+{
+	if (m_showNewComponentTab)
+	{
+		ImGui::SetNextWindowPos({ ImGui::GetWindowContentRegionMax().x * 0.75f, ImGui::GetWindowSize().y * 0.05f});
+		ImGui::SetNextWindowSize({ImGui::GetWindowSize().x, 0.0f});
+		ImGui::Begin("Add Component##windowcomponentadd", &m_showNewComponentTab, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
+
+		auto& reg = m_sceneManagerRef->GetCurrentScene()->GetRegistry();
+
+		if (ImGui::Button("GameObject", { ImGui::GetWindowSize().x, 0 }))
+		{
+			reg.AddComponent<GameObject>(m_currentEntity);
+		}
+		if (ImGui::Button("Transform", { ImGui::GetWindowSize().x, 0 }))
+		{
+			reg.AddComponent<Transform>(m_currentEntity);
+		}
+		if (ImGui::Button("Rigidbody", { ImGui::GetWindowSize().x, 0 }))
+		{
+			reg.AddComponent<RigidBody>(m_currentEntity);
+		}
+		if (ImGui::Button("Model", { ImGui::GetWindowSize().x, 0 }))
+		{
+			reg.AddComponent<Model>(m_currentEntity);
+			reg.AddComponent<ModelID>(m_currentEntity);
+		}
+		if (ImGui::Button("Light", { ImGui::GetWindowSize().x, 0 }))
+		{
+			reg.AddComponent<Light>(m_currentEntity);
+		}
+		if (ImGui::Button("Script", { ImGui::GetWindowSize().x, 0 }))
+		{
+			reg.AddComponent<Script>(m_currentEntity);
+		}
 
 		ImGui::End();
 	}
