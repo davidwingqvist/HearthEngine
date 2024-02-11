@@ -11,7 +11,6 @@ constexpr ImGuiWindowFlags bottomWindow = ImGuiWindowFlags_NoTitleBar;
 
 EngineGUI::EngineGUI()
 {
-#ifdef _DEBUG
 	IMGUI_CHECKVERSION();
 	// Setup ImGUI
 	IMGUI_CHECKVERSION();
@@ -21,16 +20,13 @@ EngineGUI::EngineGUI()
 	ImGui_ImplDX11_Init(D3D11Core::Get().Device(), D3D11Core::Get().Context());
 	ImGui::StyleColorsDark();
 	ImGui_ImplDX11_CreateDeviceObjects(); // uses device, therefore has to be called before render thread starts
-#endif
 }
 
 EngineGUI::~EngineGUI()
 {
-#ifdef _DEBUG
 	ImGui_ImplDX11_Shutdown();
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
-#endif
 }
 
 void EngineGUI::ClearConsoleWindowText()
@@ -46,6 +42,19 @@ void EngineGUI::ClearConsoleLogToLimit()
 	}
 }
 
+void EngineGUI::PutTabsToFalse()
+{
+	m_showEditTab = false;
+	m_showFileKeeper = false;
+	m_showScriptsTab = false;
+}
+
+void EngineGUI::PutEditTabsToFalse()
+{
+	m_showScriptsTab = false;
+	m_showFileKeeper = false;
+}
+
 void EngineGUI::BottomBarPutToFalse()
 {
 	m_showBottomConsole = false;
@@ -54,29 +63,24 @@ void EngineGUI::BottomBarPutToFalse()
 
 void EngineGUI::RenderGUI()
 {
-#ifdef _DEBUG
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
 	Get().RenderTopBar();
 	Get().RenderBottomBar();
 	Get().RenderHierarchy();
-#endif
+	Get().RenderFileKeepingWindow();
 }
 
 void EngineGUI::CommitGUI()
 {
-#ifdef _DEBUG
 	ImGui::Render();
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-#endif
 }
 
 void EngineGUI::SetSceneManagerRef(SceneManager* ref_pointer)
 {
-#ifdef _DEBUG
 	Get().m_sceneManagerRef = ref_pointer;
-#endif
 }
 
 void EngineGUI::RegisterConsoleLog(const ConsoleLogEvent& event)
@@ -103,26 +107,17 @@ void EngineGUI::RenderTopBar()
 
 	ImGui::BeginMenuBar();
 
-	if (ImGui::Button("Save"))
+	if (ImGui::Button("File"))
 	{
-		if (m_sceneManagerRef)
-		{
-			m_sceneManagerRef->GetCurrentScene()->GetRegistry().SaveData();
-		}
+		this->PutTabsToFalse();
+		m_showFileKeeper = !m_showFileKeeper;
 	}
 
-	if (ImGui::Button("Load"))
-	{
-		if (m_sceneManagerRef)
-		{
-			m_sceneManagerRef->GetCurrentScene()->GetRegistry().LoadData();
-		}
-	}
-
-	ImGui::Button("Settings");
 	if (ImGui::Button("Edit"))
+	{
+		this->PutTabsToFalse();
 		m_showEditTab = !m_showEditTab;
-	ImGui::Button("View");
+	}
 	if (ImGui::Button("Run"))
 	{
 		LUA.LoadScript("Test");
@@ -145,26 +140,29 @@ void EngineGUI::RenderTopBar()
 	{
 		ImGui::Begin("Edit Tab", &m_showEditTab, ImGuiWindowFlags_NoTitleBar);
 		if (ImGui::Button("Scripts", ImVec2(ImGui::GetWindowContentRegionMax().x, 0)))
+		{
+			this->PutEditTabsToFalse();
 			m_showScriptsTab = !m_showScriptsTab;
+		}
 		if (ImGui::Button("Models", ImVec2(ImGui::GetWindowContentRegionMax().x, 0)))
 		{
-
+			this->PutEditTabsToFalse();
 		}
 		if (ImGui::Button("Textures", ImVec2(ImGui::GetWindowContentRegionMax().x, 0)))
 		{
-
+			this->PutEditTabsToFalse();
 		}
 		if (ImGui::Button("Sounds", ImVec2(ImGui::GetWindowContentRegionMax().x, 0)))
 		{
-
+			this->PutEditTabsToFalse();
 		}
 		if (ImGui::Button("Shaders", ImVec2(ImGui::GetWindowContentRegionMax().x, 0)))
 		{
-
+			this->PutEditTabsToFalse();
 		}
 		if (ImGui::Button("Effects", ImVec2(ImGui::GetWindowContentRegionMax().x, 0)))
 		{
-
+			this->PutEditTabsToFalse();
 		}
 
 		ImGui::End();
@@ -288,10 +286,23 @@ void EngineGUI::RenderHierarchy()
 {
 	ImGui::SetNextWindowPos(ImVec2(0, ImGui::GetWindowSize().y * 0.05f));
 	ImGui::SetNextWindowSize(ImVec2(ImGui::GetWindowSize().x * 0.6f, ImGui::GetWindowSize().y * 1.15f));
-	ImGui::Begin("Object View", 0, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove);
+	ImGui::Begin("Object View", 0, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_MenuBar);
 	if (m_sceneManagerRef)
 	{
 		auto& reg = m_sceneManagerRef->GetCurrentScene()->GetRegistry();
+
+		ImGui::BeginMenuBar();
+		if (ImGui::Button("Create New Entity"))
+		{
+			reg.CreateEntity();
+		}
+
+		if (ImGui::Button("Delete All"))
+		{
+			// Delete all :)
+		}
+
+		ImGui::EndMenuBar();
 
 		auto& ent = reg.GetEntities();
 		for (auto& e : ent)
@@ -307,8 +318,14 @@ void EngineGUI::RenderHierarchy()
 			{
 				m_currentEntity = e;
 			}
-
+			ImGui::SameLine();
+			ImGui::SetCursorPosX(ImGui::GetWindowWidth() * 0.9f);
+			if (ImGui::Button("X", { 0.0f, ImGui::GetWindowWidth() * 0.1f }))
+			{
+				reg.DestroyEntity(e);
+			}
 		}
+
 	}
 	ImGui::End();
 }
@@ -553,4 +570,34 @@ void EngineGUI::RenderProperties()
 		ImGui::End();
 	}
 
+}
+
+void EngineGUI::RenderFileKeepingWindow()
+{
+	if (m_showFileKeeper)
+	{
+		ImGui::Begin("File Tab", 0, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_MenuBar);
+
+		ImGui::BeginMenuBar();
+
+		if (ImGui::Button("Save"))
+		{
+			if (m_sceneManagerRef)
+			{
+				m_sceneManagerRef->GetCurrentScene()->GetRegistry().SaveData();
+			}
+		}
+
+		if (ImGui::Button("Load"))
+		{
+			if (m_sceneManagerRef)
+			{
+				m_sceneManagerRef->GetCurrentScene()->GetRegistry().LoadData();
+			}
+		}
+
+		ImGui::EndMenuBar();
+
+		ImGui::End();
+	}
 }

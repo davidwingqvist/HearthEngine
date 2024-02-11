@@ -39,6 +39,11 @@ private:
 	// Console window log filter.
 	UINT m_filter = (UINT)ConsoleLogEventType::ALL;
 
+	// File keeping window values
+	bool m_showFileKeeper = false;
+
+	void PutTabsToFalse();
+	void PutEditTabsToFalse();
 	void BottomBarPutToFalse();
 public:
 	static auto& Get()
@@ -63,5 +68,6 @@ private:
 	void RenderHierarchy();
 	void RenderConsole();
 	void RenderProperties();
+	void RenderFileKeepingWindow();
 };
 
