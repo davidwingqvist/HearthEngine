@@ -3,6 +3,14 @@
 #include "Resource.h"
 #include "Debugger.h"
 
+/*
+
+	TODO:
+	* Save texture strings to file.
+	
+	
+*/
+
 class ResourceManager
 {
 private:
