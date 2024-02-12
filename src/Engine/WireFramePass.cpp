@@ -145,7 +145,7 @@ inline bool WireFramePass::UpdateColorBuffer()
 
 WireFramePass::WireFramePass()
 {
-	BuildGrid({ 0.0f, 0.0f, 0.0f }, { 1000.0f, 1000.0f }, 25);
+	BuildGrid({ 0.0f, 0.0f, 0.0f }, { 100000.0f, 100000.0f }, 25);
 	m_gridColor = { 0.f, 1.f, 0.f, 1.f }; 
 }
   

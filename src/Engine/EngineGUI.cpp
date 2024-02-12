@@ -296,6 +296,7 @@ void EngineGUI::RenderHierarchy()
 		if (ImGui::Button("Create New Entity"))
 		{
 			auto e = reg.CreateEntity();
+			// should always have a gameobject component.
 			reg.AddComponent<GameObject>(e);
 		}
 
