@@ -255,6 +255,7 @@ namespace recs
 			m_activeComponents.push_back({ entity, pos });
 			m_posToEntity[pos] = entity;
 			m_entityToPos[entity] = pos;
+			m_availableComponents.erase(std::find(m_availableComponents.begin(), m_availableComponents.end(), pos));
 
 			if (m_onCreateFunction)
 				m_onCreateFunction(entity, m_components[m_entityToPos[entity]]);
@@ -278,7 +279,7 @@ namespace recs
 			m_entityToPos.clear();
 
 			m_availableComponents.reserve(m_size);
-			for (Entity i = (Entity)m_size - 1; i != NULL_ENTITY; i--)
+			for (size_t i = 0; i < m_size; i++)
 			{
 				m_availableComponents.push_back(i);
 			}
