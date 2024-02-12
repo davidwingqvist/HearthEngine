@@ -302,12 +302,13 @@ void EngineGUI::RenderHierarchy()
 
 		if (ImGui::Button("Delete All"))
 		{
-			// Delete all :)
+			auto& e = reg.GetEntities();
 		}
 
 		ImGui::EndMenuBar();
 
 		auto& ent = reg.GetEntities();
+
 		for (auto& e : ent)
 		{
 			std::string ent_string = "Entity: " + std::to_string(e);
@@ -320,10 +321,12 @@ void EngineGUI::RenderHierarchy()
 			if (ImGui::IsItemClicked())
 			{
 				m_currentEntity = e;
+				m_showPropertiesTab = true;
 			}
 			ImGui::SameLine();
-			ImGui::SetCursorPosX(ImGui::GetWindowWidth() * 0.9f);
-			if (ImGui::Button("X", { 0.0f, ImGui::GetWindowWidth() * 0.1f }))
+			ImGui::SetCursorPosX(ImGui::GetWindowWidth() * 0.8f);
+			std::string tag = "X###deleteEntity" + std::to_string(e);
+			if (ImGui::Button(tag.c_str(), {ImGui::GetWindowWidth() * 0.15f, 0.0}))
 			{
 				reg.DestroyEntity(e);
 			}
@@ -402,7 +405,7 @@ void EngineGUI::RenderProperties()
 {
 	if (m_showPropertiesTab && m_currentEntity != (recs::Entity)-1)
 	{
-		ImGui::Begin("Properties", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
+		ImGui::Begin("Properties", &m_showPropertiesTab, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
 
 		recs::recs_registry& reg = m_sceneManagerRef->GetCurrentScene()->GetRegistry();
 
@@ -601,7 +604,7 @@ void EngineGUI::RenderFileKeepingWindow()
 {
 	if (m_showFileKeeper)
 	{
-		ImGui::Begin("File Tab", 0, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_MenuBar);
+		ImGui::Begin("File Tab", &m_showFileKeeper, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_MenuBar);
 
 		ImGui::BeginMenuBar();
 

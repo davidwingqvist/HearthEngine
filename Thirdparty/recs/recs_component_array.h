@@ -35,10 +35,6 @@ namespace recs
 		std::function<void(const Entity&, T&)> m_onDestroyFunction;
 		std::function<void(const Entity&, T&)> m_onUpdateFunction;
 
-	protected:
-
-		bool RemoveFromAvailablePool(const Entity& entity, const size_t& pos);
-
 	public:
 
 		recs_component_array()
@@ -57,7 +53,7 @@ namespace recs
 			m_size = size;
 			m_components = std::vector<T>(m_size, T());
 			m_availableComponents.reserve(m_size);
-			for (Entity i = m_size - 1; i != NULL_ENTITY; i--)
+			for (Entity i = (Entity)m_size - 1; i != NULL_ENTITY; i--)
 			{
 				m_availableComponents.push_back(i);
 			}
@@ -203,25 +199,34 @@ namespace recs
 		// Remove an entity from the component array.
 		virtual void RemoveEntity(const Entity& entity) override
 		{
-
-			if (m_onDestroyFunction)
-				m_onDestroyFunction(entity, m_components[m_entityToPos[entity]]);
-
-			m_entityToPos.erase(entity);
-			m_posToEntity.erase(entity);
-
-			m_availableComponents.push_back(entity);
-
-			for (size_t i = 0; i < m_activeComponents.size(); i++)
+			// Couldn't find entity in active components.
+			if(m_entityToPos.find(entity) != m_entityToPos.end())
 			{
-				if (m_activeComponents[i].entity == entity)
+				if (m_onDestroyFunction)
+					m_onDestroyFunction(entity, m_components[m_entityToPos[entity]]);
+
+				m_components[m_entityToPos[entity]] = T();
+
+				m_entityToPos.erase(entity);
+				m_posToEntity.erase(entity);
+
+				m_availableComponents.push_back(entity);
+
+				for (size_t i = 0; i < m_activeComponents.size(); i++)
 				{
-					m_activeComponents.erase(m_activeComponents.begin() + i);
-					return;
+					if (m_activeComponents[i].entity == entity)
+					{
+						m_activeComponents.erase(m_activeComponents.begin() + i);
+						return;
+					}
 				}
+
+				return;
 			}
 
-			std::cout << "RECS [WARNING!]: Tried to remove a component from an entity: " << entity << " that doesn't have said component.\n";
+#ifdef _DEBUG
+			//std::cout << "RECS [WARNING!]: Tried to remove a component from an entity: " << entity << " that doesn't have said component.\n";
+#endif
 		}
 
 		// Call the update function of each component that is used by an entity.
@@ -247,15 +252,12 @@ namespace recs
 		// Inherited via recs_component_array_interface
 		void LinkEntityToPos(const Entity& entity, const size_t& pos) override
 		{
-			if (RemoveFromAvailablePool(entity, pos))
-			{
-				m_activeComponents.push_back({ entity, pos });
-				m_posToEntity[pos] = entity;
-				m_entityToPos[entity] = pos;
+			m_activeComponents.push_back({ entity, pos });
+			m_posToEntity[pos] = entity;
+			m_entityToPos[entity] = pos;
 
-				if (m_onCreateFunction)
-					m_onCreateFunction(entity, m_components[m_entityToPos[entity]]);
-			}
+			if (m_onCreateFunction)
+				m_onCreateFunction(entity, m_components[m_entityToPos[entity]]);
 		}
 
 		friend class recs_state_handler;
@@ -276,31 +278,12 @@ namespace recs
 			m_entityToPos.clear();
 
 			m_availableComponents.reserve(m_size);
-			for (Entity i = m_size - 1; i != NULL_ENTITY; i--)
+			for (Entity i = (Entity)m_size - 1; i != NULL_ENTITY; i--)
 			{
 				m_availableComponents.push_back(i);
 			}
 			m_activeComponents.reserve(m_size);
 		}
 };
-
-template<typename T>
-inline bool recs_component_array<T>::RemoveFromAvailablePool(const Entity& entity, const size_t& pos)
-{
-	//if (m_availableComponents.size() <= 0)
-	//	return true;
-
-	//EntityLink link = { entity, pos };
-	//if (std::find(m_activeComponents.begin(), m_activeComponents.end(), link) != m_activeComponents.end())
-	//{
-	//	return false;
-	//}
-
-	//if(std::find(m_active))
-
-	//m_availableComponents.erase(std::remove(m_availableComponents.begin(), m_availableComponents.end(), pos), m_availableComponents.end());
-
-	return true;
-}
 
 }

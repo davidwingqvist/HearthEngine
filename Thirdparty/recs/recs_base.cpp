@@ -14,7 +14,7 @@ recs::recs_registry::recs_registry(const size_t& size)
 	:m_stateHandler(this, &this->GetComponentRegistry())
 {
 	m_size = size;
-	for (Entity i = m_size - 1; i != NULL_ENTITY; i--)
+	for (Entity i = (Entity)m_size - 1; i != NULL_ENTITY; i--)
 	{
 		m_availableEntities.push_back(i);
 	}
@@ -84,7 +84,7 @@ void recs::recs_registry::Reset()
 {
 	m_availableEntities.clear();
 	m_activeEntities.clear();
-	for (Entity i = m_size - 1; i != NULL_ENTITY; i--)
+	for (Entity i = (Entity)m_size - 1; i != NULL_ENTITY; i--)
 	{
 		m_availableEntities.push_back(i);
 	}
@@ -112,10 +112,14 @@ void recs::recs_registry::DestroyEntity(const Entity& entity)
 		m_availableEntities.push_back(freeEntity);
 		m_activeEntities.erase(it);
 	}
+#ifdef _DEBUG
 	else
 	{
+
 		std::cout << "RECS: Non-existant entity: " << entity <<  " was attempted to be removed.\n";
+
 	}
+#endif
 }
 
 void recs::recs_registry::Update()
