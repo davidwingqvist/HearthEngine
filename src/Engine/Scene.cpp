@@ -91,52 +91,6 @@ void Scene::SetupComponents()
 	ResourceManager::Get().GetResource<Model3D>("throwingknife.obj");
 	ResourceManager::Get().GetResource<Model3D>("doublebarrelshotugn.obj");
 
-	//// Temporary testing entities...
-
-	//recs::Entity entity = m_registry.CreateEntity();
-	//Transform* transf = m_registry.AddComponent<Transform>(entity);
-	//GameObject* gameObject = m_registry.AddComponent<GameObject>(entity);
-	//std::strcpy(gameObject->name, "Trunk");
-
-
-	//Model* model = m_registry.AddComponent<Model>(entity);
-	//model->model_data = ResourceManager::Get().GetResource<Model3D>("Chest.obj").get();
-	//model->model_texture = ResourceManager::Get().GetResource<Texture>("Chest_Albedo.png").get();
-	//Script* scr = m_registry.AddComponent<Script>(entity);
-
-	//ModelID* id = m_registry.AddComponent<ModelID>(entity);
-	//id->model_id = ResourceManager::Get().GetHashCode("Chest.obj");
-	//id->texture_id = ResourceManager::Get().GetHashCode("Chest_Albedo.png");
-
-	//recs::Entity entity2 = m_registry.CreateEntity();
-	//recs::Entity entity3 = m_registry.CreateEntity();
-
-	//m_registry.AddComponent<GameObject>(entity2);
-	//m_registry.AddComponent<GameObject>(entity3);
-
-	//model = m_registry.AddComponent<Model>(entity2);
-	//model->model_data = ResourceManager::Get().GetResource<Model3D>("throwingknife.obj").get();
-	//
-	//id = m_registry.AddComponent<ModelID>(entity2);
-	//id->model_id = ResourceManager::Get().GetHashCode("throwingknife.obj");
-
-	//model = m_registry.AddComponent<Model>(entity3);
-	//model->model_data = ResourceManager::Get().GetResource<Model3D>("doublebarrelshotugn.obj").get();
-
-	//id = m_registry.AddComponent<ModelID>(entity3);
-	//id->model_id = ResourceManager::Get().GetHashCode("doublebarrelshotugn.obj");
-
-
-	//Transform* transf2 = m_registry.AddComponent<Transform>(entity2);
-	//transf = m_registry.AddComponent<Transform>(entity3);
-
-	//LUA.m_currentRegistry = &m_registry;
-
-	//recs::Entity lightEnt = m_registry.CreateEntity();
-	//std::strcpy(m_registry.AddComponent<GameObject>(lightEnt)->name, "Light");
-	//transf = m_registry.AddComponent<Transform>(lightEnt);
-	//Light* light = m_registry.AddComponent<Light>(lightEnt);
-
 	//pushTransform(LUA.State(), transf);
 	//lua_setglobal(LUA.State(), "Transform");
 }

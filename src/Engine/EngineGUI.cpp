@@ -295,7 +295,8 @@ void EngineGUI::RenderHierarchy()
 		ImGui::BeginMenuBar();
 		if (ImGui::Button("Create New Entity"))
 		{
-			reg.CreateEntity();
+			auto e = reg.CreateEntity();
+			reg.AddComponent<GameObject>(e);
 		}
 
 		if (ImGui::Button("Delete All"))
@@ -441,7 +442,11 @@ void EngineGUI::RenderProperties()
 			{
 				Model3D* newModel = ResourceManager::Get().GetResource<Model3D>(std::string(m_modelinputField)).get();
 				if (newModel)
+				{
 					currModel->model_data = newModel;
+
+					reg.GetComponent<ModelID>(m_currentEntity)->model_id = ResourceManager::Get().GetHashCode(m_modelinputField);
+				}
 			}
 
 			std::string textureName = "Current Texture: None";
@@ -457,8 +462,19 @@ void EngineGUI::RenderProperties()
 			{
 				Texture* newTexture = ResourceManager::Get().GetResource<Texture>(std::string(m_textureInputField)).get();
 				if (newTexture)
+				{
 					currModel->model_texture = newTexture;
+
+					reg.GetComponent<ModelID>(m_currentEntity)->texture_id = ResourceManager::Get().GetHashCode(m_textureInputField);
+				}
 			}
+
+			if (ImGui::Button("Delete###modeldelete"))
+			{
+				reg.RemoveComponent<Model>(m_currentEntity);
+				reg.RemoveComponent<ModelID>(m_currentEntity);
+			}
+
 			ImGui::EndChild();
 		}
 
