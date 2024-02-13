@@ -459,6 +459,8 @@ void EngineGUI::RenderProperties()
 
 					reg.GetComponent<ModelID>(m_currentEntity)->model_id = ResourceManager::Get().GetHashCode(m_modelinputField);
 				}
+
+				memset(m_modelinputField, 0, 100);
 			}
 
 			std::string textureName = "Current Texture: None";
@@ -479,8 +481,11 @@ void EngineGUI::RenderProperties()
 
 					reg.GetComponent<ModelID>(m_currentEntity)->texture_id = ResourceManager::Get().GetHashCode(m_textureInputField);
 				}
+
+				memset(m_textureInputField, 0, 100);
 			}
 
+			ImGui::SetCursorPosX((ImGui::GetWindowWidth() * 0.45f));
 			if (ImGui::Button("Delete###modeldelete"))
 			{
 				reg.RemoveComponent<Model>(m_currentEntity);
@@ -527,7 +532,7 @@ void EngineGUI::RenderProperties()
 			ImGui::DragFloat("z###Scalez", &currTransform->scale.z, 0.1, 10, 0.0f, "%.2f");
 			ImGui::EndGroup();
 
-
+			ImGui::SetCursorPosX((ImGui::GetWindowWidth() * 0.45f));
 			if (ImGui::Button("Delete###transformdelete"))
 			{
 				reg.RemoveComponent<Transform>(m_currentEntity);
@@ -567,7 +572,7 @@ void EngineGUI::RenderProperties()
 			}
 			
 			ImGui::InputFloat3("###TypeSpecificInput", (float*)&currLight->data, "%.2f");
-
+			ImGui::SetCursorPosX((ImGui::GetWindowWidth() * 0.45f));
 			if (ImGui::Button("Delete###lightdelete"))
 			{
 				reg.RemoveComponent<Light>(m_currentEntity);
@@ -608,7 +613,7 @@ void EngineGUI::RenderProperties()
 				scriptId = "Delete###Script" + std::to_string(i);
 				ImGui::Button(scriptId.c_str());
 			}
-
+			ImGui::SetCursorPosX((ImGui::GetWindowWidth() * 0.45f));
 			if (ImGui::Button("Delete###scriptdelete"))
 			{
 				reg.RemoveComponent<Script>(m_currentEntity);
@@ -619,6 +624,7 @@ void EngineGUI::RenderProperties()
 
 		if (m_currentEntity != recs::NULL_ENTITY)
 		{
+			ImGui::SetCursorPosX((ImGui::GetWindowWidth() * 0.35f));
 			if (ImGui::Button("+ Add Component"))
 				m_showNewComponentTab = !m_showNewComponentTab;
 		}
