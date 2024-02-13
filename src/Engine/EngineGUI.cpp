@@ -303,6 +303,10 @@ void EngineGUI::RenderHierarchy()
 		if (ImGui::Button("Delete All"))
 		{
 			auto& e = reg.GetEntities();
+			while (!e.empty())
+			{
+				reg.DestroyEntity(e.back());
+			}
 		}
 
 		ImGui::EndMenuBar();
@@ -329,6 +333,10 @@ void EngineGUI::RenderHierarchy()
 			if (ImGui::Button(tag.c_str(), {ImGui::GetWindowWidth() * 0.15f, 0.0}))
 			{
 				reg.DestroyEntity(e);
+
+				// set null entity if deleted currently selected entity.
+				if(e == m_currentEntity)
+					m_currentEntity = recs::NULL_ENTITY;
 			}
 		}
 
@@ -403,7 +411,7 @@ void EngineGUI::RenderConsole()
 */
 void EngineGUI::RenderProperties()
 {
-	if (m_showPropertiesTab && m_currentEntity != (recs::Entity)-1)
+	if (m_showPropertiesTab)
 	{
 		ImGui::Begin("Properties", &m_showPropertiesTab, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
 
@@ -518,6 +526,13 @@ void EngineGUI::RenderProperties()
 			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 4.0f);
 			ImGui::DragFloat("z###Scalez", &currTransform->scale.z, 0.1, 10, 0.0f, "%.2f");
 			ImGui::EndGroup();
+
+
+			if (ImGui::Button("Delete###transformdelete"))
+			{
+				reg.RemoveComponent<Transform>(m_currentEntity);
+			}
+
 			ImGui::EndChild();
 		}
 
@@ -552,6 +567,11 @@ void EngineGUI::RenderProperties()
 			}
 			
 			ImGui::InputFloat3("###TypeSpecificInput", (float*)&currLight->data, "%.2f");
+
+			if (ImGui::Button("Delete###lightdelete"))
+			{
+				reg.RemoveComponent<Light>(m_currentEntity);
+			}
 			ImGui::EndChild();
 		}
 
@@ -589,11 +609,19 @@ void EngineGUI::RenderProperties()
 				ImGui::Button(scriptId.c_str());
 			}
 
+			if (ImGui::Button("Delete###scriptdelete"))
+			{
+				reg.RemoveComponent<Script>(m_currentEntity);
+			}
+
 			ImGui::EndChild();
 		}
 
-		if (ImGui::Button("+ Add Component"))
-			m_showNewComponentTab = !m_showNewComponentTab;
+		if (m_currentEntity != recs::NULL_ENTITY)
+		{
+			if (ImGui::Button("+ Add Component"))
+				m_showNewComponentTab = !m_showNewComponentTab;
+		}
 
 		ImGui::End();
 	}
@@ -624,6 +652,15 @@ void EngineGUI::RenderFileKeepingWindow()
 			}
 		}
 
+		// Todo: Clear save data.
+		if (ImGui::Button("Clear"))
+		{
+			if (m_sceneManagerRef)
+			{
+				//m_sceneManagerRef->GetCurrentScene()->GetRegistry().LoadData();
+			}
+		}
+
 		ImGui::EndMenuBar();
 
 		ImGui::End();
@@ -634,16 +671,12 @@ void EngineGUI::RenderNewComponentTab()
 {
 	if (m_showNewComponentTab)
 	{
-		ImGui::SetNextWindowPos({ ImGui::GetWindowContentRegionMax().x * 0.75f, ImGui::GetWindowSize().y * 0.05f});
+		ImGui::SetNextWindowPos({ ImGui::GetWindowContentRegionMax().x * 0.9f, ImGui::GetWindowSize().y * 0.05f});
 		ImGui::SetNextWindowSize({ImGui::GetWindowSize().x, 0.0f});
 		ImGui::Begin("Add Component##windowcomponentadd", &m_showNewComponentTab, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
 
 		auto& reg = m_sceneManagerRef->GetCurrentScene()->GetRegistry();
 
-		if (ImGui::Button("GameObject", { ImGui::GetWindowSize().x, 0 }))
-		{
-			reg.AddComponent<GameObject>(m_currentEntity);
-		}
 		if (ImGui::Button("Transform", { ImGui::GetWindowSize().x, 0 }))
 		{
 			reg.AddComponent<Transform>(m_currentEntity);

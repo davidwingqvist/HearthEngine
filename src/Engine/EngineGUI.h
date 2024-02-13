@@ -19,7 +19,7 @@ private:
 	bool m_showObjectsTab = false;
 
 	// Properties Tab Values
-	recs::Entity m_currentEntity = (recs::Entity) - 1;
+	recs::Entity m_currentEntity = recs::NULL_ENTITY;
 	bool m_showPropertiesTab = true;
 	char m_createScriptPathProp[36] = {};
 
