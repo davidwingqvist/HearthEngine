@@ -39,6 +39,11 @@ public:
 
 	// Get the hash code for file object.
 	size_t GetHashCode(const std::string& filename);
+
+private:
+
+	bool LoadStoredFileItems();
+	bool SaveStoredItemsToFile();
 };
 
 template<class T>
