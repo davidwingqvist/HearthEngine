@@ -1,0 +1,4 @@
+Model Chest.obj
+Texture Chest_Albedo.png
+Model throwingknife.obj
+Model doublebarrelshotugn.obj

@@ -31,6 +31,9 @@ Engine::Engine()
 	DEBUG_INFO("The basics of the Engine is now up and running.\n");
 	EngineGUI::Get().SetSceneManagerRef(&m_sceneManager);
 	LUA.ScanForScripts();
+
+	// Create the resource manager.
+	ResourceManager::Get();
 }
 
 Engine::Engine(const std::string& splashScreen)

@@ -23,7 +23,7 @@ public:
 	// Sets the texture to the pixelshader slot 0
 	void SetAsTexture();
 
-	const std::string& GetName() const;
+	std::string GetName() override;
 
 	// Inherited via IResource
 	bool Create(const std::string& filename) override;

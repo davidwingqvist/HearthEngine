@@ -86,11 +86,6 @@ void Scene::SetupComponents()
 			}
 		});
 
-	ResourceManager::Get().GetResource<Model3D>("Chest.obj");
-	ResourceManager::Get().GetResource<Texture>("Chest_Albedo.png");
-	ResourceManager::Get().GetResource<Model3D>("throwingknife.obj");
-	ResourceManager::Get().GetResource<Model3D>("doublebarrelshotugn.obj");
-
 	//pushTransform(LUA.State(), transf);
 	//lua_setglobal(LUA.State(), "Transform");
 }

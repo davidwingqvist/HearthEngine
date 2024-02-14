@@ -62,7 +62,7 @@ bool Texture::Create(const std::string& filename)
     return !FAILED(hr);
 }
 
-const std::string& Texture::GetName() const
+std::string Texture::GetName()
 {
     return m_filename;
 }

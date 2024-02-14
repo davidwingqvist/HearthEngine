@@ -40,6 +40,9 @@ public:
 	// Get the hash code for file object.
 	size_t GetHashCode(const std::string& filename);
 
+	// Remove all the resources from saved file.
+	void ClearResources();
+
 private:
 
 	bool LoadStoredFileItems();

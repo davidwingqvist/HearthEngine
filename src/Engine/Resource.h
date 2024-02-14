@@ -14,6 +14,7 @@ public:
 	virtual ~IResource() = 0 {};
 
 	virtual bool Create(const std::string& filename) = 0;
+	virtual std::string GetName() = 0;
 };
 
 class Image2D : public IResource
@@ -31,6 +32,10 @@ public:
 
 	// Inherited via IResource
 	virtual bool Create(const std::string& filename) override;
+
+
+	// Inherited via IResource
+	std::string GetName() override;
 
 };
 
@@ -60,8 +65,10 @@ public:
 	~Model3D();
 
 	void Draw();
-	const std::string GetName() const;
 
 	// Inherited via IResource
 	virtual bool Create(const std::string& filename) override;
+
+	// Inherited via IResource
+	std::string GetName() override;
 };

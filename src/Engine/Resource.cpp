@@ -25,6 +25,11 @@ bool Image2D::Create(const std::string& filename)
     return D2D1Core::Get().CreateImage(filename, m_image.GetAddressOf());
 }
 
+std::string Image2D::GetName()
+{
+    return std::string();
+}
+
 bool Model3D::CreateVertexBuffer(std::vector<vertex_data>& modelData, submesh& mesh)
 {
     if (modelData.empty())
@@ -152,11 +157,6 @@ void Model3D::Draw()
 
 }
 
-const std::string Model3D::GetName() const
-{
-    return m_name;
-}
-
 bool Model3D::Create(const std::string& filename)
 {
     Assimp::Importer importer;
@@ -195,4 +195,9 @@ bool Model3D::Create(const std::string& filename)
     importer.FreeScene();
 
     return true;
+}
+
+std::string Model3D::GetName()
+{
+    return m_name;
 }
