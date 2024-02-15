@@ -51,7 +51,8 @@ private:
 	*/
 
 	// Models
-	bool m_showModelsTab = true;
+	bool m_showModelsTab = false;
+	bool m_showTextureTab = false;
 
 
 	/*
@@ -89,5 +90,6 @@ private:
 	void RenderFileKeepingWindow();
 	void RenderNewComponentTab();
 	void RenderModelsTab();
+	void RenderTextureTab();
 };
 

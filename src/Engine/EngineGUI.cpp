@@ -72,6 +72,7 @@ void EngineGUI::RenderGUI()
 	Get().RenderFileKeepingWindow();
 	Get().RenderNewComponentTab();
 	Get().RenderModelsTab();
+	Get().RenderTextureTab();
 }
 
 void EngineGUI::CommitGUI()
@@ -448,7 +449,10 @@ void EngineGUI::RenderProperties()
 			}
 
 			ImGui::Text(modelName.c_str());
-			ImGui::Button("..##ModelTabButton");
+			if (ImGui::Button("..##ModelTabButton"))
+			{
+				m_showModelsTab = true;
+			}
 			ImGui::SameLine();
 
 			if (ImGui::InputTextWithHint("###Insertmodelname", "Insert Model Name", m_modelinputField, 100, ImGuiInputTextFlags_EnterReturnsTrue))
@@ -470,7 +474,12 @@ void EngineGUI::RenderProperties()
 				textureName = "Current Texture: " + currModel->model_texture->GetName();
 			}
 			ImGui::Text(textureName.c_str());
-			ImGui::Button("..##TextureTabButton");
+
+			if (ImGui::Button("..##TextureTabButton"))
+			{
+				m_showTextureTab = true;
+			}
+			
 			ImGui::SameLine();
 
 			if (ImGui::InputTextWithHint("###Inserttexturename", "Insert Texture Name", m_textureInputField, 100, ImGuiInputTextFlags_EnterReturnsTrue))
@@ -718,21 +727,18 @@ void EngineGUI::RenderModelsTab()
 
 		ImGui::BeginMenuBar();
 
-		if (ImGui::Button("Add Resource"))
+		if (ImGui::Button("Add Model"))
 		{
 
 		}
-		if (ImGui::Button("Remove Resource"))
+		if (ImGui::Button("Remove Model"))
 		{
 
-		}
-		if (ImGui::Button("Clear Resources"))
-		{
-			ResourceManager::Get().ClearResources();
 		}
 
 		ImGui::EndMenuBar();
 
+		recs::recs_registry& reg = m_sceneManagerRef->GetCurrentScene()->GetRegistry();
 		const auto& a = ResourceManager::Get().GetResourceMap();
 
 		// Identification for child windows.
@@ -749,7 +755,59 @@ void EngineGUI::RenderModelsTab()
 				ImGui::SetCursorPosX(ImGui::GetWindowWidth() * 0.82f);
 				if (ImGui::Button(std::string("Select###" + std::to_string(id)).c_str(), {ImGui::GetWindowWidth() * 0.15f , 0}))
 				{
+					reg.GetComponent<Model>(m_currentEntity)->model_data = dynamic_cast<Model3D*>(r.second.get());
+					reg.GetComponent<ModelID>(m_currentEntity)->model_id = r.first;
+					m_showModelsTab = false;
+				}
+				ImGui::EndChild();
 
+			}
+			id++;
+		}
+
+		ImGui::End();
+	}
+}
+
+void EngineGUI::RenderTextureTab()
+{
+	if (m_showTextureTab)
+	{
+		ImGui::Begin("Textures##WindowTextures", &m_showTextureTab, ImGuiWindowFlags_MenuBar);
+
+		ImGui::BeginMenuBar();
+
+		if (ImGui::Button("Add Texture"))
+		{
+
+		}
+		if (ImGui::Button("Remove Texture"))
+		{
+
+		}
+
+		ImGui::EndMenuBar();
+
+		recs::recs_registry& reg = m_sceneManagerRef->GetCurrentScene()->GetRegistry();
+		const auto& a = ResourceManager::Get().GetResourceMap();
+
+		// Identification for child windows.
+		int id = 1;
+		for (const auto& r : a)
+		{
+			// Check if model3d object.
+			if (dynamic_cast<Texture*>(r.second.get()))
+			{
+				ImGui::BeginChild(id, { 0, 0 }, ImGuiChildFlags_Border | ImGuiChildFlags_AutoResizeY);
+				ImGui::Text(r.second->GetName().c_str());
+				ImGui::SameLine();
+
+				ImGui::SetCursorPosX(ImGui::GetWindowWidth() * 0.82f);
+				if (ImGui::Button(std::string("Select###" + std::to_string(id)).c_str(), { ImGui::GetWindowWidth() * 0.15f , 0 }))
+				{
+					reg.GetComponent<Model>(m_currentEntity)->model_texture = dynamic_cast<Texture*>(r.second.get());
+					reg.GetComponent<ModelID>(m_currentEntity)->texture_id = r.first;
+					m_showTextureTab = false;
 				}
 				ImGui::EndChild();
 
