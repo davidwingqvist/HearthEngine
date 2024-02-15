@@ -44,6 +44,22 @@ private:
 	// File keeping window values
 	bool m_showFileKeeper = false;
 
+	/*
+	
+		Resources Tabs
+	
+	*/
+
+	// Models
+	bool m_showModelsTab = true;
+
+
+	/*
+	
+		Resources Tabs
+	
+	*/
+
 	void PutTabsToFalse();
 	void PutEditTabsToFalse();
 	void BottomBarPutToFalse();
@@ -72,5 +88,6 @@ private:
 	void RenderProperties();
 	void RenderFileKeepingWindow();
 	void RenderNewComponentTab();
+	void RenderModelsTab();
 };
 

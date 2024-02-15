@@ -43,6 +43,8 @@ public:
 	// Remove all the resources from saved file.
 	void ClearResources();
 
+	const std::unordered_map<size_t, std::shared_ptr<IResource>>& GetResourceMap() const;
+
 private:
 
 	bool LoadStoredFileItems();

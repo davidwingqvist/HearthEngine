@@ -42,6 +42,11 @@ void ResourceManager::ClearResources()
     m_resources.clear();
 }
 
+const std::unordered_map<size_t, std::shared_ptr<IResource>>& ResourceManager::GetResourceMap() const
+{
+    return m_resources;
+}
+
 bool ResourceManager::LoadStoredFileItems()
 {
     std::ifstream stream(DEFAULT_PATH + "resources.txt", std::ios_base::in);
@@ -97,6 +102,8 @@ bool ResourceManager::LoadStoredFileItems()
 
             continue;
         }
+
+        DEBUG_ERROR("Unknown type: " + type);
     }
 
     stream.close();

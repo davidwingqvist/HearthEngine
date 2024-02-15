@@ -71,6 +71,7 @@ void EngineGUI::RenderGUI()
 	Get().RenderHierarchy();
 	Get().RenderFileKeepingWindow();
 	Get().RenderNewComponentTab();
+	Get().RenderModelsTab();
 }
 
 void EngineGUI::CommitGUI()
@@ -703,6 +704,57 @@ void EngineGUI::RenderNewComponentTab()
 		if (ImGui::Button("Script", { ImGui::GetWindowSize().x, 0 }))
 		{
 			reg.AddComponent<Script>(m_currentEntity);
+		}
+
+		ImGui::End();
+	}
+}
+
+void EngineGUI::RenderModelsTab()
+{
+	if (m_showModelsTab)
+	{
+		ImGui::Begin("Models##WindowModels", &m_showModelsTab, ImGuiWindowFlags_MenuBar);
+
+		ImGui::BeginMenuBar();
+
+		if (ImGui::Button("Add Resource"))
+		{
+
+		}
+		if (ImGui::Button("Remove Resource"))
+		{
+
+		}
+		if (ImGui::Button("Clear Resources"))
+		{
+			ResourceManager::Get().ClearResources();
+		}
+
+		ImGui::EndMenuBar();
+
+		const auto& a = ResourceManager::Get().GetResourceMap();
+
+		// Identification for child windows.
+		int id = 1;
+		for (const auto& r : a)
+		{
+			// Check if model3d object.
+			if (dynamic_cast<Model3D*>(r.second.get()))
+			{
+				ImGui::BeginChild(id, { 0, 0 }, ImGuiChildFlags_Border | ImGuiChildFlags_AutoResizeY);
+				ImGui::Text(r.second->GetName().c_str());
+				ImGui::SameLine();
+
+				ImGui::SetCursorPosX(ImGui::GetWindowWidth() * 0.82f);
+				if (ImGui::Button(std::string("Select###" + std::to_string(id)).c_str(), {ImGui::GetWindowWidth() * 0.15f , 0}))
+				{
+
+				}
+				ImGui::EndChild();
+
+			}
+			id++;
 		}
 
 		ImGui::End();
