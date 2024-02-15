@@ -315,7 +315,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Functions.hlsli">
+    <None Include="src\Engine\Functions.hlsli">
       <Filter>Shaders\HLSL Functions</Filter>
     </None>
   </ItemGroup>

@@ -169,8 +169,8 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Functions.hlsli" />
     <None Include="packages.config" />
+    <None Include="src\Engine\Functions.hlsli" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

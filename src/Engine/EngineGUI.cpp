@@ -298,8 +298,9 @@ void EngineGUI::RenderHierarchy()
 		if (ImGui::Button("Create New Entity"))
 		{
 			auto e = reg.CreateEntity();
-			// should always have a gameobject component.
+			// should always have a gameobject and transform component.
 			reg.AddComponent<GameObject>(e);
+			reg.AddComponent<Transform>(e);
 		}
 
 		if (ImGui::Button("Delete All"))
@@ -436,6 +437,52 @@ void EngineGUI::RenderProperties()
 			ImGui::EndChild();
 		}
 
+		Transform* currTransform = reg.GetComponent<Transform>(m_currentEntity);
+		if (currTransform)
+		{
+			ImGui::BeginChild(3, ImVec2(ImGui::GetContentRegionAvail().x, 0), ImGuiChildFlags_Border | ImGuiChildFlags_AlwaysUseWindowPadding | ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_AutoResizeX);
+			ImGui::TextColored(ImVec4(255, 0, 255, 255), "Transform");
+			ImGui::BeginGroup();
+			ImGui::Text("Position");
+			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 3.6f);
+			ImGui::DragFloat("x###Posx", &currTransform->pos.x, 1, 10, 0.0f, "%.2f");
+			ImGui::SameLine();
+			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 3.6f);
+			ImGui::DragFloat("y###Posy", &currTransform->pos.y, 1, 10, 0.0f, "%.2f");
+			ImGui::SameLine();
+			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 3.6f);
+			ImGui::DragFloat("z###Posz", &currTransform->pos.z, 1, 10, 0.0f, "%.2f");
+
+			ImGui::Text("Rotation");
+			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 4.0f);
+			ImGui::SliderFloat("x###Rotx", &currTransform->rotation.x, -3.1415, 3.1415, "%.3f");
+			ImGui::SameLine();
+			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 4.0f);
+			ImGui::SliderFloat("y###Roty", &currTransform->rotation.y, -3.1415, 3.1415, "%.3f");
+			ImGui::SameLine();
+			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 4.0f);
+			ImGui::SliderFloat("z###Rotz", &currTransform->rotation.z, -3.1415, 3.1415, "%.3f");
+
+			ImGui::Text("Scale");
+			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 4.0f);
+			ImGui::DragFloat("x###Scalex", &currTransform->scale.x, 0.1, 10, 0.0f, "%.2f");
+			ImGui::SameLine();
+			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 4.0f);
+			ImGui::DragFloat("y###Scaley", &currTransform->scale.y, 0.1, 10, 0.0f, "%.2f");
+			ImGui::SameLine();
+			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 4.0f);
+			ImGui::DragFloat("z###Scalez", &currTransform->scale.z, 0.1, 10, 0.0f, "%.2f");
+			ImGui::EndGroup();
+
+			//ImGui::SetCursorPosX((ImGui::GetWindowWidth() * 0.45f));
+			//if (ImGui::Button("Delete###transformdelete"))
+			//{
+			//	reg.RemoveComponent<Transform>(m_currentEntity);
+			//}
+
+			ImGui::EndChild();
+		}
+
 		Model* currModel = reg.GetComponent<Model>(m_currentEntity);
 		if (currModel)
 		{
@@ -500,52 +547,6 @@ void EngineGUI::RenderProperties()
 			{
 				reg.RemoveComponent<Model>(m_currentEntity);
 				reg.RemoveComponent<ModelID>(m_currentEntity);
-			}
-
-			ImGui::EndChild();
-		}
-
-		Transform* currTransform = reg.GetComponent<Transform>(m_currentEntity);
-		if (currTransform)
-		{
-			ImGui::BeginChild(3, ImVec2(ImGui::GetContentRegionAvail().x, 0), ImGuiChildFlags_Border | ImGuiChildFlags_AlwaysUseWindowPadding | ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_AutoResizeX);
-			ImGui::TextColored(ImVec4(255, 0, 255, 255), "Transform");
-			ImGui::BeginGroup();
-			ImGui::Text("Position");
-			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 3.6f);
-			ImGui::DragFloat("x###Posx", &currTransform->pos.x, 1, 10, 0.0f, "%.2f");
-			ImGui::SameLine();
-			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 3.6f);
-			ImGui::DragFloat("y###Posy", &currTransform->pos.y, 1, 10, 0.0f, "%.2f");
-			ImGui::SameLine();
-			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 3.6f);
-			ImGui::DragFloat("z###Posz", &currTransform->pos.z, 1, 10, 0.0f, "%.2f");
-
-			ImGui::Text("Rotation");
-			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 4.0f);
-			ImGui::SliderFloat("x###Rotx", &currTransform->rotation.x, -3.1415, 3.1415, "%.3f");
-			ImGui::SameLine();
-			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 4.0f);
-			ImGui::SliderFloat("y###Roty", &currTransform->rotation.y, -3.1415, 3.1415, "%.3f");
-			ImGui::SameLine();
-			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 4.0f);
-			ImGui::SliderFloat("z###Rotz", &currTransform->rotation.z, -3.1415, 3.1415, "%.3f");
-
-			ImGui::Text("Scale");
-			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 4.0f);
-			ImGui::DragFloat("x###Scalex", &currTransform->scale.x, 0.1, 10, 0.0f, "%.2f");
-			ImGui::SameLine();
-			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 4.0f);
-			ImGui::DragFloat("y###Scaley", &currTransform->scale.y, 0.1, 10, 0.0f, "%.2f");
-			ImGui::SameLine();
-			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 4.0f);
-			ImGui::DragFloat("z###Scalez", &currTransform->scale.z, 0.1, 10, 0.0f, "%.2f");
-			ImGui::EndGroup();
-
-			ImGui::SetCursorPosX((ImGui::GetWindowWidth() * 0.45f));
-			if (ImGui::Button("Delete###transformdelete"))
-			{
-				reg.RemoveComponent<Transform>(m_currentEntity);
 			}
 
 			ImGui::EndChild();

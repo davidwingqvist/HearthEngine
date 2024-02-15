@@ -105,42 +105,42 @@ void Camera::Move()
 {
 	if (InputManager::Get().CheckKey(kb_key::W, key_state::HOLD))
 	{
-		SetPosition(0, 0, .1f * Time::Get().GetDeltaTime());
+		SetPosition(0, 0, 15.f * Time::Get().GetDeltaTime());
 	}
 	else if (InputManager::Get().CheckKey(kb_key::S, key_state::HOLD))
 	{
-		SetPosition(0, 0, -.1f * Time::Get().GetDeltaTime());
+		SetPosition(0, 0, -15.f * Time::Get().GetDeltaTime());
 	}
 
 	if (InputManager::Get().CheckKey(kb_key::A, key_state::HOLD))
 	{
-		SetPosition(-.1f * Time::Get().GetDeltaTime(), 0, 0);
+		SetPosition(-15.f * Time::Get().GetDeltaTime(), 0, 0);
 	}
 	else if (InputManager::Get().CheckKey(kb_key::D, key_state::HOLD))
 	{
-		SetPosition(0.1f * Time::Get().GetDeltaTime(), 0, 0);
+		SetPosition(15.f * Time::Get().GetDeltaTime(), 0, 0);
 	}
 
 	
 	if (InputManager::Get().CheckKey(kb_key::Up, key_state::HOLD))
 	{
-		m_pitch += 0.002f * Time::Get().GetDeltaTime();
+		m_pitch += 1.3f * Time::Get().GetDeltaTime();
 		UpdateRotation();
 	}
 	else if(InputManager::Get().CheckKey(kb_key::Down, key_state::HOLD))
 	{
-		m_pitch -= 0.002f * Time::Get().GetDeltaTime();
+		m_pitch -= 1.3f * Time::Get().GetDeltaTime();
 		UpdateRotation();
 	}
 
 	if (InputManager::Get().CheckKey(kb_key::Left, key_state::HOLD))
 	{
-		m_yaw += 0.002f * Time::Get().GetDeltaTime();
+		m_yaw += 1.3f * Time::Get().GetDeltaTime();
 		UpdateRotation();
 	}
 	else if (InputManager::Get().CheckKey(kb_key::Right, key_state::HOLD))
 	{
-		m_yaw -= 0.002f * Time::Get().GetDeltaTime();
+		m_yaw -= 1.3f * Time::Get().GetDeltaTime();
 		UpdateRotation();
 	}
 

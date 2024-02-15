@@ -6,6 +6,7 @@
 #include "LuaState.h"
 #include "Time.h"
 #include "Texture.h"
+#include "Utility.h"
 
 void UpdatePublicBuffer(ID3D11Buffer** buffer, const sm::Matrix& matrix_data)
 {
@@ -38,6 +39,12 @@ Scene::~Scene()
 
 void Scene::Update()
 {
+	m_registry.Group<RigidBody, Transform>().ForEach([&](const recs::Entity& e, RigidBody& rb, Transform& transform) {
+
+		transform.pos.y -= GRAVITY * Time::Get().GetDeltaTime();
+		//transform.pos.y -= 0.001f;
+
+		});
 }
 
 bool Scene::CreatePublicBuffer()

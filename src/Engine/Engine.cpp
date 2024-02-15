@@ -97,7 +97,7 @@ void Engine::Start()
 		Draw();
 		
 		auto end = std::chrono::high_resolution_clock::now();
-		Time::Get().SetDeltaTime(std::chrono::duration<float, std::milli>(end - start).count());
+		Time::Get().SetDeltaTime(std::chrono::duration<float, std::milli>(end - start).count() * 0.001f);
 	}
 }
 
