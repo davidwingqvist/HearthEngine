@@ -113,7 +113,8 @@ void LightPass::Prepass()
 
 void LightPass::Pass(Scene* currentScene)
 {
-	if (m_nrOfRegLights != currentScene->GetRegistry().GetSize<Light>() && m_nrOfRegLights > 0)
+	const size_t& l = currentScene->GetRegistry().GetSize<Light>();
+	if (m_nrOfRegLights != l && l > 0)
 	{
 		this->GatherLights(&currentScene->GetRegistry());
 	}
