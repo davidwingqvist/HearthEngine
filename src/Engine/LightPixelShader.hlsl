@@ -32,6 +32,11 @@ float4 main(PxIn input) : SV_TARGET
     float4 normal = t_normal.Sample(s_linearSamp, input.uv);
     float4 output = float4(0, 0, 0, 0);
     
+    if(lightInfo.x == 0)
+    {
+        return tex;
+    }
+    
     float4 ambient_result = float4(0, 0, 0, 0);
     float4 diffuse_result = float4(0, 0, 0, 0);
     
