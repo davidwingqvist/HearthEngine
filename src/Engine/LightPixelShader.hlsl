@@ -15,7 +15,7 @@ cbuffer lightData : register(b0)
     float type;
 }
 
-cbuffer cameraBuffer : register(b1)
+cbuffer cameraBuffer : register(b3)
 {
     float4x4 c_view;
     float4x4 c_proj;
@@ -69,7 +69,7 @@ float4 main(PxIn input) : SV_TARGET
     diffuse_result /= lightInfo.x;
     specular_result /= lightInfo.x;
     
-    output = (ambient_result + diffuse_result) * tex;
+    output = (ambient_result + diffuse_result + specular_result) * tex;
     
     return output;
 }

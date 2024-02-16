@@ -3,7 +3,7 @@ cbuffer worldMatrix : register(b0)
 	float4x4 c_world;
 }
 
-cbuffer cameraBuffer : register(b1)
+cbuffer cameraBuffer : register(b3)
 {
 	float4x4 c_view;
 	float4x4 c_proj;
