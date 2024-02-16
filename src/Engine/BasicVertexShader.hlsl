@@ -7,6 +7,7 @@ cbuffer cameraBuffer : register(b1)
 {
 	float4x4 c_view;
 	float4x4 c_proj;
+    float4 c_camPos;
 }
 
 struct VSIn

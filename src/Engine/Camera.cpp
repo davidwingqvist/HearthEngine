@@ -10,6 +10,7 @@ constexpr float limit = dx::XM_PIDIV2 - 0.01f;
 void Camera::Update()
 {
 	m_matData.viewMatrix = sm::Matrix::CreateLookAt(m_position, m_lookAt, sm::Vector3::Up);
+	m_matData.position = { m_position.x, m_position.y, m_position.z, 1.0f };
 	UpdateBuffer();
 }
 
@@ -70,6 +71,7 @@ Camera::Camera()
 	m_right = m_position + m_position.Right;
 	m_matData.viewMatrix = sm::Matrix::CreateLookAt(m_position, m_lookAt, sm::Vector3::Up);
 	m_matData.projectionMatrix = sm::Matrix::CreatePerspectiveFieldOfView(3.1415f / 4.0f, ((float)D3D11Core::Get().GetWindow()->GetWidth() / D3D11Core::Get().GetWindow()->GetHeight()), 0.1f, 5000.f);
+	m_matData.position = { m_position.x, m_position.y, m_position.z, 1.0f };
 	if (!SetUpBuffer())
 	{
 		DEBUG_ERROR("Failed to setup buffer for Camera!\n")

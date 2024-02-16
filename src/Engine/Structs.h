@@ -98,6 +98,7 @@ struct camera_data
 {
 	sm::Matrix viewMatrix;
 	sm::Matrix projectionMatrix;
+	sm::Vector4 position;
 };
 
 struct RigidBody
