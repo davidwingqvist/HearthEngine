@@ -103,7 +103,8 @@ struct camera_data
 struct RigidBody
 {
 	float mass = 0;
-	bool hasCollision = true;
+	bool hasCollision = false;
+	bool hasGravity = false;
 };
 
 /*

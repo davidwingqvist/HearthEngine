@@ -105,20 +105,20 @@ void Camera::Move()
 {
 	if (InputManager::Get().CheckKey(kb_key::W, key_state::HOLD))
 	{
-		SetPosition(0, 0, 15.f * Time::Get().GetDeltaTime());
+		SetPosition(0, 0, 20.f * Time::Get().GetDeltaTime());
 	}
 	else if (InputManager::Get().CheckKey(kb_key::S, key_state::HOLD))
 	{
-		SetPosition(0, 0, -15.f * Time::Get().GetDeltaTime());
+		SetPosition(0, 0, -20.f * Time::Get().GetDeltaTime());
 	}
 
 	if (InputManager::Get().CheckKey(kb_key::A, key_state::HOLD))
 	{
-		SetPosition(-15.f * Time::Get().GetDeltaTime(), 0, 0);
+		SetPosition(-20.f * Time::Get().GetDeltaTime(), 0, 0);
 	}
 	else if (InputManager::Get().CheckKey(kb_key::D, key_state::HOLD))
 	{
-		SetPosition(15.f * Time::Get().GetDeltaTime(), 0, 0);
+		SetPosition(20.f * Time::Get().GetDeltaTime(), 0, 0);
 	}
 
 	
@@ -149,7 +149,7 @@ void Camera::Move()
 		m_speed = 5.0f;
 	}
 	else
-		m_speed = 1.0f;
+		m_speed = 2.0f;
 }
 
 void Camera::Activate() const

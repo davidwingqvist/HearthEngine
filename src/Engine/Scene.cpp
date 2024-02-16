@@ -41,8 +41,10 @@ void Scene::Update()
 {
 	m_registry.Group<RigidBody, Transform>().ForEach([&](const recs::Entity& e, RigidBody& rb, Transform& transform) {
 
-		transform.pos.y -= GRAVITY * Time::Get().GetDeltaTime();
-		//transform.pos.y -= 0.001f;
+		if (rb.hasGravity)
+		{
+			transform.pos.y -= GRAVITY * Time::Get().GetDeltaTime();
+		}
 
 		});
 }

@@ -465,13 +465,13 @@ void EngineGUI::RenderProperties()
 
 			ImGui::Text("Scale");
 			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 4.0f);
-			ImGui::DragFloat("x###Scalex", &currTransform->scale.x, 0.1, 10, 0.0f, "%.2f");
+			ImGui::DragFloat("x###Scalex", &currTransform->scale.x, 0.1, 0.0f, 0.0f, "%.2f");
 			ImGui::SameLine();
 			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 4.0f);
-			ImGui::DragFloat("y###Scaley", &currTransform->scale.y, 0.1, 10, 0.0f, "%.2f");
+			ImGui::DragFloat("y###Scaley", &currTransform->scale.y, 0.1, 0.0f, 0.0f, "%.2f");
 			ImGui::SameLine();
 			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 4.0f);
-			ImGui::DragFloat("z###Scalez", &currTransform->scale.z, 0.1, 10, 0.0f, "%.2f");
+			ImGui::DragFloat("z###Scalez", &currTransform->scale.z, 0.1, 0.0f, 0.0f, "%.2f");
 			ImGui::EndGroup();
 
 			//ImGui::SetCursorPosX((ImGui::GetWindowWidth() * 0.45f));
@@ -552,11 +552,31 @@ void EngineGUI::RenderProperties()
 			ImGui::EndChild();
 		}
 
+		RigidBody* rigidBody = reg.GetComponent<RigidBody>(m_currentEntity);
+
+		if (rigidBody)
+		{
+			ImGui::BeginChild(4, ImVec2(ImGui::GetContentRegionAvail().x, 0), ImGuiChildFlags_Border | ImGuiChildFlags_AlwaysUseWindowPadding | ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_AutoResizeX);
+			
+			ImGui::TextColored(ImVec4(255, 0, 255, 255), "Rigidbody");
+			ImGui::DragFloat("Mass", &rigidBody->mass, 1, 0, 1000);
+			ImGui::Checkbox("Collision?", &rigidBody->hasCollision);
+			ImGui::Checkbox("Gravity?", &rigidBody->hasGravity);
+
+			ImGui::SetCursorPosX((ImGui::GetWindowWidth() * 0.45f));
+			if (ImGui::Button("Delete###rigidbodydelete"))
+			{
+				reg.RemoveComponent<RigidBody>(m_currentEntity);
+			}
+
+			ImGui::EndChild();
+		}
+
 		Light* currLight = reg.GetComponent<Light>(m_currentEntity);
 
 		if (currLight)
 		{
-			ImGui::BeginChild(4, ImVec2(ImGui::GetContentRegionAvail().x, 0), ImGuiChildFlags_Border | ImGuiChildFlags_AlwaysUseWindowPadding | ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_AutoResizeX);
+			ImGui::BeginChild(5, ImVec2(ImGui::GetContentRegionAvail().x, 0), ImGuiChildFlags_Border | ImGuiChildFlags_AlwaysUseWindowPadding | ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_AutoResizeX);
 			ImGui::TextColored(ImVec4(255, 0, 255, 255), "Light");
 			ImGui::Text("Ambient");
 			ImGui::SliderFloat4("###AmbientInput", (float*)&currLight->ambient, 0.0f, 1.0f, "%.2f");
@@ -595,7 +615,7 @@ void EngineGUI::RenderProperties()
 
 		if (currScripts)
 		{
-			ImGui::BeginChild(5, ImVec2(ImGui::GetContentRegionAvail().x, 0), ImGuiChildFlags_Border | ImGuiChildFlags_AlwaysUseWindowPadding | ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_AutoResizeX);
+			ImGui::BeginChild(6, ImVec2(ImGui::GetContentRegionAvail().x, 0), ImGuiChildFlags_Border | ImGuiChildFlags_AlwaysUseWindowPadding | ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_AutoResizeX);
 
 			ImGui::TextColored(ImVec4(255, 0, 255, 255), "Scripts");
 			std::string scriptId = "";
