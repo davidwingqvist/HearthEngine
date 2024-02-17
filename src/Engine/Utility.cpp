@@ -17,3 +17,20 @@ sm::Vector2 utility::WorldSpaceToScreenSpace(const sm::Vector3& worldPos, Camera
 
     return { new_x, new_y };
 }
+
+float utility::ConvertToDegrees(const float& radiant)
+{
+    return radiant * 180.0f / 3.14159265f;
+}
+
+float utility::CalcDegAngle(const sm::Vector2& a, const sm::Vector2& b)
+{
+    float deg = std::acos(a.Dot(b) / (a.Length() * b.Length()));
+    return utility::ConvertToDegrees(deg);
+}
+
+float utility::CalcDegAngle(const sm::Vector3& a, const sm::Vector3& b)
+{
+    float deg = std::acos(a.Dot(b) / (a.Length() * b.Length()));
+    return utility::ConvertToDegrees(deg);
+}

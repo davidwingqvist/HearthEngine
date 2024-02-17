@@ -20,4 +20,11 @@ namespace utility
 		Convert a world space position onto a position on the screen space.
 	*/
 	sm::Vector2 WorldSpaceToScreenSpace(const sm::Vector3& worldPos, Camera* cam);
+
+	// Convert radiant to degrees.
+	float ConvertToDegrees(const float& radiant);
+
+	// Calculate the angle between two vectors and return the angle in degrees.
+	float CalcDegAngle(const sm::Vector2& a, const sm::Vector2& b);
+	float CalcDegAngle(const sm::Vector3& a, const sm::Vector3& b);
 }
