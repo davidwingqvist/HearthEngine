@@ -578,6 +578,12 @@ void EngineGUI::RenderProperties()
 		{
 			ImGui::BeginChild(5, ImVec2(ImGui::GetContentRegionAvail().x, 0), ImGuiChildFlags_Border | ImGuiChildFlags_AlwaysUseWindowPadding | ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_AutoResizeX);
 			ImGui::TextColored(ImVec4(255, 0, 255, 255), "Light");
+
+			if (ImGui::Button("Apply Updates###lightUpdates"))
+			{
+				m_lightPassRef->ForceLightUpdate();
+			}
+
 			ImGui::Text("Ambient");
 			ImGui::SliderFloat4("###AmbientInput", (float*)&currLight->ambient, 0.0f, 1.0f, "%.2f");
 			ImGui::Text("Diffuse");
@@ -594,9 +600,6 @@ void EngineGUI::RenderProperties()
 			case LIGHTTYPE::DIRECTIONAL:
 				ImGui::Text("Direction");
 				break;
-			case LIGHTTYPE::POINTLIGHT:
-				ImGui::Text("Position");
-				break;
 			default:
 				ImGui::Text("No type selected...");
 				break;
@@ -604,6 +607,7 @@ void EngineGUI::RenderProperties()
 			
 			ImGui::InputFloat3("###TypeSpecificInput", (float*)&currLight->data, "%.2f");
 			ImGui::SetCursorPosX((ImGui::GetWindowWidth() * 0.45f));
+			
 			if (ImGui::Button("Delete###lightdelete"))
 			{
 				reg.RemoveComponent<Light>(m_currentEntity);

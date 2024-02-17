@@ -157,6 +157,7 @@ void Camera::Move()
 void Camera::Activate() const
 {
 	D3D11Core::Get().Context()->VSSetConstantBuffers(3, 1, &m_buffer);
+	D3D11Core::Get().Context()->PSSetConstantBuffers(3, 1, &m_buffer);
 }
 
 const camera_data& Camera::GetData() const

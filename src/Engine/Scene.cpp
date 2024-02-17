@@ -31,10 +31,6 @@ Scene::Scene()
 	this->SetupComponents();
 	this->RegisterComponentsToLua();
 	m_camera.Activate();
-
-	sm::Vector3 a = { 0, 0, 1};
-	sm::Vector3 b = { 1, 0, 1};
-	DEBUG_INFO(std::to_string(utility::CalcDegAngle(a, b)));
 }
 
 Scene::~Scene()

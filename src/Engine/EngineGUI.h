@@ -1,5 +1,6 @@
 #pragma once
 #include "SceneManager.h"
+#include "LightPass.h"
 
 class EngineGUI
 {
@@ -65,6 +66,12 @@ private:
 	void PutEditTabsToFalse();
 	void BottomBarPutToFalse();
 public:
+
+	/*
+		Temporary values
+	*/
+	LightPass* m_lightPassRef = nullptr;
+
 	static auto& Get()
 	{
 		static EngineGUI instance;

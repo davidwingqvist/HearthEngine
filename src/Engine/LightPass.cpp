@@ -55,11 +55,16 @@ void LightPass::GatherLights(recs::recs_registry* reg)
 	m_lightDataVector.clear();
 	m_lightDataVector.reserve(reg->GetComponentRegistry().GetEntityLinks<Light>().size());
 	
-	reg->Group<Light, Transform>().ForEach([&](Light& light, Transform& transf) {
+	m_lightWorldSpecs.clear();
+	m_lightWorldSpecs.reserve(reg->GetComponentRegistry().GetEntityLinks<Light>().size());
 
-		light.data = transf.pos;
+	reg->Group<Light, Transform>().ForEach([&](Light& light, Transform& transf) 
+		{
 
 		m_lightDataVector.push_back(light);
+		LightSpecs spec;
+		spec.position = { transf.pos.x, transf.pos.y, transf.pos.z, 1.0f };
+		m_lightWorldSpecs.push_back(spec);
 
 		});
 
@@ -69,9 +74,7 @@ void LightPass::GatherLights(recs::recs_registry* reg)
 
 	this->UpdateLightBuffer();
 
-	// Set buffers to pipeline.
-	DC->PSSetConstantBuffers(0, 1, m_lightData.GetAddressOf());
-	DC->PSSetConstantBuffers(1, 1, m_lightInfoBuffer.GetAddressOf());
+
 }
 
 void LightPass::SetUpLightBuffer()
@@ -90,6 +93,9 @@ void LightPass::SetUpLightBuffer()
 
 	desc.ByteWidth = sizeof sm::Vector4;
 	hr = DD->CreateBuffer(&desc, 0, m_lightInfoBuffer.GetAddressOf());
+
+	desc.ByteWidth = sizeof(LightSpecs) * MAX_LIGHTS;
+	hr = DD->CreateBuffer(&desc, 0, m_lightWorldData.GetAddressOf());
 }
 
 void LightPass::Prepass()
@@ -113,11 +119,18 @@ void LightPass::Prepass()
 
 void LightPass::Pass(Scene* currentScene)
 {
-	const size_t& l = currentScene->GetRegistry().GetSize<Light>();
-	if (m_nrOfRegLights != l && l > 0)
-	{
-		this->GatherLights(&currentScene->GetRegistry());
-	}
+	m_currentScene = currentScene;
+	//const size_t& l = currentScene->GetRegistry().GetSize<Light>();
+	//if (m_nrOfRegLights != l && l > 0 || m_forceUpdate)
+	//{
+	//	
+	//	m_forceUpdate = false;
+	//}
+
+	// Set buffers to pipeline.
+	DC->PSSetConstantBuffers(0, 1, m_lightData.GetAddressOf());
+	DC->PSSetConstantBuffers(1, 1, m_lightInfoBuffer.GetAddressOf());
+	DC->PSSetConstantBuffers(2, 1, m_lightWorldData.GetAddressOf());
 
 	D3D11Core::Get().Context()->DrawIndexed(6, 0, 0);
 }
@@ -141,6 +154,15 @@ void LightPass::UpdateLightBuffer()
 	}
 	std::memcpy(sub2.pData, &m_lightInfo, sizeof(sm::Vector4));
 	D3D11Core::Get().Context()->Unmap(m_lightInfoBuffer.Get(), 0);
+
+	D3D11_MAPPED_SUBRESOURCE sub3;
+	hr = D3D11Core::Get().Context()->Map(m_lightWorldData.Get(), 0, D3D11_MAP_WRITE_DISCARD, NULL, &sub3);
+	if (FAILED(hr))
+	{
+		DEBUG_ERROR("Failed to update light specs buffer\n");
+	}
+	std::memcpy(sub3.pData, &m_lightWorldSpecs[0], sizeof(LightSpecs) * m_lightWorldSpecs.size());
+	D3D11Core::Get().Context()->Unmap(m_lightWorldData.Get(), 0);
 }
 
 void LightPass::Postpass()
@@ -154,4 +176,9 @@ void LightPass::Create()
 	m_lightPixel.Create("LightPixelShader");
 	SetUpScreenTriangles();
 	this->SetUpLightBuffer();
+}
+
+void LightPass::ForceLightUpdate()
+{
+	this->GatherLights(&m_currentScene->GetRegistry());
 }

@@ -3,6 +3,13 @@
 #include "Shader.h"
 #include "BasicPass.h"
 
+/*
+
+	TODO:
+	Put update lights in separate function and call it more optimally.
+
+*/
+
 class LightPass : public IRenderpass
 {
 private:
@@ -34,9 +41,20 @@ private:
 		Lightning values
 
 	*/
+
+	// holds light specfic data, ambient, diffuse, specular...
 	DXPointer<ID3D11Buffer> m_lightData;
 	DXPointer<ID3D11Buffer> m_lightInfoBuffer;
 	std::vector<Light> m_lightDataVector;
+
+	struct LightSpecs
+	{
+		sm::Vector4 position;
+	};
+	std::vector<LightSpecs> m_lightWorldSpecs;
+	// Holds the position data, and other.
+	DXPointer<ID3D11Buffer> m_lightWorldData;
+
 	UINT m_nrOfRegLights = 0;
 	sm::Vector4 m_lightInfo = {};
 
@@ -45,6 +63,14 @@ private:
 
 	// Gather all the lights data.
 	void GatherLights(recs::recs_registry* reg);
+
+	/*
+	
+		Edit values
+	
+	*/
+	bool m_forceUpdate = false;
+	Scene* m_currentScene = nullptr;
 
 public:
 
@@ -60,6 +86,8 @@ public:
 
 	void Postpass() override;
 
+	// Force an update of all lights.
+	void ForceLightUpdate();
 
 	// Inherited via IRenderpass
 	void Create() override;

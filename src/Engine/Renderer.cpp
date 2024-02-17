@@ -1,5 +1,6 @@
 #include "Header.h"
 #include "Renderer.h"
+#include "EngineGUI.h"
 
 Renderer::Renderer()
 	:m_basicPass(&m_pipelineManager), m_lightPass(&m_pipelineManager)
@@ -19,6 +20,7 @@ void Renderer::Initialize()
 	m_cubeMapPass.Create();
 
 	m_lightPass.m_basicPassRef = &m_basicPass;
+	EngineGUI::Get().m_lightPassRef = &m_lightPass;
 
 	m_renderPasses.push_back(&m_basicPass);
 	m_renderPasses.push_back(&m_cubeMapPass);

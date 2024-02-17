@@ -15,16 +15,21 @@ cbuffer lightData : register(b0)
     float type;
 }
 
+cbuffer lightInfo : register(b1)
+{
+    float4 lightInfo;
+}
+
+cbuffer lightWorld : register(b2)
+{
+    float4 c_lightPosition;
+}
+
 cbuffer cameraBuffer : register(b3)
 {
     float4x4 c_view;
     float4x4 c_proj;
     float4 c_camPos;
-}
-
-cbuffer lightInfo : register(b1)
-{
-    float4 lightInfo;
 }
 
 struct PxIn
@@ -50,19 +55,19 @@ float4 main(PxIn input) : SV_TARGET
     float4 diffuse_result = float4(0, 0, 0, 0);
     float4 specular_result = float4(0, 0, 0, 0);
     
-    //float3 lightDirection = normalize(float3(0.0f, 1000.0f, 0.0f) - worldPos.xyz);
-    float3 lightDirection = float3(0.1f, 0.0f, 0.1f);
+
     /*
         Loop through each light.
     */
     for (int i = 0; i < lightInfo.x; i++)
     {
-        ambient_result = ambient[i] * tex;
-        diffuse_result = max(dot(lightDirection, normalize(normal.xyz)), 0.0f) * tex;
+        float3 lightDirection = normalize(c_lightPosition.xyz - worldPos.xyz);
+        ambient_result += ambient[i] * tex;
+        diffuse_result += max(dot(lightDirection, normalize(normal.xyz)), 0.0f) * tex;
         
         float3 viewDirection = normalize(c_camPos.xyz - worldPos.xyz);
         float3 reflection = reflect(lightDirection, normal.xyz);
-        specular_result = pow(max(dot(viewDirection, reflection), 0.0f), 1024);
+        specular_result += pow(max(dot(viewDirection, reflection), 0.0f), 32);
     }
     
     ambient_result /= lightInfo.x;
