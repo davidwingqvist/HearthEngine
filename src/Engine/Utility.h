@@ -27,4 +27,8 @@ namespace utility
 	// Calculate the angle between two vectors and return the angle in degrees.
 	float CalcDegAngle(const sm::Vector2& a, const sm::Vector2& b);
 	float CalcDegAngle(const sm::Vector3& a, const sm::Vector3& b);
+
+	// Calculate the reflect vector of (d) vector and (n) normal vector.
+	sm::Vector3 Reflect(const sm::Vector3& d, const sm::Vector3& n);
+	sm::Vector2 Reflect(const sm::Vector2& d, const sm::Vector2& n);
 }

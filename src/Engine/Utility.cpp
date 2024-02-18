@@ -34,3 +34,13 @@ float utility::CalcDegAngle(const sm::Vector3& a, const sm::Vector3& b)
     float deg = std::acos(a.Dot(b) / (a.Length() * b.Length()));
     return utility::ConvertToDegrees(deg);
 }
+
+sm::Vector2 utility::Reflect(const sm::Vector2& d, const sm::Vector2& n)
+{
+    return d - (((2 * d.Dot(n)) / n.Length()) * n);
+}
+
+sm::Vector3 utility::Reflect(const sm::Vector3& d, const sm::Vector3& n)
+{
+    return d - (((2*d.Dot(n)) / n.Length()) * n);
+}

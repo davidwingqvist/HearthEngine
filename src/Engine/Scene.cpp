@@ -31,6 +31,12 @@ Scene::Scene()
 	this->SetupComponents();
 	this->RegisterComponentsToLua();
 	m_camera.Activate();
+
+	sm::Vector3 d = { 5.0f, -10.0f, 0.0f };
+	sm::Vector3 n = { 0.0f, 1.0f, 0.0f };
+
+	sm::Vector3 r = utility::Reflect(d, n);
+
 }
 
 Scene::~Scene()
