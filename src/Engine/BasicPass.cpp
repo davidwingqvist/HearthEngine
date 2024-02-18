@@ -177,8 +177,8 @@ void BasicPass::SetLightPassValues()
 	D3D11Core::Get().Context()->PSSetShaderResources(0, 4, m_views);
 }
 
-BasicPass::BasicPass(PipelineManager* pipe)
-	:IRenderpass(pipe)
+BasicPass::BasicPass(PipelineManager* pipe, Renderer* render)
+	:IRenderpass(pipe, render)
 {
 }
 

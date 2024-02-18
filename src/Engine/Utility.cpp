@@ -20,13 +20,16 @@ sm::Vector2 utility::WorldSpaceToScreenSpace(const sm::Vector3& worldPos, Camera
 
 sm::Vector3 utility::ScreenRayToWorld(const sm::Vector2& screenPos, Camera* cam)
 {
+    // Conversion to NDC space
     float clipX = (screenPos.x / D3D11Core::Get().GetWindow()->GetWidth()) * 2 - 1;
     float clipY = 1 - (screenPos.y / D3D11Core::Get().GetWindow()->GetHeight()) * 2;
 
+    // Inverse step towards World Space
     sm::Vector3 ray_position = { clipX, clipY, 0.0f };
     ray_position = sm::Vector3::Transform(ray_position, cam->GetData().projectionMatrix.Invert());
     ray_position = sm::Vector3::Transform(ray_position, cam->GetData().viewMatrix.Invert());
 
+    // Make into a ray.
     sm::Vector3 ray_dir = ray_position - sm::Vector3(cam->GetData().position.x, cam->GetData().position.y, cam->GetData().position.z);
     ray_dir.Normalize();
 

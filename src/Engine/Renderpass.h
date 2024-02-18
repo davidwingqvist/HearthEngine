@@ -2,6 +2,8 @@
 #include "Scene.h"
 #include "PipelineManager.h"
 
+class Renderer;
+
 class IRenderpass
 {
 private:
@@ -11,10 +13,11 @@ private:
 protected:
 
 	PipelineManager* m_pipeline = nullptr;
+	Renderer* m_renderer = nullptr;
 
 public:
 	IRenderpass() = default;
-	IRenderpass(PipelineManager* pipe);
+	IRenderpass(PipelineManager* pipe, Renderer* render);
 	virtual ~IRenderpass() = 0 {};
 
 	void SetActive(const bool& tog);

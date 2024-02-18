@@ -37,7 +37,7 @@ public:
 	void SetLightPassValues();
 
 
-	BasicPass(PipelineManager* pipe);
+	BasicPass(PipelineManager* pipe, Renderer* render);
 	virtual ~BasicPass() override;
 
 	virtual void Prepass() override;

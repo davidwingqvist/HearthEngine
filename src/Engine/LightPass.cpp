@@ -2,6 +2,7 @@
 #include "LightPass.h"
 #include "D3D11Context.h"
 #include "Debugger.h"
+#include "Renderer.h"
 
 constexpr UINT MAX_LIGHTS = 50;
 
@@ -40,8 +41,8 @@ bool LightPass::SetUpScreenTriangles()
 	return true;
 }
 
-LightPass::LightPass(PipelineManager* pipe)
-	:IRenderpass(pipe)
+LightPass::LightPass(PipelineManager* pipe, Renderer* render)
+	:IRenderpass(pipe, render)
 {
 	m_basicPassRef = nullptr;
 }
@@ -176,6 +177,7 @@ void LightPass::Create()
 	m_lightPixel.Create("LightPixelShader");
 	SetUpScreenTriangles();
 	this->SetUpLightBuffer();
+	m_basicPassRef = &m_renderer->m_basicPass;
 }
 
 void LightPass::ForceLightUpdate()

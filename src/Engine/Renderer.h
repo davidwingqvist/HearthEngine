@@ -7,7 +7,7 @@
 
 class Renderer
 {
-private:
+protected:
 
 	BasicPass m_basicPass; // G-Pass before Light
 	LightPass m_lightPass; // Light pass, based on basic pass.
@@ -28,4 +28,8 @@ public:
 	void Draw(Scene* currentScene);
 
 	PipelineManager& GetPipelineManager();
+
+	friend class BasicPass;
+	friend class LightPass;
+	friend class CubeMapPass;
 };

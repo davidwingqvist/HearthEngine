@@ -72,11 +72,13 @@ private:
 	bool m_forceUpdate = false;
 	Scene* m_currentScene = nullptr;
 
+
+	BasicPass* m_basicPassRef = nullptr;
+
 public:
 
-	BasicPass* m_basicPassRef;
 
-	LightPass(PipelineManager* pipe);
+	LightPass(PipelineManager* pipe, Renderer* render);
 	~LightPass();
 
 	// Inherited via IRenderpass
