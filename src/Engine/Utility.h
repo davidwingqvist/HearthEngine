@@ -21,6 +21,11 @@ namespace utility
 	*/
 	sm::Vector2 WorldSpaceToScreenSpace(const sm::Vector3& worldPos, Camera* cam);
 
+	/*
+		Convert a screen space position as ray to world position.
+	*/
+	sm::Vector3 ScreenRayToWorld(const sm::Vector2& screenPos, Camera* cam);
+
 	// Convert radiant to degrees.
 	float ConvertToDegrees(const float& radiant);
 

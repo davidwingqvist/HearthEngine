@@ -7,6 +7,7 @@
 #include "Time.h"
 #include "Texture.h"
 #include "Utility.h"
+#include "InputManager.h"
 
 void UpdatePublicBuffer(ID3D11Buffer** buffer, const sm::Matrix& matrix_data)
 {
@@ -53,6 +54,13 @@ void Scene::Update()
 		}
 
 		});
+
+	//if (InputManager::Get().CheckMouseKey(MouseKey::LEFT, key_state::PRESSED))
+	//{
+	//	auto m = InputManager::Get().GetMouse();
+	//	auto v = utility::ScreenRayToWorld({ (float)m->GetState().x, (float)m->GetState().y }, &m_camera);
+	//	DEBUG_INFO(std::to_string(v.x) + " " + std::to_string(v.y) + " " + std::to_string(v.z));
+	//}
 }
 
 bool Scene::CreatePublicBuffer()

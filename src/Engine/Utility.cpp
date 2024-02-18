@@ -12,10 +12,25 @@ sm::Vector2 utility::WorldSpaceToScreenSpace(const sm::Vector3& worldPos, Camera
     pos.y /= pos.y;
 
     // Conversion from NDC space [-1, 1] to Window space
-    float new_x = (((pos.x + 1) * (D3D11Core::Get().GetWindow()->GetWidth())) / (2));
-    float new_y = D3D11Core::Get().GetWindow()->GetHeight() - (((pos.y + 1) * (D3D11Core::Get().GetWindow()->GetHeight())) / (2));
+    const float new_x = (((pos.x + 1) * (D3D11Core::Get().GetWindow()->GetWidth())) / (2));
+    const float new_y = D3D11Core::Get().GetWindow()->GetHeight() - (((pos.y + 1) * (D3D11Core::Get().GetWindow()->GetHeight())) / (2));
 
     return { new_x, new_y };
+}
+
+sm::Vector3 utility::ScreenRayToWorld(const sm::Vector2& screenPos, Camera* cam)
+{
+    float clipX = (screenPos.x / D3D11Core::Get().GetWindow()->GetWidth()) * 2 - 1;
+    float clipY = 1 - (screenPos.y / D3D11Core::Get().GetWindow()->GetHeight()) * 2;
+
+    sm::Vector3 ray_position = { clipX, clipY, 0.0f };
+    ray_position = sm::Vector3::Transform(ray_position, cam->GetData().projectionMatrix.Invert());
+    ray_position = sm::Vector3::Transform(ray_position, cam->GetData().viewMatrix.Invert());
+
+    sm::Vector3 ray_dir = ray_position - sm::Vector3(cam->GetData().position.x, cam->GetData().position.y, cam->GetData().position.z);
+    ray_dir.Normalize();
+
+    return ray_dir;
 }
 
 float utility::ConvertToDegrees(const float& radiant)
