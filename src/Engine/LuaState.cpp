@@ -5,6 +5,7 @@
 #include <shellapi.h>
 #include <filesystem>
 #include "LuaToCpp.h"
+#include "LuaGameState.h"
 
 // Open up a fresh lua state.
 LuaHandler::LuaHandler()
@@ -14,6 +15,7 @@ LuaHandler::LuaHandler()
 	m_currentRegistry = nullptr;
 
 	this->LoadInFunctions();
+	LuaGameState::Get();
 }
 
 LuaHandler::~LuaHandler()
@@ -30,6 +32,7 @@ void LuaHandler::RegisterFunction(lua_CFunction func, const std::string& funcNam
 void LuaHandler::LoadInFunctions()
 {
 	this->LoadInDebugFunctions();
+	this->LoadInEngineScripts();
 }
 
 void LuaHandler::LoadInDebugFunctions()
@@ -37,6 +40,17 @@ void LuaHandler::LoadInDebugFunctions()
 	this->RegisterFunction(Debug_LogInfo, "DEBUG_INFO");
 	this->RegisterFunction(Debug_LogError, "DEBUG_ERROR");
 	this->RegisterFunction(Debug_LogSuccess, "DEBUG_SUCCESS");
+}
+
+void LuaHandler::LoadInEngineScripts()
+{
+	const std::string path = SCRIPTPATH + "EngineScripts" + "/";
+	std::string currFile = "ObjectsHandlerScript_Engine.lua";
+
+	if (luaL_dofile(m_luaState, (path + currFile).c_str()) != LUA_OK)
+	{
+		DEBUG_ERROR("Couldnt load: " + path + currFile);
+	}
 }
 
 lua_State* LuaHandler::State()
@@ -125,7 +139,7 @@ void LuaHandler::CreateScriptFile(const char* script_name, const bool& addExtens
 
 	std::ofstream outfile(SCRIPTPATH + script_name + ext);
 
-	outfile << "local " << std::string(script_name) + "={}\n\n\n--This function runs when object is created.\nlocal function OnAwake()\n\n\n\nend\n\n\n--This function runs each Update cycle\nlocal function OnUpdate()\n\n\n\nend\n";
+	outfile << "local " << std::string(script_name) + "={}\n\n\n--This function runs when object is created.\nlocal function OnAwake()\n\n\n\nend\n\n\n--This function runs each Update cycle\nlocal function OnUpdate()\n\n\n\nend\n\nreturn " + std::string(script_name);
 
 	outfile.close();
 }

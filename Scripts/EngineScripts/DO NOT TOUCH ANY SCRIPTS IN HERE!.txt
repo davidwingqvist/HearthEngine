@@ -1,0 +1,2 @@
+Do not touch or modify any of the scripts in this folder.
+Doing so could cause the scripts to stop working or produce faulty results.

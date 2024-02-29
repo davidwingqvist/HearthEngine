@@ -23,6 +23,9 @@ private:
 	// Debug functions for lua.
 	void LoadInDebugFunctions();
 
+
+	void LoadInEngineScripts();
+
 public:
 
 	recs::recs_registry* m_currentRegistry;

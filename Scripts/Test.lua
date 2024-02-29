@@ -15,4 +15,4 @@ function OnUpdate()
 
 end
 
-return 0
+return Test
