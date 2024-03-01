@@ -123,7 +123,8 @@ struct Light
 
 struct Script
 {
-	std::vector<std::string> scripts;
+	int amount = 0;
+	size_t script_id[5] = {};
 };
 
 struct ModelID

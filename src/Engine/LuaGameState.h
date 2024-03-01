@@ -8,6 +8,8 @@ private:
 	LuaGameState();
 	~LuaGameState();
 
+	std::hash<std::string> m_hasher;
+
 public:
 
 

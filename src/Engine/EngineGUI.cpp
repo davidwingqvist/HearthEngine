@@ -619,6 +619,7 @@ void EngineGUI::RenderProperties()
 
 		if (currScripts)
 		{
+			/*
 			ImGui::BeginChild(6, ImVec2(ImGui::GetContentRegionAvail().x, 0), ImGuiChildFlags_Border | ImGuiChildFlags_AlwaysUseWindowPadding | ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_AutoResizeX);
 
 			ImGui::TextColored(ImVec4(255, 0, 255, 255), "Scripts");
@@ -655,6 +656,7 @@ void EngineGUI::RenderProperties()
 			}
 
 			ImGui::EndChild();
+			*/
 		}
 
 		if (m_currentEntity != recs::NULL_ENTITY)
