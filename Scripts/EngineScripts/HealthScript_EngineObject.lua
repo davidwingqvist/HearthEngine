@@ -1,8 +1,8 @@
-local HealthScript_Objects={}
+HealthScript_Objects={}
 
 function UpdateHealthScriptObjects_Engine()
-
-		for k, v in pairs(HealthScript) do
+		
+		for k, v in pairs(HealthScript_Objects) do
 			v:OnUpdate()
 		end
 

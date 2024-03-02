@@ -2,7 +2,7 @@ local HealthScript={}
 
 
 --This function runs when object is created.
-local function OnAwake()
+function HealthScript:OnAwake()
 
 
 
@@ -10,9 +10,9 @@ end
 
 
 --This function runs each Update cycle
-local function OnUpdate()
+function HealthScript:OnUpdate()
 
-
+	DEBUG_INFO("Hello!")
 
 end
 

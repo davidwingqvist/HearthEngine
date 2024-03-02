@@ -112,6 +112,22 @@ bool LuaHandler::LoadScript(const char* script_name)
 	return true;
 }
 
+bool LuaHandler::LoadEngineScript(const char* script_name)
+{
+	//No name on the file...
+	if (!script_name) return false;
+
+	std::string script = SCRIPTPATH_INTERNAL + script_name + ".lua";
+
+	if (luaL_dofile(Get().m_luaState, script.c_str()) != LUA_OK)
+	{
+		Debugger::Get().Print("Error loading script: " + std::string(script_name) + " = " + lua_tostring(Get().m_luaState, -1) + "\n", Debugger::COLOR_RED);
+		return false;
+	}
+
+	return true;
+}
+
 void LuaHandler::OpenScriptFile(const char* script_name, const bool& addExtension)
 {
 	std::string ext = "";
@@ -136,8 +152,8 @@ void LuaHandler::CreateScriptFile(const char* script_name, const bool& addExtens
 	std::ofstream outfile(SCRIPTPATH + script_name + ext);
 	std::ofstream outfileSystem(SCRIPTPATH_INTERNAL + script_name + "_EngineObject" + ext);
 
-	outfile << "local " << std::string(script_name) + "={}\n\n\n--This function runs when object is created.\nlocal function OnAwake()\n\n\n\nend\n\n\n--This function runs each Update cycle\nlocal function OnUpdate()\n\n\n\nend\n\nreturn " + std::string(script_name);
-	outfileSystem << "local " << std::string(script_name) + "_Objects={}\n\nfunction Update" + std::string(script_name) + "Objects_Engine()\n\n\t\tfor k, v in pairs(" + std::string(script_name) + ") do\n\t\t\tv:OnUpdate()\n\t\tend\n\nend";
+	outfile << "local " << std::string(script_name) + "={}\n\n\n--This function runs when object is created.\nfunction " + std::string(script_name) + ":OnAwake()\n\n\n\nend\n\n\n--This function runs each Update cycle\nfunction " + std::string(script_name) + ":OnUpdate()\n\n\n\nend\n\nreturn " + std::string(script_name);
+	outfileSystem << std::string(script_name) + "_Objects={}\n\nfunction Update" + std::string(script_name) + "Objects_Engine()\n\n\t\tfor k, v in pairs(" + std::string(script_name) + "_Objects) do\n\t\t\tv:OnUpdate()\n\t\tend\n\nend";
 
 	outfile.close();
 	outfileSystem.close();
