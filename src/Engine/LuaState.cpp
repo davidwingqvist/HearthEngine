@@ -109,10 +109,6 @@ bool LuaHandler::LoadScript(const char* script_name)
 		return false;
 	}
 
-
-
-	//Debugger::Get().Print("Successfully loaded script: " + std::string(script_name) + "\n", Debugger::COLOR_GREEN);
-
 	return true;
 }
 
@@ -214,4 +210,14 @@ bool LuaHandler::LookUpScript(const char* script_name, const bool& addExtenstion
 		}
 	}
 	return false;
+}
+
+std::string& LuaHandler::GetScriptNameFromId(const size_t& id)
+{
+	return Get().m_scriptIdToName[id];
+}
+
+size_t& LuaHandler::GetIdFromScriptName(const std::string& script_name)
+{
+	return Get().m_scriptNameToId[script_name];
 }

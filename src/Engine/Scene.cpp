@@ -8,6 +8,7 @@
 #include "Texture.h"
 #include "Utility.h"
 #include "InputManager.h"
+#include "LuaGameState.h"
 
 void UpdatePublicBuffer(ID3D11Buffer** buffer, const sm::Matrix& matrix_data)
 {
@@ -113,7 +114,8 @@ void Scene::SetupComponents()
 
 	m_registry.RegisterOnCreate<Script>([&](const recs::Entity& entity, Script& script) {
 
-
+			for(int i = 0; i < 5; i++)
+				LUA_GAME.CreateObjectFromScript(script.script_id[i]);
 
 		});
 

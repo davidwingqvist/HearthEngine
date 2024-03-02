@@ -71,5 +71,8 @@ public:
 
 	// Search for a saved script, return true if it exists
 	static bool LookUpScript(const char* script_name, const bool& addExtenstion = true);
+
+	static std::string& GetScriptNameFromId(const size_t& id);
+	static size_t& GetIdFromScriptName(const std::string& script_name);
 };
 

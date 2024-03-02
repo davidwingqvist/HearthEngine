@@ -121,10 +121,11 @@ struct Light
 	LIGHTTYPE type = LIGHTTYPE::DIRECTIONAL; // Type
 };
 
+constexpr int MAX_SCRIPTS = 8;
+constexpr int NULL_SCRIPT = 0;
 struct Script
 {
-	int amount = 0;
-	size_t script_id[5] = {};
+	size_t script_id[MAX_SCRIPTS] = {};
 };
 
 struct ModelID

@@ -10,11 +10,11 @@ private:
 
 public:
 
-
-
 	static auto& Get()
 	{
 		static LuaGameState instance;
 		return instance;
 	}
+
+	void CreateObjectFromScript(const size_t& scriptId);
 };

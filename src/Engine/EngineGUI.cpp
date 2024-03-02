@@ -619,7 +619,7 @@ void EngineGUI::RenderProperties()
 
 		if (currScripts)
 		{
-			/*
+			
 			ImGui::BeginChild(6, ImVec2(ImGui::GetContentRegionAvail().x, 0), ImGuiChildFlags_Border | ImGuiChildFlags_AlwaysUseWindowPadding | ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_AutoResizeX);
 
 			ImGui::TextColored(ImVec4(255, 0, 255, 255), "Scripts");
@@ -631,24 +631,32 @@ void EngineGUI::RenderProperties()
 			{
 				if (LUA.LookUpScript(m_createScriptPathProp))
 				{
-					currScripts->scripts.push_back(std::string(m_createScriptPathProp) + ".lua");
+					for (int i = 0; i < MAX_SCRIPTS; i++)
+					{
+						if (currScripts->script_id[i] == NULL_SCRIPT)
+						{
+							currScripts->script_id[i] = LUA.GetIdFromScriptName(m_createScriptPathProp);
+							break;
+						}
+					}
 				}
 				memset(m_createScriptPathProp, '\0', sizeof m_createScriptPathProp);
 			}
 
-			for (int i = 0; i < currScripts->scripts.size(); i++)
+			for (int i = 0; i < MAX_SCRIPTS; i++)
 			{
-				scriptId = "Open###Script" + std::to_string(i);
-				ImGui::Text(currScripts->scripts[i].c_str());
-				ImGui::SameLine();
-				if (ImGui::Button(scriptId.c_str()))
+				if (currScripts->script_id[i] != NULL_SCRIPT)
 				{
-					LUA.OpenScriptFile(currScripts->scripts[i].c_str());
+					ImGui::Text(LUA.GetScriptNameFromId(currScripts->script_id[i]).c_str());
+					ImGui::SameLine();
+					if (ImGui::Button(("Remove###CurrentScript" + std::to_string(i)).c_str()))
+					{
+						currScripts->script_id[i] = NULL_SCRIPT;
+					}
 				}
-				ImGui::SameLine();
-				scriptId = "Delete###Script" + std::to_string(i);
-				ImGui::Button(scriptId.c_str());
 			}
+
+
 			ImGui::SetCursorPosX((ImGui::GetWindowWidth() * 0.45f));
 			if (ImGui::Button("Delete###scriptdelete"))
 			{
@@ -656,7 +664,7 @@ void EngineGUI::RenderProperties()
 			}
 
 			ImGui::EndChild();
-			*/
+			
 		}
 
 		if (m_currentEntity != recs::NULL_ENTITY)
@@ -720,10 +728,7 @@ void EngineGUI::RenderNewComponentTab()
 
 		auto& reg = m_sceneManagerRef->GetCurrentScene()->GetRegistry();
 
-		if (ImGui::Button("Transform", { ImGui::GetWindowSize().x, 0 }))
-		{
-			reg.AddComponent<Transform>(m_currentEntity);
-		}
+
 		if (ImGui::Button("Rigidbody", { ImGui::GetWindowSize().x, 0 }))
 		{
 			reg.AddComponent<RigidBody>(m_currentEntity);
