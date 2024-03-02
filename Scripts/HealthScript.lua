@@ -12,7 +12,7 @@ end
 --This function runs each Update cycle
 local function OnUpdate()
 
-	DEBUG_INFO("Hello from HealthScript!")
+
 
 end
 

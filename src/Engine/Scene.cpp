@@ -86,9 +86,9 @@ void Scene::PreDraw()
 
 void Scene::SetupComponents()
 {
-	m_registry.RegisterComponent<Script>();
 	m_registry.RegisterComponent<Model>();
 
+	m_registry.RegisterDataToState(Script());
 	m_registry.RegisterDataToState(GameObject());
 	m_registry.RegisterDataToState(Transform());
 	m_registry.RegisterDataToState(Light());

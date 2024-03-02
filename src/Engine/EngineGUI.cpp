@@ -649,9 +649,14 @@ void EngineGUI::RenderProperties()
 				{
 					ImGui::Text(LUA.GetScriptNameFromId(currScripts->script_id[i]).c_str());
 					ImGui::SameLine();
-					if (ImGui::Button(("Remove###CurrentScript" + std::to_string(i)).c_str()))
+					if (ImGui::Button(("Remove###RemoveCurrentScript" + std::to_string(i)).c_str()))
 					{
 						currScripts->script_id[i] = NULL_SCRIPT;
+					}
+					ImGui::SameLine();
+					if (ImGui::Button(("Open###OpenCurrentScript" + std::to_string(i)).c_str()))
+					{
+						LUA.OpenScriptFile(LUA.GetScriptNameFromId(currScripts->script_id[i]).c_str(), true);
 					}
 				}
 			}
