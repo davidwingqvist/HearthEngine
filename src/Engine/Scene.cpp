@@ -46,6 +46,8 @@ Scene::~Scene()
 
 void Scene::Update()
 {
+	m_registry.Update();
+
 	m_registry.Group<RigidBody, Transform>().ForEach([&](const recs::Entity& e, RigidBody& rb, Transform& transform) {
 
 		if (rb.hasGravity)
@@ -107,6 +109,18 @@ void Scene::SetupComponents()
 					model->model_texture = ResourceManager::Get().GetResource<Texture>(id.texture_id).get();
 				}
 			}
+		});
+
+	m_registry.RegisterOnCreate<Script>([&](const recs::Entity& entity, Script& script) {
+
+
+
+		});
+
+	m_registry.RegisterOnUpdate<Script>([&](const recs::Entity& entity, Script& script) {
+
+			
+
 		});
 
 	//pushTransform(LUA.State(), transf);

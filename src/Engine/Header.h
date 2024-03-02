@@ -48,4 +48,5 @@ namespace sm = DirectX::SimpleMath;
 const std::string UIPATH = "Assets/Graphics2D/";
 const std::string MODELPATH = "Assets/Models/";
 const std::string SCRIPTPATH = "Scripts/";
+const std::string SCRIPTPATH_INTERNAL = "Scripts/EngineScripts/";
 const std::string TEXTUREPATH = "Assets/Textures/";

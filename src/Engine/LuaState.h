@@ -11,6 +11,9 @@ private:
 	~LuaHandler();
 
 	std::vector<std::string> m_scriptNames;
+	std::unordered_map<std::string, size_t> m_scriptNameToId;
+	std::unordered_map<size_t, std::string> m_scriptIdToName;
+	std::hash<std::string> m_hasher;
 
 private:
 

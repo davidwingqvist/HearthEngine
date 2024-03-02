@@ -138,10 +138,13 @@ void LuaHandler::CreateScriptFile(const char* script_name, const bool& addExtens
 		ext = ".lua";
 
 	std::ofstream outfile(SCRIPTPATH + script_name + ext);
+	std::ofstream outfileSystem(SCRIPTPATH_INTERNAL + script_name + "_EngineObject" + ext);
 
 	outfile << "local " << std::string(script_name) + "={}\n\n\n--This function runs when object is created.\nlocal function OnAwake()\n\n\n\nend\n\n\n--This function runs each Update cycle\nlocal function OnUpdate()\n\n\n\nend\n\nreturn " + std::string(script_name);
+	outfileSystem << "local " << std::string(script_name) + "_Objects={}\n\nfunction Update" + std::string(script_name) + "Objects_Engine()\n\n\t\tfor k, v in pairs(" + std::string(script_name) + ") do\n\t\t\tv:OnUpdate()\n\t\tend\n\nend";
 
 	outfile.close();
+	outfileSystem.close();
 }
 
 void LuaHandler::DeleteScriptFile(const char* script_name, const bool& addExtension)
@@ -173,12 +176,21 @@ void LuaHandler::DeleteScriptFile(const char* script_name, const bool& addExtens
 void LuaHandler::ScanForScripts()
 {
 	Get().m_scriptNames.clear();
+	Get().m_scriptIdToName.clear();
+	Get().m_scriptNameToId.clear();
 	std::filesystem::path currPath = std::filesystem::current_path();
 	std::string strPath = currPath.generic_string() + "/" + SCRIPTPATH;
 
 	for (const auto& entry : std::filesystem::directory_iterator(strPath))
 	{
 		Get().m_scriptNames.push_back(entry.path().filename().string());
+
+		std::string scriptObjectName = entry.path().filename().string();
+		scriptObjectName = scriptObjectName.substr(0, scriptObjectName.size() - 4);
+		size_t hash = Get().m_hasher(scriptObjectName);
+
+		Get().m_scriptNameToId[scriptObjectName] = hash;
+		Get().m_scriptIdToName[hash] = scriptObjectName;
 	}
 }
 
