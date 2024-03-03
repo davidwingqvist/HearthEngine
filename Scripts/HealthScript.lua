@@ -12,7 +12,7 @@ end
 --This function runs each Update cycle
 function HealthScript:OnUpdate()
 
-	DEBUG_INFO("Hello!")
+	DEBUG_INFO("TESTING!")
 
 end
 

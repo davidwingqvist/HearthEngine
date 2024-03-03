@@ -10,9 +10,9 @@ LuaGameState::~LuaGameState()
 {
 }
 
-void LuaGameState::CreateObjectFromScript(const size_t& scriptId)
+void LuaGameState::CreateObjectFromScript(const size_t& scriptId, const size_t& objectId)
 {
-	if (scriptId == 0)
+	if (scriptId == 0 || objectId == recs::NULL_ENTITY)
 		return;
 
 	const std::string& name = LUA.GetScriptNameFromId(scriptId);
@@ -21,18 +21,14 @@ void LuaGameState::CreateObjectFromScript(const size_t& scriptId)
 
 	lua_getglobal(LUA.State(), (name + "_Objects").c_str());
 
-	/*
-	
-		TODO: ADD IDENTIFICATION FOR PUSH NUMBER!
-	
-	*/
-
-	lua_pushnumber(LUA.State(), 0);
+	lua_pushnumber(LUA.State(), objectId);
 	LUA.LoadScript(name.c_str());
 
 
 	lua_settable(LUA.State(), 1);
 
-	lua_getglobal(LUA.State(), "UpdateHealthScriptObjects_Engine");
-	lua_pcall(LUA.State(), 0, 0, 0);
+
+	/*lua_getglobal(LUA.State(), "UpdateSingleHealthScriptObject_Engine");
+	lua_pushnumber(LUA.State(), objectId);
+	lua_pcall(LUA.State(), 1, 0, 0);*/
 }

@@ -16,5 +16,5 @@ public:
 		return instance;
 	}
 
-	void CreateObjectFromScript(const size_t& scriptId);
+	void CreateObjectFromScript(const size_t& scriptId, const size_t& objectId);
 };

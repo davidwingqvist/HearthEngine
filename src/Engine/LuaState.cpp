@@ -153,7 +153,7 @@ void LuaHandler::CreateScriptFile(const char* script_name, const bool& addExtens
 	std::ofstream outfileSystem(SCRIPTPATH_INTERNAL + script_name + "_EngineObject" + ext);
 
 	outfile << "local " << std::string(script_name) + "={}\n\n\n--This function runs when object is created.\nfunction " + std::string(script_name) + ":OnAwake()\n\n\n\nend\n\n\n--This function runs each Update cycle\nfunction " + std::string(script_name) + ":OnUpdate()\n\n\n\nend\n\nreturn " + std::string(script_name);
-	outfileSystem << std::string(script_name) + "_Objects={}\n\nfunction Update" + std::string(script_name) + "Objects_Engine()\n\n\t\tfor k, v in pairs(" + std::string(script_name) + "_Objects) do\n\t\t\tv:OnUpdate()\n\t\tend\n\nend";
+	outfileSystem << std::string(script_name) + "_Objects={}\n\nfunction Update" + std::string(script_name) + "Objects_Engine()\n\n\t\tfor k, v in pairs(" + std::string(script_name) + "_Objects) do\n\t\t\tv:OnUpdate()\n\t\tend\n\nend\n\nfunction UpdateSingle" + std::string(script_name) + "Object_Engine(key)\n\t" + std::string(script_name) + "_Objects[key]:OnUpdate()\nend";
 
 	outfile.close();
 	outfileSystem.close();
