@@ -19,13 +19,14 @@ void LuaGameState::CreateObjectFromScript(const size_t& scriptId, const size_t& 
 	const std::string& name_internal = name + "_EngineObject";
 	LUA.LoadEngineScript(name_internal.c_str());
 
-	lua_getglobal(LUA.State(), (name + "_Objects").c_str());
+	LUA.ClearStack();
 
+	lua_getglobal(LUA.State(), (name + "_Objects").c_str());
 	lua_pushnumber(LUA.State(), objectId);
 	LUA.LoadScript(name.c_str());
-
-
 	lua_settable(LUA.State(), 1);
+
+	LUA.ClearStack();
 }
 
 void LuaGameState::UpdateObjectFromScript(const size_t& scriptId, const size_t& objectId)
