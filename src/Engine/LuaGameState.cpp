@@ -28,7 +28,25 @@ void LuaGameState::CreateObjectFromScript(const size_t& scriptId, const size_t& 
 	lua_settable(LUA.State(), 1);
 
 
-	/*lua_getglobal(LUA.State(), "UpdateSingleHealthScriptObject_Engine");
+	this->UpdateObjectFromScript(scriptId, objectId);
+}
+
+void LuaGameState::UpdateObjectFromScript(const size_t& scriptId, const size_t& objectId)
+{
+	const std::string scriptName = LUA.GetScriptNameFromId(scriptId);
+	std::string functionCall = "UpdateSingle" + scriptName + "Object_Engine";
+
+	lua_getglobal(LUA.State(), functionCall.c_str());
 	lua_pushnumber(LUA.State(), objectId);
-	lua_pcall(LUA.State(), 1, 0, 0);*/
+	lua_pcall(LUA.State(), 1, 0, 0);
+}
+
+void LuaGameState::AwakeObjectFromScript(const size_t& scriptId, const size_t& objectId)
+{
+	const std::string scriptName = LUA.GetScriptNameFromId(scriptId);
+	std::string functionCall = "AwakeSingle" + scriptName + "Object_Engine";
+
+	lua_getglobal(LUA.State(), functionCall.c_str());
+	lua_pushnumber(LUA.State(), objectId);
+	lua_pcall(LUA.State(), 1, 0, 0);
 }
