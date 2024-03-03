@@ -26,13 +26,13 @@ void LuaGameState::CreateObjectFromScript(const size_t& scriptId, const size_t& 
 
 
 	lua_settable(LUA.State(), 1);
-
-
-	this->UpdateObjectFromScript(scriptId, objectId);
 }
 
 void LuaGameState::UpdateObjectFromScript(const size_t& scriptId, const size_t& objectId)
 {
+	if (scriptId == 0 || objectId == recs::NULL_ENTITY)
+		return;
+
 	const std::string scriptName = LUA.GetScriptNameFromId(scriptId);
 	std::string functionCall = "UpdateSingle" + scriptName + "Object_Engine";
 
@@ -43,6 +43,9 @@ void LuaGameState::UpdateObjectFromScript(const size_t& scriptId, const size_t& 
 
 void LuaGameState::AwakeObjectFromScript(const size_t& scriptId, const size_t& objectId)
 {
+	if (scriptId == 0 || objectId == recs::NULL_ENTITY)
+		return;
+
 	const std::string scriptName = LUA.GetScriptNameFromId(scriptId);
 	std::string functionCall = "AwakeSingle" + scriptName + "Object_Engine";
 

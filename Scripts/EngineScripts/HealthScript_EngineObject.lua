@@ -11,3 +11,7 @@ end
 function UpdateSingleHealthScriptObject_Engine(key)
 	HealthScript_Objects[key]:OnUpdate()
 end
+
+function AwakeSingleHealthScriptObject_Engine(key)
+	HealthScript_Objects[key]:OnAwake()
+end

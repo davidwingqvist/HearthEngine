@@ -114,14 +114,20 @@ void Scene::SetupComponents()
 
 	m_registry.RegisterOnCreate<Script>([&](const recs::Entity& entity, Script& script) {
 
-			for(int i = 0; i < 5; i++)
-				LUA_GAME.CreateObjectFromScript(script.script_id[i], entity);
+		for (int i = 0; i < 5; i++)
+		{
+			LUA_GAME.CreateObjectFromScript(script.script_id[i], entity);
+			LUA_GAME.AwakeObjectFromScript(script.script_id[i], entity);
+		}
 
 		});
 
 	m_registry.RegisterOnUpdate<Script>([&](const recs::Entity& entity, Script& script) {
-
 			
+		for (int i = 0; i < 5; i++)
+		{
+			LUA_GAME.UpdateObjectFromScript(script.script_id[i], entity);
+		}
 
 		});
 
