@@ -79,7 +79,7 @@ sm::Matrix GetMatrix(const Transform& transform);
 static int transform_get(lua_State* L);
 static int transform_set(lua_State* L);
 
-void pushTransform(lua_State* L, Transform* inst);
+void pushTransform(lua_State* L);
 
 /*
 	-----------------------------------

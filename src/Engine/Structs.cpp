@@ -1,11 +1,11 @@
 #include "Header.h"
 #include "Structs.h"
 #include "LuaState.h"
+#include "LuaGameState.h"
 
-void pushTransform(lua_State* L, Transform* inst)
+void pushTransform(lua_State* L)
 {
 	Transform** ud = (Transform**)lua_newuserdata(L, sizeof(*ud));
-	*ud = inst;
 
 	if (luaL_newmetatable(L, tname))
 	{
@@ -29,8 +29,13 @@ sm::Matrix GetMatrix(const Transform& transform)
 
 static int transform_get(lua_State* L)
 {
+	if (LUA_GAME.GetCurrentEntity() == recs::NULL_ENTITY)
+	{
+		return 0;
+	}
+
 	Transform* inst = *(Transform**)luaL_checkudata(L, 1, tname);
-	*inst = *LUA.m_currentRegistry->GetComponent<Transform>(0);
+	*inst = *LUA.m_currentRegistry->GetComponent<Transform>(LUA_GAME.GetCurrentEntity());
 
 	switch (luaL_checkoption(L, 2, NULL, tmap_set))
 	{
@@ -68,8 +73,13 @@ static int transform_get(lua_State* L)
 
 static int transform_set(lua_State* L)
 {
+	if (LUA_GAME.GetCurrentEntity() == recs::NULL_ENTITY)
+	{
+		return 0;
+	}
+
 	Transform* inst = *(Transform**)luaL_checkudata(L, 1, tname);
-	*inst = *LUA.m_currentRegistry->GetComponent<Transform>(0);
+	*inst = *LUA.m_currentRegistry->GetComponent<Transform>(LUA_GAME.GetCurrentEntity());
 
 	int option = luaL_checkoption(L, 2, NULL, tmap_set);
 	switch (option)

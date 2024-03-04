@@ -26,8 +26,7 @@ private:
 	// Debug functions for lua.
 	void LoadInDebugFunctions();
 
-
-	void LoadInEngineScripts();
+	void LoadInComponentAffectingFunctions();
 
 public:
 
@@ -43,10 +42,10 @@ public:
 	static lua_State* State();
 
 	// Dump everything from the stack onto the console window.
-	static void DumpStack();
+	void DumpStack();
 
 	// Clear the stack of everything, create a fresh clean stack.
-	static void ClearStack();
+	void ClearStack();
 
 	// Register a function from C to LUA.
 	static void RegisterFunction(const char* func_name, lua_CFunction func);

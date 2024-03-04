@@ -88,12 +88,12 @@ void Scene::SetupComponents()
 {
 	m_registry.RegisterComponent<Model>();
 
-	m_registry.RegisterDataToState(Script());
 	m_registry.RegisterDataToState(GameObject());
 	m_registry.RegisterDataToState(Transform());
 	m_registry.RegisterDataToState(Light());
 	m_registry.RegisterDataToState(RigidBody());
 	m_registry.RegisterDataToState(ModelID());
+	m_registry.RegisterDataToState(Script());
 
 	m_registry.RegisterOnCreate<ModelID>([&](const recs::Entity& entity, ModelID& id)
 		{
@@ -114,6 +114,7 @@ void Scene::SetupComponents()
 
 	m_registry.RegisterOnCreate<Script>([&](const recs::Entity& entity, Script& script) {
 
+		LUA_GAME.SetCurrentEntity(entity);
 		for (int i = 0; i < 5; i++)
 		{
 			LUA_GAME.CreateObjectFromScript(script.script_id[i], entity);
@@ -124,6 +125,7 @@ void Scene::SetupComponents()
 
 	m_registry.RegisterOnUpdate<Script>([&](const recs::Entity& entity, Script& script) {
 			
+		LUA_GAME.SetCurrentEntity(entity);
 		for (int i = 0; i < 5; i++)
 		{
 			LUA_GAME.UpdateObjectFromScript(script.script_id[i], entity);
@@ -131,8 +133,7 @@ void Scene::SetupComponents()
 
 		});
 
-	//pushTransform(LUA.State(), transf);
-	//lua_setglobal(LUA.State(), "Transform");
+	pushTransform(LUA.State());
 }
 
 void Scene::RegisterComponentsToLua()

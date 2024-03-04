@@ -10,6 +10,16 @@ LuaGameState::~LuaGameState()
 {
 }
 
+const recs::Entity& LuaGameState::GetCurrentEntity() const
+{
+	return m_currentEntity;
+}
+
+void LuaGameState::SetCurrentEntity(const recs::Entity& entity)
+{
+	m_currentEntity = entity;
+}
+
 void LuaGameState::CreateObjectFromScript(const size_t& scriptId, const size_t& objectId)
 {
 	if (scriptId == 0 || objectId == recs::NULL_ENTITY)
@@ -19,14 +29,14 @@ void LuaGameState::CreateObjectFromScript(const size_t& scriptId, const size_t& 
 	const std::string& name_internal = name + "_EngineObject";
 	LUA.LoadEngineScript(name_internal.c_str());
 
-	LUA.ClearStack();
+	LUA.DumpStack();
 
 	lua_getglobal(LUA.State(), (name + "_Objects").c_str());
 	lua_pushnumber(LUA.State(), objectId);
 	LUA.LoadScript(name.c_str());
 	lua_settable(LUA.State(), 1);
 
-	LUA.ClearStack();
+	LUA.DumpStack();
 }
 
 void LuaGameState::UpdateObjectFromScript(const size_t& scriptId, const size_t& objectId)

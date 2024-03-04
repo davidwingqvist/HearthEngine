@@ -32,7 +32,7 @@ void LuaHandler::RegisterFunction(lua_CFunction func, const std::string& funcNam
 void LuaHandler::LoadInFunctions()
 {
 	this->LoadInDebugFunctions();
-	this->LoadInEngineScripts();
+	this->LoadInComponentAffectingFunctions();
 }
 
 void LuaHandler::LoadInDebugFunctions()
@@ -42,15 +42,9 @@ void LuaHandler::LoadInDebugFunctions()
 	this->RegisterFunction(Debug_LogSuccess, "DEBUG_SUCCESS");
 }
 
-void LuaHandler::LoadInEngineScripts()
+void LuaHandler::LoadInComponentAffectingFunctions()
 {
-	const std::string path = SCRIPTPATH + "EngineScripts" + "/";
-	std::string currFile = "ObjectsHandlerScript_Engine.lua";
 
-	if (luaL_dofile(m_luaState, (path + currFile).c_str()) != LUA_OK)
-	{
-		DEBUG_ERROR("Couldnt load: " + path + currFile);
-	}
 }
 
 lua_State* LuaHandler::State()
@@ -62,18 +56,19 @@ void LuaHandler::DumpStack()
 {
 	Debugger::Get().Print("------- STACK DUMP -------\n", Debugger::COLOR_PURPLE);
 	std::string line;
-	for (int i = lua_gettop(Get().m_luaState); i > 0; i--)
+	int i = lua_gettop(m_luaState);
+	for (i; i > 0; i--)
 	{
-		Debugger::Get().Print("Index " + std::to_string(i) + ": " + lua_typename(Get().m_luaState, lua_type(Get().m_luaState, i)), Debugger::COLOR_PURPLE);
+		Debugger::Get().Print("Index " + std::to_string(i) + ": " + lua_typename(m_luaState, lua_type(m_luaState, i)), Debugger::COLOR_PURPLE);
 
 		//Print out more info about the data in the stack
-		switch (lua_type(Get().m_luaState, i))
+		switch (lua_type(m_luaState, i))
 		{
 		case LUA_TNUMBER:
-			DEBUG_SAMELINE(" '" + std::to_string(lua_tonumber(Get().m_luaState, i)) + "'");
+			DEBUG_SAMELINE(" '" + std::to_string(lua_tonumber(m_luaState, i)) + "'");
 			break;
 		case LUA_TSTRING:
-			line = lua_tostring(Get().m_luaState, i);
+			line = lua_tostring(m_luaState, i);
 			DEBUG_SAMELINE(" '" + line + "'");
 			break;
 		default:
@@ -85,9 +80,9 @@ void LuaHandler::DumpStack()
 
 void LuaHandler::ClearStack()
 {
-	while (lua_gettop(Get().m_luaState) > 0)
+	while (lua_gettop(m_luaState) > 0)
 	{
-		lua_pop(Get().m_luaState, -1);
+		lua_pop(m_luaState, -1);
 	}
 }
 

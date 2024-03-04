@@ -8,6 +8,8 @@ private:
 	LuaGameState();
 	~LuaGameState();
 
+	recs::Entity m_currentEntity = recs::NULL_ENTITY;
+
 public:
 
 	static auto& Get()
@@ -15,6 +17,9 @@ public:
 		static LuaGameState instance;
 		return instance;
 	}
+
+	const recs::Entity& GetCurrentEntity() const;
+	void SetCurrentEntity(const recs::Entity& entity);
 
 	void CreateObjectFromScript(const size_t& scriptId, const size_t& objectId);
 	void UpdateObjectFromScript(const size_t& scriptId, const size_t& objectId);
