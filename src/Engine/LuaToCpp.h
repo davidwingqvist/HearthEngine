@@ -20,3 +20,21 @@ int Debug_LogSuccess(lua_State* L);
 	TRANSFORM FUNCTIONS
 
 */
+int Translate_Model(lua_State* L);
+/*
+
+	TRANSFORM FUNCTIONS
+
+*/
+
+/*
+
+	TIME FUNCTIONS
+
+*/
+int GetDeltaTime(lua_State* L);
+/*
+
+	TIME FUNCTIONS
+
+*/

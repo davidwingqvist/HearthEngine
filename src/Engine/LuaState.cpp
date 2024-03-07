@@ -44,7 +44,7 @@ void LuaHandler::LoadInDebugFunctions()
 
 void LuaHandler::LoadInComponentAffectingFunctions()
 {
-
+	this->RegisterFunction(GetDeltaTime, "GetDeltaTime");
 }
 
 lua_State* LuaHandler::State()
