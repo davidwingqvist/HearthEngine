@@ -5,8 +5,6 @@
 
 void pushTransform(lua_State* L)
 {
-	Transform** ud = (Transform**)lua_newuserdata(L, sizeof(*ud));
-
 	if (luaL_newmetatable(L, tname))
 	{
 		lua_pushcfunction(L, transform_set);
@@ -34,8 +32,10 @@ static int transform_get(lua_State* L)
 		return 0;
 	}
 
-	Transform* inst = *(Transform**)luaL_checkudata(L, 1, tname);
-	*inst = *LUA.m_currentRegistry->GetComponent<Transform>(LUA_GAME.GetCurrentEntity());
+	Transform* inst = LUA.m_currentRegistry->GetComponent<Transform>(LUA_GAME.GetCurrentEntity());
+
+	if (!inst)
+		return 0;
 
 	switch (luaL_checkoption(L, 2, NULL, tmap_set))
 	{
@@ -78,8 +78,8 @@ static int transform_set(lua_State* L)
 		return 0;
 	}
 
-	Transform* inst = *(Transform**)luaL_checkudata(L, 1, tname);
-	*inst = *LUA.m_currentRegistry->GetComponent<Transform>(LUA_GAME.GetCurrentEntity());
+	Transform* inst = LUA.m_currentRegistry->GetComponent<Transform>(LUA_GAME.GetCurrentEntity());
+	
 
 	int option = luaL_checkoption(L, 2, NULL, tmap_set);
 	switch (option)

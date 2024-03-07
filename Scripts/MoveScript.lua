@@ -3,6 +3,7 @@ local MoveScript={}
 
 --This function runs when object is created.
 function MoveScript:OnAwake()
+	print(Transform.xPosition)
 end
 
 
