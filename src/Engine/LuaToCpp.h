@@ -21,6 +21,7 @@ int Debug_LogSuccess(lua_State* L);
 
 */
 int Translate_Model(lua_State* L);
+int SetPosition_Model(lua_State* L);
 /*
 
 	TRANSFORM FUNCTIONS

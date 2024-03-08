@@ -45,6 +45,8 @@ void LuaHandler::LoadInDebugFunctions()
 void LuaHandler::LoadInComponentAffectingFunctions()
 {
 	this->RegisterFunction(GetDeltaTime, "GetDeltaTime");
+	this->RegisterFunction(Translate_Model, "Translate");
+	this->RegisterFunction(SetPosition_Model, "SetPosition");
 }
 
 lua_State* LuaHandler::State()

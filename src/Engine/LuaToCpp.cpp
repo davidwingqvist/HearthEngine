@@ -2,6 +2,8 @@
 #include "LuaToCpp.h"
 #include "Debugger.h"
 #include "Time.h"
+#include "LuaState.h"
+#include "LuaGameState.h"
 
 int Debug_LogInfo(lua_State* L)
 {
@@ -26,6 +28,34 @@ int Debug_LogSuccess(lua_State* L)
 
 int Translate_Model(lua_State* L)
 {
+	const float x = luaL_checknumber(L, -3);
+	const float y = luaL_checknumber(L, -2);
+	const float z = luaL_checknumber(L, -1);
+
+	Transform* transform = LUA.m_currentRegistry->GetComponent<Transform>(LUA_GAME.GetCurrentEntity());
+
+	if (!transform)
+		return 0;
+
+	transform->pos.x += x;
+	transform->pos.y += y;
+	transform->pos.z += z;
+
+	return 0;
+}
+
+int SetPosition_Model(lua_State* L)
+{
+	const float x = luaL_checknumber(L, -3);
+	const float y = luaL_checknumber(L, -2);
+	const float z = luaL_checknumber(L, -1);
+
+	Transform* transform = LUA.m_currentRegistry->GetComponent<Transform>(LUA_GAME.GetCurrentEntity());
+
+	if (!transform)
+		return 0;
+
+	transform->pos = { x, y, z };
 	return 0;
 }
 
