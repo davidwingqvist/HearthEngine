@@ -47,6 +47,8 @@ void LuaHandler::LoadInComponentAffectingFunctions()
 	this->RegisterFunction(GetDeltaTime, "GetDeltaTime");
 	this->RegisterFunction(Translate_Model, "Translate");
 	this->RegisterFunction(SetPosition_Model, "SetPosition");
+	this->RegisterFunction(CreateEntity_Lua, "CreateEntity");
+	this->RegisterFunction(DeleteEntity_Lua, "DestroyEntity");
 }
 
 lua_State* LuaHandler::State()
