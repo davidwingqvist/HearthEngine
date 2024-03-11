@@ -60,6 +60,7 @@ void EngineGUI::BottomBarPutToFalse()
 {
 	m_showBottomConsole = false;
 	m_showBottomFiles = false;
+	m_showBottomStatistics = false;
 }
 
 void EngineGUI::RenderGUI()
@@ -421,6 +422,7 @@ void EngineGUI::RenderConsole()
 void EngineGUI::RenderStatistics()
 {
 	std::string framesText = "FPS: " + std::to_string(1 / Time::Get().GetDeltaTime());
+	framesText = framesText.substr(0, 7);
 	ImGui::Text(framesText.c_str());
 }
 

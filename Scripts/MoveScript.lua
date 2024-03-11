@@ -9,7 +9,7 @@ end
 --This function runs each Update cycle
 function MoveScript:OnUpdate()
 		--Transform.xPosition = Transform.xPosition + GetDeltaTime();
-		SetRotation(45, 0, 0)
+		SetTag("New Box")
 end
 
 return MoveScript

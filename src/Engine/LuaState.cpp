@@ -44,12 +44,28 @@ void LuaHandler::LoadInDebugFunctions()
 
 void LuaHandler::LoadInComponentAffectingFunctions()
 {
-	this->RegisterFunction(GetDeltaTime, "GetDeltaTime");
-	this->RegisterFunction(Translate_Model, "Translate");
-	this->RegisterFunction(SetPosition_Model, "SetPosition");
+	/*
+		Entity
+	*/
 	this->RegisterFunction(CreateEntity_Lua, "CreateEntity");
 	this->RegisterFunction(DeleteEntity_Lua, "DestroyEntity");
+
+	// Time
+	this->RegisterFunction(GetDeltaTime, "GetDeltaTime");
+
+	/*
+		Transform
+	*/
+	this->RegisterFunction(Translate_Model, "Translate");
+	this->RegisterFunction(SetPosition_Model, "SetPosition");
 	this->RegisterFunction(SetRotation_Model, "SetRotation");
+	this->RegisterFunction(SetScale_Model, "SetScale");
+
+	/*
+		GameObject
+	*/
+	this->RegisterFunction(SetTag_GameObject, "SetTag");
+
 }
 
 lua_State* LuaHandler::State()

@@ -27,8 +27,17 @@ int DeleteEntity_Lua(lua_State* L);
 int Translate_Model(lua_State* L);
 int SetPosition_Model(lua_State* L);
 int SetRotation_Model(lua_State* L);
+int SetScale_Model(lua_State* L);
 /*
 	TRANSFORM FUNCTIONS
+*/
+
+/*
+	GAMEOBJECT FUNCTIONS
+*/
+int SetTag_GameObject(lua_State* L);
+/*
+	GAMEOBJECT FUNCTIONS
 */
 
 

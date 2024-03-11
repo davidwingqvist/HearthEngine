@@ -127,6 +127,39 @@ int SetRotation_Model(lua_State* L)
 	return 0;
 }
 
+int SetScale_Model(lua_State* L)
+{
+	const float x = luaL_checknumber(L, -3);
+	const float y = luaL_checknumber(L, -2);
+	const float z = luaL_checknumber(L, -1);
+
+	Transform* transform = LUA.m_currentRegistry->GetComponent<Transform>(LUA_GAME.GetCurrentEntity());
+
+	if (!transform)
+		return 0;
+
+	transform->scale = { x, y, z };
+
+	return 0;
+}
+
+int SetTag_GameObject(lua_State* L)
+{
+	std::string name = luaL_checkstring(L, -1);
+
+	GameObject* gameObject = LUA.m_currentRegistry->GetComponent<GameObject>(LUA_GAME.GetCurrentEntity());
+
+	if (!gameObject)
+		return 0;
+
+	if (name.length() > 28)
+		name = name.substr(0, 28);
+
+	std::strncpy(gameObject->name, name.c_str(), 28);
+
+	return 0;
+}
+
 int GetDeltaTime(lua_State* L)
 {
 	lua_pushnumber(L, Time::Get().GetDeltaTime());
