@@ -5,6 +5,7 @@
 #include "LuaState.h"
 #include "ResourceManager.h"
 #include "Texture.h"
+#include "Time.h"
 
 constexpr ImGuiWindowFlags menuWindow = (ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoTitleBar);
 constexpr ImGuiWindowFlags bottomWindow = ImGuiWindowFlags_NoTitleBar;
@@ -269,6 +270,12 @@ void EngineGUI::RenderBottomBar()
 		m_showBottomConsole = true;
 	}
 
+	if (ImGui::Button("Statistics", { ImGui::GetWindowWidth(), ImGui::GetWindowHeight() / 10.0f }))
+	{
+		BottomBarPutToFalse();
+		m_showBottomStatistics = true;
+	}
+
 	ImGui::EndChild();
 
 	ImGui::SameLine();
@@ -278,6 +285,10 @@ void EngineGUI::RenderBottomBar()
 	if (m_showBottomConsole)
 	{
 		this->RenderConsole();
+	}
+	if (m_showBottomStatistics)
+	{
+		this->RenderStatistics();
 	}
 
 	ImGui::EndChild();
@@ -405,6 +416,12 @@ void EngineGUI::RenderConsole()
 	ImGui::SameLine();
 	ImGui::SetNextItemWidth(ImGui::GetWindowWidth() * 0.07);
 	ImGui::Button("Enter###consoleWindowEnter");
+}
+
+void EngineGUI::RenderStatistics()
+{
+	std::string framesText = "FPS: " + std::to_string(1 / Time::Get().GetDeltaTime());
+	ImGui::Text(framesText.c_str());
 }
 
 /*

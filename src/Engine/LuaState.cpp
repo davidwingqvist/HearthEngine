@@ -49,6 +49,7 @@ void LuaHandler::LoadInComponentAffectingFunctions()
 	this->RegisterFunction(SetPosition_Model, "SetPosition");
 	this->RegisterFunction(CreateEntity_Lua, "CreateEntity");
 	this->RegisterFunction(DeleteEntity_Lua, "DestroyEntity");
+	this->RegisterFunction(SetRotation_Model, "SetRotation");
 }
 
 lua_State* LuaHandler::State()

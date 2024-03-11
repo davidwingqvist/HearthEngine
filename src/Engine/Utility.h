@@ -29,6 +29,9 @@ namespace utility
 	// Convert radiant to degrees.
 	float ConvertToDegrees(const float& radiant);
 
+	// Convert degrees to radiant.
+	float ConvertToRadiant(const float& degrees);
+
 	// Calculate the angle between two vectors and return the angle in degrees.
 	float CalcDegAngle(const sm::Vector2& a, const sm::Vector2& b);
 	float CalcDegAngle(const sm::Vector3& a, const sm::Vector3& b);

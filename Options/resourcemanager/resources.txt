@@ -1,5 +1,5 @@
-Model Tree1.obj
 Model Chest.obj
+Model Tree1.obj
 Texture Chest_Albedo.png
 Model throwingknife.obj
 Model doublebarrelshotugn.obj

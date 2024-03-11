@@ -26,6 +26,7 @@ int DeleteEntity_Lua(lua_State* L);
 */
 int Translate_Model(lua_State* L);
 int SetPosition_Model(lua_State* L);
+int SetRotation_Model(lua_State* L);
 /*
 	TRANSFORM FUNCTIONS
 */

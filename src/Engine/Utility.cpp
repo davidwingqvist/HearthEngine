@@ -41,6 +41,11 @@ float utility::ConvertToDegrees(const float& radiant)
     return radiant * 180.0f / 3.14159265f;
 }
 
+float utility::ConvertToRadiant(const float& degrees)
+{
+    return degrees / 180.0f * 3.14159265f;
+}
+
 float utility::CalcDegAngle(const sm::Vector2& a, const sm::Vector2& b)
 {
     float deg = std::acos(a.Dot(b) / (a.Length() * b.Length()));

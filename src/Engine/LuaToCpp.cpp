@@ -3,6 +3,7 @@
 #include "Debugger.h"
 #include "Time.h"
 #include "LuaState.h"
+#include "Utility.h"
 #include "LuaGameState.h"
 
 int Debug_LogInfo(lua_State* L)
@@ -107,6 +108,22 @@ int SetPosition_Model(lua_State* L)
 		return 0;
 
 	transform->pos = { x, y, z };
+	return 0;
+}
+
+int SetRotation_Model(lua_State* L)
+{
+	const float x = utility::ConvertToRadiant(luaL_checknumber(L, -3));
+	const float y = utility::ConvertToRadiant(luaL_checknumber(L, -2));
+	const float z = utility::ConvertToRadiant(luaL_checknumber(L, -1));
+
+	Transform* transform = LUA.m_currentRegistry->GetComponent<Transform>(LUA_GAME.GetCurrentEntity());
+
+	if (!transform)
+		return 0;
+
+	transform->rotation = { x, y, z };
+
 	return 0;
 }
 
