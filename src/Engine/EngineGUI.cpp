@@ -75,6 +75,7 @@ void EngineGUI::RenderGUI()
 	Get().RenderNewComponentTab();
 	Get().RenderModelsTab();
 	Get().RenderTextureTab();
+	Get().RenderScriptsTab();
 }
 
 void EngineGUI::CommitGUI()
@@ -147,7 +148,7 @@ void EngineGUI::RenderTopBar()
 		if (ImGui::Button("Scripts", ImVec2(ImGui::GetWindowContentRegionMax().x, 0)))
 		{
 			this->PutEditTabsToFalse();
-			m_showScriptsTab = !m_showScriptsTab;
+			//m_showScriptsTab = !m_showScriptsTab;
 		}
 		if (ImGui::Button("Models", ImVec2(ImGui::GetWindowContentRegionMax().x, 0)))
 		{
@@ -173,42 +174,42 @@ void EngineGUI::RenderTopBar()
 		ImGui::End();
 	}
 
-	if (m_showScriptsTab)
-	{
-		ImGui::Begin("Scripts", &m_showScriptsTab, ImGuiWindowFlags_NoTitleBar);
-		ImGui::TextColored(ImVec4(255, 0, 255, 255), "Scripts");
-		ImGui::InputTextWithHint("###ScriptNew", "Input script name", m_createScriptPath, sizeof m_createScriptPath);
-		ImGui::SameLine();
-		if (ImGui::Button("Create Script"))
-		{
-			LUA.CreateScriptFile(m_createScriptPath);
-			LUA.ScanForScripts();
-			memset(m_createScriptPath, '\0', sizeof m_createScriptPath);
-		}
-		
-		if (ImGui::BeginListBox("###AllScripts"))
-		{
-			for (int i = 0; i < LUA.GetScriptNames().size(); i++)
-			{
-				ImGui::Text(LUA.GetScriptNames()[i].c_str());
-				ImGui::SameLine();
-				std::string name = "Open###" + std::to_string(i);
-				if (ImGui::Button(name.c_str()))
-				{
-					LUA.OpenScriptFile(LUA.GetScriptNames()[i].c_str());
-				}
-				ImGui::SameLine();
-				name = "Remove##" + std::to_string(i);
-				if (ImGui::Button(name.c_str()))
-				{
-					LUA.DeleteScriptFile(LUA.GetScriptNames()[i].c_str());
-					LUA.ScanForScripts();
-				}
-			}
-		}
-		ImGui::EndListBox();
-		ImGui::End();
-	}
+	//if (m_showScriptsTab)
+	//{
+	//	ImGui::Begin("Scripts", &m_showScriptsTab, ImGuiWindowFlags_NoTitleBar);
+	//	ImGui::TextColored(ImVec4(255, 0, 255, 255), "Scripts");
+	//	ImGui::InputTextWithHint("###ScriptNew", "Input script name", m_createScriptPath, sizeof m_createScriptPath);
+	//	ImGui::SameLine();
+	//	if (ImGui::Button("Create Script"))
+	//	{
+	//		LUA.CreateScriptFile(m_createScriptPath);
+	//		LUA.ScanForScripts();
+	//		memset(m_createScriptPath, '\0', sizeof m_createScriptPath);
+	//	}
+	//	
+	//	if (ImGui::BeginListBox("###AllScripts"))
+	//	{
+	//		for (int i = 0; i < LUA.GetScriptNames().size(); i++)
+	//		{
+	//			ImGui::Text(LUA.GetScriptNames()[i].c_str());
+	//			ImGui::SameLine();
+	//			std::string name = "Open###" + std::to_string(i);
+	//			if (ImGui::Button(name.c_str()))
+	//			{
+	//				LUA.OpenScriptFile(LUA.GetScriptNames()[i].c_str());
+	//			}
+	//			ImGui::SameLine();
+	//			name = "Remove##" + std::to_string(i);
+	//			if (ImGui::Button(name.c_str()))
+	//			{
+	//				LUA.DeleteScriptFile(LUA.GetScriptNames()[i].c_str());
+	//				LUA.ScanForScripts();
+	//			}
+	//		}
+	//	}
+	//	ImGui::EndListBox();
+	//	ImGui::End();
+	//}
 
 	if (m_showObjectsTab)
 	{
@@ -422,7 +423,6 @@ void EngineGUI::RenderConsole()
 void EngineGUI::RenderStatistics()
 {
 	std::string framesText = "FPS: " + std::to_string(1 / Time::Get().GetDeltaTime());
-	framesText = framesText.substr(0, 7);
 	ImGui::Text(framesText.c_str());
 }
 
@@ -644,9 +644,12 @@ void EngineGUI::RenderProperties()
 			ImGui::TextColored(ImVec4(255, 0, 255, 255), "Scripts");
 			std::string scriptId = "";
 
-			ImGui::InputTextWithHint("###InputScriptNameProps", "Input script name", m_createScriptPathProp, sizeof m_createScriptPathProp);
+			if (ImGui::Button("..##ScriptSelectWindow"))
+				m_showScriptsTab = !m_showScriptsTab;
+
 			ImGui::SameLine();
-			if (ImGui::Button("Add Script"))
+
+			if (ImGui::InputTextWithHint("###InputScriptNameProps", "Input script name", m_createScriptPathProp, sizeof m_createScriptPathProp, ImGuiInputTextFlags_EnterReturnsTrue))
 			{
 				if (LUA.LookUpScript(m_createScriptPathProp))
 				{
@@ -769,6 +772,48 @@ void EngineGUI::RenderNewComponentTab()
 		if (ImGui::Button("Script", { ImGui::GetWindowSize().x, 0 }))
 		{
 			reg.AddComponent<Script>(m_currentEntity);
+		}
+
+		ImGui::End();
+	}
+}
+
+void EngineGUI::RenderScriptsTab()
+{
+	if (m_showScriptsTab)
+	{
+		ImGui::Begin("Scripts###WindowsScripts", &m_showScriptsTab);
+
+		const auto& scripts = LUA.GetScriptNames();
+		recs::recs_registry& reg = m_sceneManagerRef->GetCurrentScene()->GetRegistry();
+
+		int id = 1;
+		for (const auto& script : scripts)
+		{
+			ImGui::BeginChild(id, { 0, 0 }, ImGuiChildFlags_Border | ImGuiChildFlags_AutoResizeY);
+
+			ImGui::Text(script.c_str());
+			ImGui::SameLine();
+			ImGui::SetCursorPosX(ImGui::GetWindowWidth() * 0.82f);
+			if (ImGui::Button(("Select###scriptselect" + std::to_string(id)).c_str(), { ImGui::GetWindowWidth() * 0.15f , 0 }))
+			{
+				Script* s = reg.GetComponent<Script>(m_currentEntity);
+				if (s)
+				{
+					for (int i = 0; i < MAX_SCRIPTS; i++)
+					{
+						if (s->script_id[i] == NULL_SCRIPT)
+						{
+							s->script_id[i] = LUA.GetIdFromScriptName(script.substr(0, script.size() - 4));
+							m_showScriptsTab = false;
+						}
+						break;
+					}
+				}
+			}
+
+			ImGui::EndChild();
+			id++;
 		}
 
 		ImGui::End();

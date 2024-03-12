@@ -67,6 +67,10 @@ void Scene::Update()
 	//}
 }
 
+void Scene::Awake()
+{
+}
+
 bool Scene::CreatePublicBuffer()
 {
 	D3D11_BUFFER_DESC desc{};

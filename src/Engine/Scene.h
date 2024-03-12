@@ -2,12 +2,13 @@
 #include "DrawManager.h"
 #include "Camera.h"
 #include "DXPointer.h"
+#include "InternalScene.h"
 
-class Scene
+class Scene : public InternalScene
 {
 private:
 
-	recs::recs_registry m_registry;
+	//recs::recs_registry m_registry;
 	DrawManager m_drawManager;
 	DXPointer<ID3D11Buffer> m_publicBuffer;
 	recs::Entity entity;
@@ -26,9 +27,11 @@ public:
 	Scene();
 	~Scene();
 
-	void Update();
+	void Update() override;
 
-	void Draw();
+	void Awake() override;
+
+	void Draw() override;
 
 	recs::recs_registry& GetRegistry();
 };

@@ -21,6 +21,8 @@
   <ItemGroup>
     <ClCompile Include="src\Engine\BasicPass.cpp" />
     <ClCompile Include="src\Engine\Camera.cpp" />
+    <ClCompile Include="src\Engine\GameScene.cpp" />
+    <ClCompile Include="src\Engine\InternalScene.cpp" />
     <ClCompile Include="src\Engine\LuaGameState.cpp" />
     <ClCompile Include="src\Engine\LuaToCpp.cpp" />
     <ClCompile Include="src\Engine\CubeMapPass.cpp" />
@@ -82,6 +84,8 @@
   <ItemGroup>
     <ClInclude Include="src\Engine\BasicPass.h" />
     <ClInclude Include="src\Engine\Camera.h" />
+    <ClInclude Include="src\Engine\GameScene.h" />
+    <ClInclude Include="src\Engine\InternalScene.h" />
     <ClInclude Include="src\Engine\LuaGameState.h" />
     <ClInclude Include="src\Engine\LuaToCpp.h" />
     <ClInclude Include="src\Engine\CubeMapPass.h" />

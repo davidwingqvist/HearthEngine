@@ -211,7 +211,11 @@ void LuaHandler::ScanForScripts()
 
 	for (const auto& entry : std::filesystem::directory_iterator(strPath))
 	{
-		Get().m_scriptNames.push_back(entry.path().filename().string());
+		const std::string name = entry.path().filename().string();
+		if (name == "EngineScripts")
+			continue;
+
+		Get().m_scriptNames.push_back(name);
 
 		std::string scriptObjectName = entry.path().filename().string();
 		scriptObjectName = scriptObjectName.substr(0, scriptObjectName.size() - 4);

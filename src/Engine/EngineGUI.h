@@ -13,7 +13,6 @@ private:
 	bool m_showEditTab = false;
 
 	// Script Tab values
-	bool m_showScriptsTab = false;
 	char m_createScriptPath[36] = {};
 
 	// Object Tab values
@@ -55,6 +54,7 @@ private:
 	// Models
 	bool m_showModelsTab = false;
 	bool m_showTextureTab = false;
+	bool m_showScriptsTab = false;
 
 
 	/*
@@ -98,6 +98,7 @@ private:
 	void RenderProperties();
 	void RenderFileKeepingWindow();
 	void RenderNewComponentTab();
+	void RenderScriptsTab();
 	void RenderModelsTab();
 	void RenderTextureTab();
 };
