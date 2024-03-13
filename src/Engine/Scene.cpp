@@ -24,6 +24,7 @@ void UpdatePublicBuffer(ID3D11Buffer** buffer, const sm::Matrix& matrix_data)
 }
 
 Scene::Scene()
+	:InternalScene()
 {
 	m_publicBuffer = nullptr;
 	if (!this->CreatePublicBuffer())
@@ -32,8 +33,6 @@ Scene::Scene()
 	}
 	this->SetupComponents();
 	this->RegisterComponentsToLua();
-	m_camera.Activate();
-	LUA.m_currentRegistry = &m_registry;
 
 	sm::Vector3 d = { 5.0f, -10.0f, 0.0f };
 	sm::Vector3 n = { 0.0f, 1.0f, 0.0f };
@@ -48,23 +47,16 @@ Scene::~Scene()
 
 void Scene::Update()
 {
-	m_registry.Update();
+	//m_registry.Update();
 
-	m_registry.Group<RigidBody, Transform>().ForEach([&](const recs::Entity& e, RigidBody& rb, Transform& transform) {
+	//m_registry.Group<RigidBody, Transform>().ForEach([&](const recs::Entity& e, RigidBody& rb, Transform& transform) {
 
-		if (rb.hasGravity)
-		{
-			transform.pos.y -= GRAVITY * Time::Get().GetDeltaTime();
-		}
+	//	if (rb.hasGravity)
+	//	{
+	//		transform.pos.y -= GRAVITY * Time::Get().GetDeltaTime();
+	//	}
 
-		});
-
-	//if (InputManager::Get().CheckMouseKey(MouseKey::LEFT, key_state::PRESSED))
-	//{
-	//	auto m = InputManager::Get().GetMouse();
-	//	auto v = utility::ScreenRayToWorld({ (float)m->GetState().x, (float)m->GetState().y }, &m_camera);
-	//	DEBUG_INFO(std::to_string(v.x) + " " + std::to_string(v.y) + " " + std::to_string(v.z));
-	//}
+	//	});
 }
 
 void Scene::Awake()
@@ -86,60 +78,65 @@ bool Scene::CreatePublicBuffer()
 
 void Scene::PreDraw()
 {
-
+	EngineGUI::Get().RenderGUI();
 }
 
-void Scene::SetupComponents()
+void Scene::PostDraw()
 {
-	m_registry.RegisterComponent<Model>();
-
-	m_registry.RegisterDataToState(GameObject());
-	m_registry.RegisterDataToState(Transform());
-	m_registry.RegisterDataToState(Light());
-	m_registry.RegisterDataToState(RigidBody());
-	m_registry.RegisterDataToState(ModelID());
-	m_registry.RegisterDataToState(Script());
-
-	m_registry.RegisterOnCreate<ModelID>([&](const recs::Entity& entity, ModelID& id)
-		{
-			if ((!m_registry.HasComponent<Model>(entity) && ((id.model_id != 0) || (id.texture_id != 0))))
-			{
-				Model* model = m_registry.AddComponent<Model>(entity);
-
-				if (id.model_id != 0)
-				{
-					model->model_data = ResourceManager::Get().GetResource<Model3D>(id.model_id).get();
-				}
-				if (id.texture_id != 0)
-				{
-					model->model_texture = ResourceManager::Get().GetResource<Texture>(id.texture_id).get();
-				}
-			}
-		});
-
-	m_registry.RegisterOnCreate<Script>([&](const recs::Entity& entity, Script& script) {
-
-		LUA_GAME.SetCurrentEntity(entity);
-		for (int i = 0; i < 5; i++)
-		{
-			LUA_GAME.CreateObjectFromScript(script.script_id[i], entity);
-			LUA_GAME.AwakeObjectFromScript(script.script_id[i], entity);
-		}
-
-		});
-
-	m_registry.RegisterOnUpdate<Script>([&](const recs::Entity& entity, Script& script) {
-			
-		LUA_GAME.SetCurrentEntity(entity);
-		for (int i = 0; i < 5; i++)
-		{
-			LUA_GAME.UpdateObjectFromScript(script.script_id[i], entity);
-		}
-
-		});
-
-	pushTransform(LUA.State());
+	EngineGUI::Get().CommitGUI();
 }
+
+//void Scene::SetupComponents()
+//{
+//	m_registry.RegisterComponent<Model>();
+//
+//	m_registry.RegisterDataToState(GameObject());
+//	m_registry.RegisterDataToState(Transform());
+//	m_registry.RegisterDataToState(Light());
+//	m_registry.RegisterDataToState(RigidBody());
+//	m_registry.RegisterDataToState(ModelID());
+//	m_registry.RegisterDataToState(Script());
+//
+//	m_registry.RegisterOnCreate<ModelID>([&](const recs::Entity& entity, ModelID& id)
+//		{
+//			if ((!m_registry.HasComponent<Model>(entity) && ((id.model_id != 0) || (id.texture_id != 0))))
+//			{
+//				Model* model = m_registry.AddComponent<Model>(entity);
+//
+//				if (id.model_id != 0)
+//				{
+//					model->model_data = ResourceManager::Get().GetResource<Model3D>(id.model_id).get();
+//				}
+//				if (id.texture_id != 0)
+//				{
+//					model->model_texture = ResourceManager::Get().GetResource<Texture>(id.texture_id).get();
+//				}
+//			}
+//		});
+//
+//	m_registry.RegisterOnCreate<Script>([&](const recs::Entity& entity, Script& script) {
+//
+//		LUA_GAME.SetCurrentEntity(entity);
+//		for (int i = 0; i < 5; i++)
+//		{
+//			LUA_GAME.CreateObjectFromScript(script.script_id[i], entity);
+//			LUA_GAME.AwakeObjectFromScript(script.script_id[i], entity);
+//		}
+//
+//		});
+//
+//	m_registry.RegisterOnUpdate<Script>([&](const recs::Entity& entity, Script& script) {
+//			
+//		LUA_GAME.SetCurrentEntity(entity);
+//		for (int i = 0; i < 5; i++)
+//		{
+//			LUA_GAME.UpdateObjectFromScript(script.script_id[i], entity);
+//		}
+//
+//		});
+//
+//	pushTransform(LUA.State());
+//}
 
 void Scene::RegisterComponentsToLua()
 {

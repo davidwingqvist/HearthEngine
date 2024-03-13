@@ -1,9 +1,7 @@
 #pragma once
-#include "DrawManager.h"
-#include "Camera.h"
-#include "DXPointer.h"
 #include "InternalScene.h"
 
+// Used for internal editing scene for editor.
 class Scene : public InternalScene
 {
 private:
@@ -11,21 +9,22 @@ private:
 	//recs::recs_registry m_registry;
 	DrawManager m_drawManager;
 	DXPointer<ID3D11Buffer> m_publicBuffer;
-	recs::Entity entity;
-	Camera m_camera;
 
 	bool CreatePublicBuffer();
-	void PreDraw();
 
 private:
 
-	void SetupComponents();
+	//void SetupComponents();
 	void RegisterComponentsToLua();
 
 public:
 
 	Scene();
 	~Scene();
+
+	void PreDraw() override;
+
+	void PostDraw() override;
 
 	void Update() override;
 

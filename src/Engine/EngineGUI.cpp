@@ -21,6 +21,7 @@ EngineGUI::EngineGUI()
 	ImGui_ImplDX11_Init(D3D11Core::Get().Device(), D3D11Core::Get().Context());
 	ImGui::StyleColorsDark();
 	ImGui_ImplDX11_CreateDeviceObjects(); // uses device, therefore has to be called before render thread starts
+	m_currentSceneName = "Not Selected.";
 }
 
 EngineGUI::~EngineGUI()
@@ -121,6 +122,12 @@ void EngineGUI::RenderTopBar()
 
 		m_showEditTab = !m_showEditTab;
 	}
+
+	if (ImGui::Button("Run"))
+	{
+
+	}
+
 	if (ImGui::Button("Dump Stack"))
 	{
 		LUA.DumpStack();
@@ -131,6 +138,8 @@ void EngineGUI::RenderTopBar()
 		DEBUG_INFO("LUA stack has been cleared.\n")
 	}
 
+	ImGui::Text(("Current Scene: " + m_currentSceneName).c_str());
+
 	ImGui::EndMenuBar();
 
 	ImGui::End();
@@ -138,6 +147,11 @@ void EngineGUI::RenderTopBar()
 	if (m_showEditTab)
 	{
 		ImGui::Begin("Edit Tab", &m_showEditTab, ImGuiWindowFlags_NoTitleBar);
+		if (ImGui::Button("Scenes", ImVec2(ImGui::GetWindowContentRegionMax().x, 0)))
+		{
+			this->PutEditTabsToFalse();
+			m_showScenesTab = !m_showScenesTab;
+		}
 		if (ImGui::Button("Scripts", ImVec2(ImGui::GetWindowContentRegionMax().x, 0)))
 		{
 			this->PutEditTabsToFalse();

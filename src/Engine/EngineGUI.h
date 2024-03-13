@@ -12,6 +12,10 @@ private:
 
 	bool m_showEditTab = false;
 
+	// Scene related
+	std::string m_currentSceneName;
+	bool m_showScenesTab = false;
+
 	// Script Tab values
 	char m_createScriptPath[36] = {};
 

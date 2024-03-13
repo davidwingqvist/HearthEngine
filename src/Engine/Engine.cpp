@@ -25,8 +25,8 @@ Engine::Engine()
 
 	this->m_renderer.Initialize();
 
-	m_sceneManager.AddScene("Test");
-	m_sceneManager.SetScene("Test");
+	m_sceneManager.AddInternalScene("Internal_EditScene");
+	m_sceneManager.SetScene("Internal_EditScene");
 
 	DEBUG_INFO("The basics of the Engine is now up and running.\n");
 	EngineGUI::Get().SetSceneManagerRef(&m_sceneManager);
@@ -68,7 +68,7 @@ void Engine::Update()
 
 void Engine::Draw()
 {
-	EngineGUI::Get().RenderGUI();
+	m_sceneManager.GetCurrentScene()->PreDraw();
 	{ // Ingame rendering.
 		this->m_renderer.GetPipelineManager().ClearScreen();
 		/*D2D1Core::Get().Begin();*/
@@ -77,7 +77,7 @@ void Engine::Draw()
 
 		/*D2D1Core::Get().Commit();*/
 	}
-	EngineGUI::Get().CommitGUI();
+	m_sceneManager.GetCurrentScene()->PostDraw();
 
 	D3D11Core::Get().Present();
 }

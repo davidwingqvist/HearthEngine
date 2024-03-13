@@ -1,6 +1,7 @@
 #include "Header.h"
 #include "SceneManager.h"
 #include "Debugger.h"
+#include "GameScene.h"
 
 SceneManager::SceneManager()
 {
@@ -15,10 +16,23 @@ SceneManager::~SceneManager()
 	}
 }
 
-void SceneManager::AddScene(const std::string& sceneName)
+void SceneManager::AddInternalScene(const std::string& sceneName)
 {
 	Scene* newScene = new Scene();
+	newScene->SetSceneName(sceneName);
 	m_scenes[sceneName] = newScene;
+	m_sceneNames.push_back(sceneName);
+	m_currentSceneName = sceneName;
+	DEBUG_INFO("Added Edit Scene: " + sceneName);
+}
+
+void SceneManager::AddScene(const std::string& sceneName)
+{
+	GameScene* newScene = new GameScene();
+	newScene->SetSceneName(sceneName);
+	m_scenes[sceneName] = newScene;
+	m_currentSceneName = sceneName;
+	m_sceneNames.push_back(sceneName);
 	Debugger::Get().Print("Added Scene: '" + sceneName + "'\n", Debugger::COLOR_GREEN);
 }
 
@@ -32,11 +46,17 @@ void SceneManager::SetScene(const std::string& sceneName)
 
 	DEBUG_INFO("Scene set to: '" + sceneName + "'\n")
 	m_currentScene = m_scenes[sceneName];
+	m_currentScene->Assign();
 }
 
 InternalScene* SceneManager::GetScene(const std::string& sceneName)
 {
 	return m_scenes[sceneName];
+}
+
+const std::vector<std::string>& SceneManager::GetSceneNames() const
+{
+	return m_sceneNames;
 }
 
 InternalScene* SceneManager::GetCurrentScene() const
