@@ -70,7 +70,7 @@ private:
 	
 	*/
 	bool m_forceUpdate = false;
-	Scene* m_currentScene = nullptr;
+	InternalScene* m_currentScene = nullptr;
 
 
 	BasicPass* m_basicPassRef = nullptr;
@@ -84,7 +84,7 @@ public:
 	// Inherited via IRenderpass
 	void Prepass() override;
 
-	void Pass(Scene* currentScene) override;
+	void Pass(InternalScene* currentScene) override;
 
 	void Postpass() override;
 

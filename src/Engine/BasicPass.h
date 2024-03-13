@@ -41,7 +41,7 @@ public:
 	virtual ~BasicPass() override;
 
 	virtual void Prepass() override;
-	virtual void Pass(Scene* currentScene) override;
+	virtual void Pass(InternalScene* currentScene) override;
 	virtual void Postpass() override;
 
 	// Inherited via IRenderpass

@@ -25,6 +25,6 @@ public:
 
 	virtual void Create() = 0;
 	virtual void Prepass() = 0;
-	virtual void Pass(Scene* currentScene) = 0;
+	virtual void Pass(InternalScene* currentScene) = 0;
 	virtual void Postpass() = 0;
 };

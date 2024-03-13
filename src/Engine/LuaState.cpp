@@ -49,6 +49,7 @@ void LuaHandler::LoadInComponentAffectingFunctions()
 	*/
 	this->RegisterFunction(CreateEntity_Lua, "CreateEntity");
 	this->RegisterFunction(DeleteEntity_Lua, "DestroyEntity");
+	this->RegisterFunction(DestroyEntity_Lua, "Destroy");
 
 	// Time
 	this->RegisterFunction(GetDeltaTime, "GetDeltaTime");

@@ -78,6 +78,12 @@ int DeleteEntity_Lua(lua_State* L)
 	return 0;
 }
 
+int DestroyEntity_Lua(lua_State* L)
+{
+	LUA.m_currentRegistry->DestroyEntity(LUA_GAME.GetCurrentEntity());
+	return 0;
+}
+
 int Translate_Model(lua_State* L)
 {
 	const float x = luaL_checknumber(L, -3);

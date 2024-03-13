@@ -55,6 +55,7 @@ private:
 	bool m_showModelsTab = false;
 	bool m_showTextureTab = false;
 	bool m_showScriptsTab = false;
+	bool m_showScriptsHandlerTab = false;
 
 
 	/*
@@ -63,7 +64,6 @@ private:
 	
 	*/
 
-	void PutTabsToFalse();
 	void PutEditTabsToFalse();
 	void BottomBarPutToFalse();
 public:

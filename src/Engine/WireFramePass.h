@@ -59,7 +59,7 @@ public:
 	// Inherited via IRenderpass
 	void Create() override;
 	void Prepass() override;
-	void Pass(Scene* currentScene) override;
+	void Pass(InternalScene* currentScene) override;
 	void Postpass() override;
 
 	// Set the color of the wireframe grid.

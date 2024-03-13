@@ -118,7 +118,7 @@ void LightPass::Prepass()
 	D3D11Core::Get().Context()->PSSetSamplers(0, 1, m_pipeline->m_linearSamplerState.GetAddressOf());
 }
 
-void LightPass::Pass(Scene* currentScene)
+void LightPass::Pass(InternalScene* currentScene)
 {
 	m_currentScene = currentScene;
 	//const size_t& l = currentScene->GetRegistry().GetSize<Light>();

@@ -279,7 +279,7 @@ void CubeMapPass::Prepass()
 	DC->PSSetShaderResources(0, 1, m_cubeMapView.GetAddressOf());
 }
 
-void CubeMapPass::Pass(Scene* currentScene)
+void CubeMapPass::Pass(InternalScene* currentScene)
 {
 	DC->DrawIndexed(m_nrOfIndices, 0, 0);
 }

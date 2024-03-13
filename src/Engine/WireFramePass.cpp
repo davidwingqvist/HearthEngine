@@ -183,7 +183,7 @@ void WireFramePass::Prepass()
 	D3D11Core::Get().Context()->PSSetConstantBuffers(0, 1, m_gridColorBuffer.GetAddressOf());
 }
 
-void WireFramePass::Pass(Scene* currentScene)
+void WireFramePass::Pass(InternalScene* currentScene)
 {
 	D3D11Core::Get().Context()->DrawIndexed((UINT)m_indices.size(), 0, 0);
 }

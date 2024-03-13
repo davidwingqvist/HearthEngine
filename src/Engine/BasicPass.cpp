@@ -200,7 +200,7 @@ void BasicPass::Prepass()
 	DC->PSSetSamplers(0, 1, m_pipeline->m_anisotropicSamplerState.GetAddressOf());
 }
 
-void BasicPass::Pass(Scene* currentScene)
+void BasicPass::Pass(InternalScene* currentScene)
 {
 	currentScene->Draw();
 	m_gridPass.Prepass();

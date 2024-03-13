@@ -25,7 +25,7 @@ public:
 
 	void Initialize();
 
-	void Draw(Scene* currentScene);
+	void Draw(InternalScene* currentScene);
 
 	PipelineManager& GetPipelineManager();
 

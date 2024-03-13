@@ -8,6 +8,8 @@ public:
 	virtual void Awake() = 0;
 	virtual void Draw() = 0;
 
+	recs::recs_registry& GetRegistry();
+
 protected:
 
 	recs::recs_registry m_registry;

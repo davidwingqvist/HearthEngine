@@ -26,7 +26,7 @@ void Renderer::Initialize()
 	m_renderPasses.push_back(&m_lightPass);
 }
 
-void Renderer::Draw(Scene* currentScene)
+void Renderer::Draw(InternalScene* currentScene)
 {
 	for (auto& pass : m_renderPasses)
 	{

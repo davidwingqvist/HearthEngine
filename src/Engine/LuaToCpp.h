@@ -16,6 +16,7 @@ int Debug_LogSuccess(lua_State* L);
 */
 int CreateEntity_Lua(lua_State* L);
 int DeleteEntity_Lua(lua_State* L);
+int DestroyEntity_Lua(lua_State* L);
 /*
 	ENTITY FUNCTIONS
 */

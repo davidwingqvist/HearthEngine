@@ -34,12 +34,12 @@ void SceneManager::SetScene(const std::string& sceneName)
 	m_currentScene = m_scenes[sceneName];
 }
 
-Scene* SceneManager::GetScene(const std::string& sceneName)
+InternalScene* SceneManager::GetScene(const std::string& sceneName)
 {
 	return m_scenes[sceneName];
 }
 
-Scene* SceneManager::GetCurrentScene() const
+InternalScene* SceneManager::GetCurrentScene() const
 {
 	return m_currentScene;
 }
