@@ -15,6 +15,7 @@ private:
 	// Scene related
 	std::string m_currentSceneName;
 	bool m_showScenesTab = false;
+	char m_sceneInputField[100] = {};
 
 	// Script Tab values
 	char m_createScriptPath[36] = {};
@@ -105,5 +106,6 @@ private:
 	void RenderScriptsTab();
 	void RenderModelsTab();
 	void RenderTextureTab();
+	void RenderScenesTab();
 };
 

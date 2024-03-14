@@ -16,6 +16,9 @@ public:
 	// Assign this scene as the current scene.
 	void Assign();
 
+	// Assign this scene for editing.
+	void AssignEdit();
+
 	// Set the scene name reference.
 	void SetSceneName(const std::string& sceneName);
 

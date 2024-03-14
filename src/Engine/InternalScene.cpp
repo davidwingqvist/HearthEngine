@@ -15,6 +15,11 @@ void InternalScene::Assign()
 	LUA.m_currentRegistry = &m_registry;
 }
 
+void InternalScene::AssignEdit()
+{
+	LUA.m_currentRegistry = &m_registry;
+}
+
 void InternalScene::SetSceneName(const std::string& sceneName)
 {
 	m_sceneName = sceneName;
@@ -55,7 +60,7 @@ void InternalScene::SetupComponents()
 		for (int i = 0; i < 5; i++)
 		{
 			LUA_GAME.CreateObjectFromScript(script.script_id[i], entity);
-			LUA_GAME.AwakeObjectFromScript(script.script_id[i], entity);
+			//LUA_GAME.AwakeObjectFromScript(script.script_id[i], entity);
 		}
 
 		});

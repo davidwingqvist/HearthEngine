@@ -71,6 +71,7 @@ void EngineGUI::RenderGUI()
 	Get().RenderModelsTab();
 	Get().RenderTextureTab();
 	Get().RenderScriptsTab();
+	Get().RenderScenesTab();
 }
 
 void EngineGUI::CommitGUI()
@@ -922,6 +923,63 @@ void EngineGUI::RenderTextureTab()
 			}
 			id++;
 		}
+
+		ImGui::End();
+	}
+}
+
+void EngineGUI::RenderScenesTab()
+{
+	if (m_showScenesTab)
+	{
+		const ImVec2 wSize = {ImGui::GetWindowSize().x * 2.0f, ImGui::GetWindowSize().y};
+		ImGui::SetNextWindowSize(wSize);
+		ImGui::Begin("Scenes", &m_showScenesTab);
+
+		/*
+		
+			Create or Delete Scene.
+		
+		*/
+		int id = 1;
+
+		ImGui::TextColored(ImVec4(255, 0, 255, 255), "Create new Scene");
+		ImGui::BeginChild(id, { 0, 0 }, ImGuiChildFlags_Border | ImGuiChildFlags_AutoResizeY);
+		
+		if (ImGui::InputTextWithHint("###SceneInputHandler", "Input scene name...", m_sceneInputField, 100, ImGuiInputTextFlags_EnterReturnsTrue))
+		{
+			m_sceneManagerRef->AddScene(std::string(m_sceneInputField));
+			
+			memset(m_sceneInputField, '\0', 100);
+		}
+
+		id++;
+		ImGui::EndChild();
+
+		/*
+		
+			Display all available Scenes.
+			* Delete also available.
+		*/
+
+		ImGui::TextColored(ImVec4(255, 0, 255, 255), "List of Scenes");
+
+
+		ImGui::BeginChild(id, { 0, 0 }, ImGuiChildFlags_Border | ImGuiChildFlags_AutoResizeY);
+		auto& scenes = m_sceneManagerRef->GetSceneNames();
+		for (auto& scene : scenes)
+		{
+			ImGui::Text(scene.c_str());
+			ImGui::SameLine();
+			if (ImGui::Button("Select###SceneSelectButton"))
+			{
+				m_sceneManagerRef->SetSceneForEdit(scene);
+			}
+			ImGui::SameLine();
+			ImGui::Button("Delete###SceneDeleteButton");
+		}
+
+		ImGui::EndChild();
 
 		ImGui::End();
 	}

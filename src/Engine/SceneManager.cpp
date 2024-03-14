@@ -21,8 +21,6 @@ void SceneManager::AddInternalScene(const std::string& sceneName)
 	Scene* newScene = new Scene();
 	newScene->SetSceneName(sceneName);
 	m_scenes[sceneName] = newScene;
-	m_sceneNames.push_back(sceneName);
-	m_currentSceneName = sceneName;
 	DEBUG_INFO("Added Edit Scene: " + sceneName);
 }
 
@@ -47,6 +45,20 @@ void SceneManager::SetScene(const std::string& sceneName)
 	DEBUG_INFO("Scene set to: '" + sceneName + "'\n")
 	m_currentScene = m_scenes[sceneName];
 	m_currentScene->Assign();
+}
+
+void SceneManager::SetSceneForEdit(const std::string& sceneName)
+{
+	if (m_scenes.find(sceneName) == m_scenes.end())
+	{
+		DEBUG_ERROR("No scene with the name: '" + sceneName + "' found.")
+			return;
+	}
+
+	DEBUG_INFO("Scene set to: '" + sceneName + "'\n");
+
+	m_scenes[sceneName]->AssignEdit();
+	m_currentSceneName = sceneName;
 }
 
 InternalScene* SceneManager::GetScene(const std::string& sceneName)
