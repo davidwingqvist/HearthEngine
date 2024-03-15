@@ -182,5 +182,5 @@ void LightPass::Create()
 
 void LightPass::ForceLightUpdate()
 {
-	this->GatherLights(&m_currentScene->GetRegistry());
+	this->GatherLights(m_currentScene->GetRegistry());
 }

@@ -23,6 +23,12 @@ void UpdatePublicBuffer(ID3D11Buffer** buffer, const sm::Matrix& matrix_data)
 
 }
 
+void Scene::AssignEdit(InternalScene* scene)
+{
+	LUA.m_currentRegistry = scene->GetRegistry();
+	m_sceneReg = scene->GetRegistry();
+}
+
 Scene::Scene()
 	:InternalScene()
 {
@@ -145,32 +151,35 @@ void Scene::RegisterComponentsToLua()
 
 void Scene::Draw()
 {
-	// Public buffer is set to the first slot in Vertex Shader
-	D3D11Core::Get().Context()->VSSetConstantBuffers(0, 1, m_publicBuffer.GetAddressOf());
-	m_camera.Move();
+	if (m_sceneReg)
+	{
+		// Public buffer is set to the first slot in Vertex Shader
+		D3D11Core::Get().Context()->VSSetConstantBuffers(0, 1, m_publicBuffer.GetAddressOf());
+		m_camera.Move();
 
-	m_registry.Group<Model, Transform>().ForEach([&](Model& model, Transform& transform){
+		m_sceneReg->Group<Model, Transform>().ForEach([&](Model& model, Transform& transform) {
 
-		if (model.isVisible)
-		{
-			UpdatePublicBuffer(m_publicBuffer.GetAddressOf(), GetMatrix(transform));
+			if (model.isVisible)
+			{
+				UpdatePublicBuffer(m_publicBuffer.GetAddressOf(), GetMatrix(transform));
 
-			if(model.model_texture)
-				model.model_texture->SetAsTexture();
+				if (model.model_texture)
+					model.model_texture->SetAsTexture();
 
-			// draw each model.
-			if (model.model_data)
-				model.model_data->Draw();
-		}
+				// draw each model.
+				if (model.model_data)
+					model.model_data->Draw();
+			}
 
-		});
+			});
 
-	m_drawManager.Draw();
+		m_drawManager.Draw();
+	}
 
 	
 }
 
-recs::recs_registry& Scene::GetRegistry()
+recs::recs_registry* Scene::GetRegistry()
 {
-	return m_registry;
+	return m_sceneReg;
 }

@@ -17,14 +17,14 @@ public:
 	void Assign();
 
 	// Assign this scene for editing.
-	void AssignEdit();
+	virtual void AssignEdit(InternalScene* scene);
 
 	// Set the scene name reference.
 	void SetSceneName(const std::string& sceneName);
 
 	void SetupComponents();
 
-	recs::recs_registry& GetRegistry();
+	virtual recs::recs_registry* GetRegistry();
 
 	InternalScene();
 

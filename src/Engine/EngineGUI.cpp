@@ -21,7 +21,6 @@ EngineGUI::EngineGUI()
 	ImGui_ImplDX11_Init(D3D11Core::Get().Device(), D3D11Core::Get().Context());
 	ImGui::StyleColorsDark();
 	ImGui_ImplDX11_CreateDeviceObjects(); // uses device, therefore has to be called before render thread starts
-	m_currentSceneName = "Not Selected.";
 }
 
 EngineGUI::~EngineGUI()
@@ -139,7 +138,7 @@ void EngineGUI::RenderTopBar()
 		DEBUG_INFO("LUA stack has been cleared.\n")
 	}
 
-	ImGui::Text(("Current Scene: " + m_currentSceneName).c_str());
+	ImGui::Text(("Current Scene: " + m_sceneManagerRef->GetCurrentSceneName()).c_str());
 
 	ImGui::EndMenuBar();
 
@@ -225,9 +224,9 @@ void EngineGUI::RenderTopBar()
 		ImGui::TextColored(ImVec4(255, 0, 255, 255), "Objects");
 		if (ImGui::BeginListBox("###AllObjects"))
 		{
-			recs::recs_registry& reg = m_sceneManagerRef->GetCurrentScene()->GetRegistry();
+			recs::recs_registry* reg = m_sceneManagerRef->GetCurrentScene()->GetRegistry();
 
-			const recs::Entity_Group grp = reg.GetEntities();
+			const recs::Entity_Group grp = reg->GetEntities();
 
 			for (int i = 0; i < grp.size(); i++)
 			{
@@ -313,34 +312,40 @@ void EngineGUI::RenderHierarchy()
 	ImGui::Begin("Object View", 0, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_MenuBar);
 	if (m_sceneManagerRef)
 	{
-		auto& reg = m_sceneManagerRef->GetCurrentScene()->GetRegistry();
+		auto reg = m_sceneManagerRef->GetCurrentScene()->GetRegistry();
+
+		if (!reg)
+		{
+			ImGui::End();
+			return;
+		}
 
 		ImGui::BeginMenuBar();
 		if (ImGui::Button("Create New Entity"))
 		{
-			auto e = reg.CreateEntity();
+			auto e = reg->CreateEntity();
 			// should always have a gameobject and transform component.
-			reg.AddComponent<GameObject>(e);
-			reg.AddComponent<Transform>(e);
+			reg->AddComponent<GameObject>(e);
+			reg->AddComponent<Transform>(e);
 		}
 
 		if (ImGui::Button("Delete All"))
 		{
-			auto& e = reg.GetEntities();
+			auto& e = reg->GetEntities();
 			while (!e.empty())
 			{
-				reg.DestroyEntity(e.back());
+				reg->DestroyEntity(e.back());
 			}
 		}
 
 		ImGui::EndMenuBar();
 
-		auto& ent = reg.GetEntities();
+		auto& ent = reg->GetEntities();
 
 		for (auto& e : ent)
 		{
 			std::string ent_string = "Entity: " + std::to_string(e);
-			auto gameObject = reg.GetComponent<GameObject>(e);
+			auto gameObject = reg->GetComponent<GameObject>(e);
 			if (gameObject)
 			{
 				ent_string = gameObject->name;
@@ -356,7 +361,7 @@ void EngineGUI::RenderHierarchy()
 			std::string tag = "X###deleteEntity" + std::to_string(e);
 			if (ImGui::Button(tag.c_str(), {ImGui::GetWindowWidth() * 0.15f, 0.0}))
 			{
-				reg.DestroyEntity(e);
+				reg->DestroyEntity(e);
 
 				// set null entity if deleted currently selected entity.
 				if(e == m_currentEntity)
@@ -445,9 +450,15 @@ void EngineGUI::RenderProperties()
 	{
 		ImGui::Begin("Properties", &m_showPropertiesTab, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
 
-		recs::recs_registry& reg = m_sceneManagerRef->GetCurrentScene()->GetRegistry();
+		recs::recs_registry* reg = m_sceneManagerRef->GetCurrentScene()->GetRegistry();
 
-		GameObject* currGameObject = reg.GetComponent<GameObject>(m_currentEntity);
+		if (!reg)
+		{
+			ImGui::End();
+			return;
+		}
+
+		GameObject* currGameObject = reg->GetComponent<GameObject>(m_currentEntity);
 
 		if (currGameObject)
 		{
@@ -464,7 +475,7 @@ void EngineGUI::RenderProperties()
 			ImGui::EndChild();
 		}
 
-		Transform* currTransform = reg.GetComponent<Transform>(m_currentEntity);
+		Transform* currTransform = reg->GetComponent<Transform>(m_currentEntity);
 		if (currTransform)
 		{
 			ImGui::BeginChild(3, ImVec2(ImGui::GetContentRegionAvail().x, 0), ImGuiChildFlags_Border | ImGuiChildFlags_AlwaysUseWindowPadding | ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_AutoResizeX);
@@ -504,13 +515,13 @@ void EngineGUI::RenderProperties()
 			//ImGui::SetCursorPosX((ImGui::GetWindowWidth() * 0.45f));
 			//if (ImGui::Button("Delete###transformdelete"))
 			//{
-			//	reg.RemoveComponent<Transform>(m_currentEntity);
+			//	reg->RemoveComponent<Transform>(m_currentEntity);
 			//}
 
 			ImGui::EndChild();
 		}
 
-		Model* currModel = reg.GetComponent<Model>(m_currentEntity);
+		Model* currModel = reg->GetComponent<Model>(m_currentEntity);
 		if (currModel)
 		{
 			ImGui::BeginChild(2, ImVec2(ImGui::GetContentRegionAvail().x, 0), ImGuiChildFlags_Border | ImGuiChildFlags_AlwaysUseWindowPadding | ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_AutoResizeX);
@@ -536,7 +547,7 @@ void EngineGUI::RenderProperties()
 				{
 					currModel->model_data = newModel;
 
-					reg.GetComponent<ModelID>(m_currentEntity)->model_id = ResourceManager::Get().GetHashCode(m_modelinputField);
+					reg->GetComponent<ModelID>(m_currentEntity)->model_id = ResourceManager::Get().GetHashCode(m_modelinputField);
 				}
 
 				memset(m_modelinputField, 0, 100);
@@ -563,7 +574,7 @@ void EngineGUI::RenderProperties()
 				{
 					currModel->model_texture = newTexture;
 
-					reg.GetComponent<ModelID>(m_currentEntity)->texture_id = ResourceManager::Get().GetHashCode(m_textureInputField);
+					reg->GetComponent<ModelID>(m_currentEntity)->texture_id = ResourceManager::Get().GetHashCode(m_textureInputField);
 				}
 
 				memset(m_textureInputField, 0, 100);
@@ -572,14 +583,14 @@ void EngineGUI::RenderProperties()
 			ImGui::SetCursorPosX((ImGui::GetWindowWidth() * 0.45f));
 			if (ImGui::Button("Delete###modeldelete"))
 			{
-				reg.RemoveComponent<Model>(m_currentEntity);
-				reg.RemoveComponent<ModelID>(m_currentEntity);
+				reg->RemoveComponent<Model>(m_currentEntity);
+				reg->RemoveComponent<ModelID>(m_currentEntity);
 			}
 
 			ImGui::EndChild();
 		}
 
-		RigidBody* rigidBody = reg.GetComponent<RigidBody>(m_currentEntity);
+		RigidBody* rigidBody = reg->GetComponent<RigidBody>(m_currentEntity);
 
 		if (rigidBody)
 		{
@@ -593,13 +604,13 @@ void EngineGUI::RenderProperties()
 			ImGui::SetCursorPosX((ImGui::GetWindowWidth() * 0.45f));
 			if (ImGui::Button("Delete###rigidbodydelete"))
 			{
-				reg.RemoveComponent<RigidBody>(m_currentEntity);
+				reg->RemoveComponent<RigidBody>(m_currentEntity);
 			}
 
 			ImGui::EndChild();
 		}
 
-		Light* currLight = reg.GetComponent<Light>(m_currentEntity);
+		Light* currLight = reg->GetComponent<Light>(m_currentEntity);
 
 		if (currLight)
 		{
@@ -637,12 +648,12 @@ void EngineGUI::RenderProperties()
 			
 			if (ImGui::Button("Delete###lightdelete"))
 			{
-				reg.RemoveComponent<Light>(m_currentEntity);
+				reg->RemoveComponent<Light>(m_currentEntity);
 			}
 			ImGui::EndChild();
 		}
 
-		Script* currScripts = reg.GetComponent<Script>(m_currentEntity);
+		Script* currScripts = reg->GetComponent<Script>(m_currentEntity);
 
 		if (currScripts)
 		{
@@ -695,7 +706,7 @@ void EngineGUI::RenderProperties()
 			ImGui::SetCursorPosX((ImGui::GetWindowWidth() * 0.45f));
 			if (ImGui::Button("Delete###scriptdelete"))
 			{
-				reg.RemoveComponent<Script>(m_currentEntity);
+				reg->RemoveComponent<Script>(m_currentEntity);
 			}
 
 			ImGui::EndChild();
@@ -726,7 +737,7 @@ void EngineGUI::RenderFileKeepingWindow()
 		{
 			if (m_sceneManagerRef)
 			{
-				m_sceneManagerRef->GetCurrentScene()->GetRegistry().SaveData();
+				m_sceneManagerRef->GetCurrentScene()->GetRegistry()->SaveData();
 			}
 		}
 
@@ -734,7 +745,7 @@ void EngineGUI::RenderFileKeepingWindow()
 		{
 			if (m_sceneManagerRef)
 			{
-				m_sceneManagerRef->GetCurrentScene()->GetRegistry().LoadData();
+				m_sceneManagerRef->GetCurrentScene()->GetRegistry()->LoadData();
 			}
 		}
 
@@ -761,25 +772,25 @@ void EngineGUI::RenderNewComponentTab()
 		ImGui::SetNextWindowSize({ImGui::GetWindowSize().x, 0.0f});
 		ImGui::Begin("Add Component##windowcomponentadd", &m_showNewComponentTab, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
 
-		auto& reg = m_sceneManagerRef->GetCurrentScene()->GetRegistry();
+		auto reg = m_sceneManagerRef->GetCurrentScene()->GetRegistry();
 
 
 		if (ImGui::Button("Rigidbody", { ImGui::GetWindowSize().x, 0 }))
 		{
-			reg.AddComponent<RigidBody>(m_currentEntity);
+			reg->AddComponent<RigidBody>(m_currentEntity);
 		}
 		if (ImGui::Button("Model", { ImGui::GetWindowSize().x, 0 }))
 		{
-			reg.AddComponent<Model>(m_currentEntity);
-			reg.AddComponent<ModelID>(m_currentEntity);
+			reg->AddComponent<Model>(m_currentEntity);
+			reg->AddComponent<ModelID>(m_currentEntity);
 		}
 		if (ImGui::Button("Light", { ImGui::GetWindowSize().x, 0 }))
 		{
-			reg.AddComponent<Light>(m_currentEntity);
+			reg->AddComponent<Light>(m_currentEntity);
 		}
 		if (ImGui::Button("Script", { ImGui::GetWindowSize().x, 0 }))
 		{
-			reg.AddComponent<Script>(m_currentEntity);
+			reg->AddComponent<Script>(m_currentEntity);
 		}
 
 		ImGui::End();
@@ -793,7 +804,7 @@ void EngineGUI::RenderScriptsTab()
 		ImGui::Begin("Scripts###WindowsScripts", &m_showScriptsTab);
 
 		const auto& scripts = LUA.GetScriptNames();
-		recs::recs_registry& reg = m_sceneManagerRef->GetCurrentScene()->GetRegistry();
+		recs::recs_registry* reg = m_sceneManagerRef->GetCurrentScene()->GetRegistry();
 
 		int id = 1;
 		for (const auto& script : scripts)
@@ -805,7 +816,7 @@ void EngineGUI::RenderScriptsTab()
 			ImGui::SetCursorPosX(ImGui::GetWindowWidth() * 0.82f);
 			if (ImGui::Button(("Select###scriptselect" + std::to_string(id)).c_str(), { ImGui::GetWindowWidth() * 0.15f , 0 }))
 			{
-				Script* s = reg.GetComponent<Script>(m_currentEntity);
+				Script* s = reg->GetComponent<Script>(m_currentEntity);
 				if (s)
 				{
 					for (int i = 0; i < MAX_SCRIPTS; i++)
@@ -847,7 +858,7 @@ void EngineGUI::RenderModelsTab()
 
 		ImGui::EndMenuBar();
 
-		recs::recs_registry& reg = m_sceneManagerRef->GetCurrentScene()->GetRegistry();
+		recs::recs_registry* reg = m_sceneManagerRef->GetCurrentScene()->GetRegistry();
 		const auto& a = ResourceManager::Get().GetResourceMap();
 
 		// Identification for child windows.
@@ -864,8 +875,8 @@ void EngineGUI::RenderModelsTab()
 				ImGui::SetCursorPosX(ImGui::GetWindowWidth() * 0.82f);
 				if (ImGui::Button(std::string("Select###" + std::to_string(id)).c_str(), {ImGui::GetWindowWidth() * 0.15f , 0}))
 				{
-					reg.GetComponent<Model>(m_currentEntity)->model_data = dynamic_cast<Model3D*>(r.second.get());
-					reg.GetComponent<ModelID>(m_currentEntity)->model_id = r.first;
+					reg->GetComponent<Model>(m_currentEntity)->model_data = dynamic_cast<Model3D*>(r.second.get());
+					reg->GetComponent<ModelID>(m_currentEntity)->model_id = r.first;
 					m_showModelsTab = false;
 				}
 				ImGui::EndChild();
@@ -897,7 +908,7 @@ void EngineGUI::RenderTextureTab()
 
 		ImGui::EndMenuBar();
 
-		recs::recs_registry& reg = m_sceneManagerRef->GetCurrentScene()->GetRegistry();
+		recs::recs_registry* reg = m_sceneManagerRef->GetCurrentScene()->GetRegistry();
 		const auto& a = ResourceManager::Get().GetResourceMap();
 
 		// Identification for child windows.
@@ -914,8 +925,8 @@ void EngineGUI::RenderTextureTab()
 				ImGui::SetCursorPosX(ImGui::GetWindowWidth() * 0.82f);
 				if (ImGui::Button(std::string("Select###" + std::to_string(id)).c_str(), { ImGui::GetWindowWidth() * 0.15f , 0 }))
 				{
-					reg.GetComponent<Model>(m_currentEntity)->model_texture = dynamic_cast<Texture*>(r.second.get());
-					reg.GetComponent<ModelID>(m_currentEntity)->texture_id = r.first;
+					reg->GetComponent<Model>(m_currentEntity)->model_texture = dynamic_cast<Texture*>(r.second.get());
+					reg->GetComponent<ModelID>(m_currentEntity)->texture_id = r.first;
 					m_showTextureTab = false;
 				}
 				ImGui::EndChild();
@@ -971,13 +982,17 @@ void EngineGUI::RenderScenesTab()
 		{
 			ImGui::Text(scene.c_str());
 			ImGui::SameLine();
-			if (ImGui::Button("Select###SceneSelectButton"))
+			if (ImGui::Button(("Select###SceneSelectButton" + std::to_string(id)).c_str()))
 			{
 				m_sceneManagerRef->SetSceneForEdit(scene);
 			}
 			ImGui::SameLine();
 			ImGui::Button("Delete###SceneDeleteButton");
+
+			id++;
 		}
+
+
 
 		ImGui::EndChild();
 

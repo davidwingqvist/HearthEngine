@@ -26,7 +26,6 @@ Engine::Engine()
 	this->m_renderer.Initialize();
 
 	m_sceneManager.AddInternalScene("Internal_EditScene");
-	m_sceneManager.SetScene("Internal_EditScene");
 
 	DEBUG_INFO("The basics of the Engine is now up and running.\n");
 	EngineGUI::Get().SetSceneManagerRef(&m_sceneManager);

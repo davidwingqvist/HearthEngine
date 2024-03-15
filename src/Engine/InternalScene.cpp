@@ -15,9 +15,9 @@ void InternalScene::Assign()
 	LUA.m_currentRegistry = &m_registry;
 }
 
-void InternalScene::AssignEdit()
+void InternalScene::AssignEdit(InternalScene* scene)
 {
-	LUA.m_currentRegistry = &m_registry;
+
 }
 
 void InternalScene::SetSceneName(const std::string& sceneName)
@@ -78,9 +78,9 @@ void InternalScene::SetupComponents()
 	pushTransform(LUA.State());
 }
 
-recs::recs_registry& InternalScene::GetRegistry()
+recs::recs_registry* InternalScene::GetRegistry()
 {
-    return m_registry;
+    return &m_registry;
 }
 
 InternalScene::InternalScene()

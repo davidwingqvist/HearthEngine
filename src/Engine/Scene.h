@@ -9,6 +9,7 @@ private:
 	//recs::recs_registry m_registry;
 	DrawManager m_drawManager;
 	DXPointer<ID3D11Buffer> m_publicBuffer;
+	recs::recs_registry* m_sceneReg = nullptr;
 
 	bool CreatePublicBuffer();
 
@@ -18,6 +19,8 @@ private:
 	void RegisterComponentsToLua();
 
 public:
+
+	void AssignEdit(InternalScene* scene) override;
 
 	Scene();
 	~Scene();
@@ -32,5 +35,5 @@ public:
 
 	void Draw() override;
 
-	recs::recs_registry& GetRegistry();
+	recs::recs_registry* GetRegistry() override;
 };
