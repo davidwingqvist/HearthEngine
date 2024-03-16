@@ -3,3 +3,5 @@ Model Tree1.obj
 Texture Chest_Albedo.png
 Model throwingknife.obj
 Model doublebarrelshotugn.obj
+Icon BoxIcon.png
+Icon MapIcon.png

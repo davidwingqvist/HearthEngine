@@ -419,8 +419,9 @@ void EngineGUI::RenderConsole()
 
 	// Upper line button bar.
 
+	// Console list.
 	ImGui::BeginListBox("###consoleLog", ImVec2(ImGui::GetWindowWidth(), ImGui::GetWindowSize().y * 0.72f));
-	for (int i = 0; i < m_consoleLogs.size(); i++)
+	for (int i = m_consoleLogs.size() - 1; i >= 0; i--)
 	{
 		if(m_filter & (UINT)m_consoleLogs[i].type)
 			ImGui::TextColored(m_consoleLogs[i].color, m_consoleLogs[i].data.c_str());
@@ -733,6 +734,7 @@ void EngineGUI::RenderFileKeepingWindow()
 
 		ImGui::BeginMenuBar();
 
+		// REDO
 		if (ImGui::Button("Save"))
 		{
 			if (m_sceneManagerRef)
@@ -741,6 +743,7 @@ void EngineGUI::RenderFileKeepingWindow()
 			}
 		}
 
+		// REDO
 		if (ImGui::Button("Load"))
 		{
 			if (m_sceneManagerRef)
@@ -754,7 +757,6 @@ void EngineGUI::RenderFileKeepingWindow()
 		{
 			if (m_sceneManagerRef)
 			{
-				//m_sceneManagerRef->GetCurrentScene()->GetRegistry().LoadData();
 			}
 		}
 
@@ -985,6 +987,7 @@ void EngineGUI::RenderScenesTab()
 			if (ImGui::Button(("Select###SceneSelectButton" + std::to_string(id)).c_str()))
 			{
 				m_sceneManagerRef->SetSceneForEdit(scene);
+				m_currentEntity = recs::NULL_ENTITY;
 			}
 			ImGui::SameLine();
 			ImGui::Button("Delete###SceneDeleteButton");

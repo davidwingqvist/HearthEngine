@@ -13,7 +13,7 @@ private:
 	bool m_showEditTab = false;
 
 	// Scene related
-	bool m_showScenesTab = false;
+	bool m_showScenesTab = true;
 	char m_sceneInputField[100] = {};
 
 	// Script Tab values

@@ -173,10 +173,13 @@
     <ClCompile Include="src\Engine\LuaGameState.cpp">
       <Filter>Lua</Filter>
     </ClCompile>
-    <ClCompile Include="src\Engine\GameScene.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Engine\InternalScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Icon.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\GameScene.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
   </ItemGroup>
@@ -303,6 +306,9 @@
     </ClInclude>
     <ClInclude Include="src\Engine\InternalScene.h">
       <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Icon.h">
+      <Filter>Resource</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,7 @@
 #include "Header.h"
 #include "ResourceManager.h"
 #include "Texture.h"
+#include "Icon.h"
 #include <sstream>
 
 const std::string DEFAULT_PATH = "Options/resourcemanager/";
@@ -102,6 +103,23 @@ bool ResourceManager::LoadStoredFileItems()
 
             continue;
         }
+        else if (type == "Icon")
+        {
+            std::shared_ptr<Icon> newIcon = std::make_shared<Icon>();
+
+            if (newIcon->Create(name))
+            {
+                DEBUG_SUCCESS("Resource: '" + name + "' created.");
+            }
+            else
+            {
+                DEBUG_ERROR("Resource: '" + name + "' failed to be created.");
+            }
+
+            m_resources.emplace(id, newIcon);
+
+            continue;
+        }
 
         DEBUG_ERROR("Unknown type: " + type);
     }
@@ -131,6 +149,10 @@ bool ResourceManager::SaveStoredItemsToFile()
         else if (dynamic_cast<Texture*>(resource.second.get()))
         {
             type = "Texture";
+        }
+        else if (dynamic_cast<Icon*>(resource.second.get()))
+        {
+            type = "Icon";
         }
 
         stream << type << ' ' << resource.second.get()->GetName() << "\n";
