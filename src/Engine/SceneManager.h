@@ -11,6 +11,8 @@ private:
 	std::string m_currentSceneName;
 	std::vector<std::string> m_sceneNames;
 
+	void LoadSpecificScene(const std::string& sceneName);
+
 public:
 
 	SceneManager();
@@ -24,6 +26,12 @@ public:
 	void SetSceneForEdit(const std::string& sceneName);
 	InternalScene* GetScene(const std::string& sceneName);
 	const std::string& GetCurrentSceneName() const;
+
+	// Load scenes from file.
+	void LoadScenes();
+
+	// Save scenes to file.
+	void SaveScenes();
 
 	const std::vector<std::string>& GetSceneNames() const;
 

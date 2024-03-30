@@ -778,6 +778,7 @@ void EngineGUI::RenderFileKeepingWindow()
 				{
 					m_sceneManagerRef->GetScene(scene)->GetRegistry()->SaveData();
 				}
+				m_sceneManagerRef->SaveScenes();
 			}
 		}
 
@@ -786,12 +787,14 @@ void EngineGUI::RenderFileKeepingWindow()
 		{
 			if (m_sceneManagerRef)
 			{
+				m_sceneManagerRef->LoadScenes();
 				//m_sceneManagerRef->GetCurrentScene()->GetRegistry()->LoadData();
 				auto& sceneNames = m_sceneManagerRef->GetSceneNames();
 				for (auto& scene : sceneNames)
 				{
 					m_sceneManagerRef->GetScene(scene)->GetRegistry()->LoadData();
 				}
+				
 			}
 		}
 

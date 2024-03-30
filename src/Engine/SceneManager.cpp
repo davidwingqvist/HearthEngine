@@ -3,6 +3,11 @@
 #include "Debugger.h"
 #include "GameScene.h"
 
+void SceneManager::LoadSpecificScene(const std::string& sceneName)
+{
+
+}
+
 SceneManager::SceneManager()
 {
 	m_currentScene = nullptr;
@@ -74,6 +79,27 @@ InternalScene* SceneManager::GetScene(const std::string& sceneName)
 const std::string& SceneManager::GetCurrentSceneName() const
 {
 	return m_currentSceneName;
+}
+
+void SceneManager::LoadScenes()
+{
+	std::ifstream stream(OPTIONPATH + "Scenes.txt");
+
+	std::string line;
+	while (std::getline(stream, line))
+	{
+		AddScene(line);
+	}
+}
+
+void SceneManager::SaveScenes()
+{
+	std::ofstream outfile(OPTIONPATH + "Scenes.txt");
+
+	for (auto& scene : m_sceneNames)
+	{
+		outfile << scene << "\n";
+	}
 }
 
 const std::vector<std::string>& SceneManager::GetSceneNames() const
