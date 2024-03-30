@@ -36,6 +36,7 @@ private:
 	bool m_showBottomFiles = false;
 	bool m_showBottomConsole = false;
 	bool m_showBottomStatistics = false;
+	bool m_showBottomScenes = false;
 
 	// Console Window Values
 	std::vector<ConsoleLogEvent> m_consoleLogs;
@@ -99,6 +100,7 @@ private:
 	void RenderHierarchy();
 	void RenderConsole();
 	void RenderStatistics();
+	void RenderScenes();
 	void RenderProperties();
 	void RenderFileKeepingWindow();
 	void RenderNewComponentTab();

@@ -6,6 +6,7 @@
 #include "ResourceManager.h"
 #include "Texture.h"
 #include "Time.h"
+#include "Icon.h"
 
 constexpr ImGuiWindowFlags menuWindow = (ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoTitleBar);
 constexpr ImGuiWindowFlags bottomWindow = ImGuiWindowFlags_NoTitleBar;
@@ -55,6 +56,7 @@ void EngineGUI::BottomBarPutToFalse()
 	m_showBottomConsole = false;
 	m_showBottomFiles = false;
 	m_showBottomStatistics = false;
+	m_showBottomScenes = false;
 }
 
 void EngineGUI::RenderGUI()
@@ -262,7 +264,7 @@ void EngineGUI::RenderBottomBar()
 
 	ImGui::BeginChild("Sidebar", {ImGui::GetWindowWidth() / 5.0f, ImGui::GetContentRegionAvail().y }, ImGuiChildFlags_Border);
 
-	if (ImGui::Button("Files", { ImGui::GetWindowWidth(), ImGui::GetWindowHeight() / 10.0f }))
+	if (ImGui::Button("Items", { ImGui::GetWindowWidth(), ImGui::GetWindowHeight() / 10.0f }))
 	{
 		BottomBarPutToFalse();
 		m_showBottomFiles = true;
@@ -271,6 +273,7 @@ void EngineGUI::RenderBottomBar()
 	if (ImGui::Button("Scenes", { ImGui::GetWindowWidth(), ImGui::GetWindowHeight() / 10.0f }))
 	{
 		BottomBarPutToFalse();
+		m_showBottomScenes = true;
 	}
 
 	if (ImGui::Button("Console", { ImGui::GetWindowWidth(), ImGui::GetWindowHeight() / 10.0f }))
@@ -295,9 +298,13 @@ void EngineGUI::RenderBottomBar()
 	{
 		this->RenderConsole();
 	}
-	if (m_showBottomStatistics)
+	else if (m_showBottomStatistics)
 	{
 		this->RenderStatistics();
+	}
+	else if (m_showBottomScenes)
+	{
+		this->RenderScenes();
 	}
 
 	ImGui::EndChild();
@@ -438,6 +445,31 @@ void EngineGUI::RenderStatistics()
 {
 	std::string framesText = "FPS: " + std::to_string(1 / Time::Get().GetDeltaTime());
 	ImGui::Text(framesText.c_str());
+}
+
+void EngineGUI::RenderScenes()
+{
+	Icon* sceneIcon = ResourceManager::Get().GetResource<Icon>("MapIcon.png").get();
+
+	auto& sceneNames = m_sceneManagerRef->GetSceneNames();
+
+	ImVec2 size = { ImGui::GetWindowSize().x * 0.1f, ImGui::GetWindowSize().x * 0.1f };
+
+	int id = 1;
+	for (auto& scene : sceneNames)
+	{
+		ImGui::BeginChild(id++);
+		ImGui::Image(*sceneIcon->GetShaderView(), size);
+		ImGui::SetNextItemWidth(ImGui::GetWindowSize().x * 0.1f);
+		ImGui::Text(scene.c_str());
+		ImGui::SameLine();
+		if (ImGui::Button(("Select###sceneSelecterid" + std::to_string(id)).c_str()))
+		{
+			m_sceneManagerRef->SetSceneForEdit(scene);
+		}
+		ImGui::EndChild();
+	}
+
 }
 
 /*
@@ -739,7 +771,13 @@ void EngineGUI::RenderFileKeepingWindow()
 		{
 			if (m_sceneManagerRef)
 			{
-				m_sceneManagerRef->GetCurrentScene()->GetRegistry()->SaveData();
+				//m_sceneManagerRef->GetCurrentScene()->GetRegistry()->SaveData();
+
+				auto& sceneNames = m_sceneManagerRef->GetSceneNames();
+				for (auto& scene : sceneNames)
+				{
+					m_sceneManagerRef->GetScene(scene)->GetRegistry()->SaveData();
+				}
 			}
 		}
 
@@ -748,7 +786,12 @@ void EngineGUI::RenderFileKeepingWindow()
 		{
 			if (m_sceneManagerRef)
 			{
-				m_sceneManagerRef->GetCurrentScene()->GetRegistry()->LoadData();
+				//m_sceneManagerRef->GetCurrentScene()->GetRegistry()->LoadData();
+				auto& sceneNames = m_sceneManagerRef->GetSceneNames();
+				for (auto& scene : sceneNames)
+				{
+					m_sceneManagerRef->GetScene(scene)->GetRegistry()->LoadData();
+				}
 			}
 		}
 
