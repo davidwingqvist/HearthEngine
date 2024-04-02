@@ -29,6 +29,12 @@ void Scene::AssignEdit(InternalScene* scene)
 	m_sceneReg = scene->GetRegistry();
 }
 
+void Scene::Reset()
+{
+	m_sceneReg = nullptr;
+	LUA.m_currentRegistry = nullptr;
+}
+
 Scene::Scene()
 	:InternalScene()
 {

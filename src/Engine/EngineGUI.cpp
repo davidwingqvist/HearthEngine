@@ -771,8 +771,6 @@ void EngineGUI::RenderFileKeepingWindow()
 		{
 			if (m_sceneManagerRef)
 			{
-				//m_sceneManagerRef->GetCurrentScene()->GetRegistry()->SaveData();
-
 				auto& sceneNames = m_sceneManagerRef->GetSceneNames();
 				for (auto& scene : sceneNames)
 				{
@@ -787,8 +785,9 @@ void EngineGUI::RenderFileKeepingWindow()
 		{
 			if (m_sceneManagerRef)
 			{
+				m_currentEntity = recs::NULL_ENTITY;
+				m_sceneManagerRef->ResetScenes();
 				m_sceneManagerRef->LoadScenes();
-				//m_sceneManagerRef->GetCurrentScene()->GetRegistry()->LoadData();
 				auto& sceneNames = m_sceneManagerRef->GetSceneNames();
 				for (auto& scene : sceneNames)
 				{

@@ -22,6 +22,8 @@ public:
 
 	void AssignEdit(InternalScene* scene) override;
 
+	void Reset();
+
 	Scene();
 	~Scene();
 

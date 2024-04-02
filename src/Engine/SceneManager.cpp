@@ -102,6 +102,18 @@ void SceneManager::SaveScenes()
 	}
 }
 
+void SceneManager::ResetScenes()
+{
+	for (auto& scene : m_scenes)
+	{
+		delete scene.second;
+	}
+
+	m_scenes.clear();
+	m_sceneNames.clear();
+	m_editScene->Reset();
+}
+
 const std::vector<std::string>& SceneManager::GetSceneNames() const
 {
 	return m_sceneNames;

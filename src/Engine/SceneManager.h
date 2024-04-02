@@ -33,6 +33,9 @@ public:
 	// Save scenes to file.
 	void SaveScenes();
 
+	// Remove scenes and data from them.
+	void ResetScenes();
+
 	const std::vector<std::string>& GetSceneNames() const;
 
 };
