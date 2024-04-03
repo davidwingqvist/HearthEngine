@@ -24,6 +24,7 @@ public:
 	void AddScene(const std::string& sceneName);
 	void SetScene(const std::string& sceneName);
 	void SetSceneForEdit(const std::string& sceneName);
+	void RemoveScene(const std::string& sceneName);
 	InternalScene* GetScene(const std::string& sceneName);
 	const std::string& GetCurrentSceneName() const;
 

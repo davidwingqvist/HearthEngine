@@ -71,6 +71,21 @@ void SceneManager::SetSceneForEdit(const std::string& sceneName)
 	m_currentSceneName = sceneName;
 }
 
+void SceneManager::RemoveScene(const std::string& sceneName)
+{
+	delete m_scenes[sceneName];
+	m_scenes.erase(sceneName);
+
+	for (int i = 0; i < m_sceneNames.size(); i++)
+	{
+		if (m_sceneNames[i] == sceneName)
+		{
+			m_sceneNames.erase(m_sceneNames.begin() +  i);
+			break;
+		}
+	}
+}
+
 InternalScene* SceneManager::GetScene(const std::string& sceneName)
 {
 	return m_scenes[sceneName];

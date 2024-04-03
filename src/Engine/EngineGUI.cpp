@@ -766,7 +766,6 @@ void EngineGUI::RenderFileKeepingWindow()
 
 		ImGui::BeginMenuBar();
 
-		// REDO
 		if (ImGui::Button("Save"))
 		{
 			if (m_sceneManagerRef)
@@ -780,7 +779,6 @@ void EngineGUI::RenderFileKeepingWindow()
 			}
 		}
 
-		// REDO
 		if (ImGui::Button("Load"))
 		{
 			if (m_sceneManagerRef)
@@ -797,11 +795,11 @@ void EngineGUI::RenderFileKeepingWindow()
 			}
 		}
 
-		// Todo: Clear save data.
-		if (ImGui::Button("Clear"))
+		if (ImGui::Button("Clear##ClearScenesButton"))
 		{
 			if (m_sceneManagerRef)
 			{
+				m_sceneManagerRef->ResetScenes();
 			}
 		}
 
@@ -1035,7 +1033,14 @@ void EngineGUI::RenderScenesTab()
 				m_currentEntity = recs::NULL_ENTITY;
 			}
 			ImGui::SameLine();
-			ImGui::Button("Delete###SceneDeleteButton");
+			if (ImGui::Button(("Delete###SceneDeleteButton" + std::to_string(id)).c_str()))
+			{
+				// Delete scene, move edit scene to other scene, otherwise move to blank scene.
+
+				m_sceneManagerRef->RemoveScene(scene);
+				break;
+
+			}
 
 			id++;
 		}
