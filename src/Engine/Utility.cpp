@@ -63,6 +63,16 @@ sm::Vector2 utility::Reflect(const sm::Vector2& d, const sm::Vector2& n)
     return d - (((2 * d.Dot(n)) / n.Length()) * n);
 }
 
+bool utility::IsBoxColliding(const CollisionBox& a, const CollisionBox& b)
+{
+    return  a.max.x > b.min.x && 
+            a.min.x < b.max.x &&
+            a.max.y > b.min.y &&
+            a.min.y < b.max.y &&
+            a.max.z > b.min.z &&
+            a.min.z < b.max.z;
+}
+
 sm::Vector3 utility::Reflect(const sm::Vector3& d, const sm::Vector3& n)
 {
     return d - (((2*d.Dot(n)) / n.Length()) * n);

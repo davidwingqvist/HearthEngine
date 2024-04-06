@@ -36,6 +36,7 @@ void InternalScene::SetupComponents()
 	m_registry.RegisterDataToState(RigidBody());
 	m_registry.RegisterDataToState(ModelID());
 	m_registry.RegisterDataToState(Script());
+	m_registry.RegisterDataToState(CollisionBox());
 
 	m_registry.RegisterOnCreate<ModelID>([&](const recs::Entity& entity, ModelID& id)
 		{

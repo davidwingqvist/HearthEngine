@@ -746,6 +746,25 @@ void EngineGUI::RenderProperties()
 			
 		}
 
+		CollisionBox* currCollBox = reg->GetComponent<CollisionBox>(m_currentEntity);
+
+		if (currCollBox)
+		{
+			ImGui::BeginChild(7, ImVec2(ImGui::GetContentRegionAvail().x, 0), ImGuiChildFlags_Border | ImGuiChildFlags_AlwaysUseWindowPadding | ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_AutoResizeX);
+		
+			ImGui::TextColored(ImVec4(255, 0, 255, 255), "Collision Box");
+
+			ImGui::DragFloat("Size###SizeOfCollisionBoxDrag", &currCollBox->size, 0.3f, 0.0f, 0.0f, "%.1f");
+
+			ImGui::SetCursorPosX((ImGui::GetWindowWidth() * 0.45f));
+			if (ImGui::Button("Delete###cbdelete"))
+			{
+				reg->RemoveComponent<CollisionBox>(m_currentEntity);
+			}
+
+			ImGui::EndChild();
+		}
+
 		if (m_currentEntity != recs::NULL_ENTITY)
 		{
 			ImGui::SetCursorPosX((ImGui::GetWindowWidth() * 0.35f));
@@ -837,14 +856,15 @@ void EngineGUI::RenderNewComponentTab()
 		{
 			reg->AddComponent<Script>(m_currentEntity);
 		}
+		if (ImGui::Button("Collision Box", { ImGui::GetWindowSize().x, 0 }))
+		{
+			reg->AddComponent<CollisionBox>(m_currentEntity);
+		}
 		if (ImGui::Button("Camera Point", { ImGui::GetWindowSize().x, 0 }))
 		{
 			// To be implemented..
 		}
-		if (ImGui::Button("Collision Box", { ImGui::GetWindowSize().x, 0 }))
-		{
-			// To be implemented..
-		}
+
 
 		ImGui::End();
 	}

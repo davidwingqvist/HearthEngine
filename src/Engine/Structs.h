@@ -149,10 +149,10 @@ struct Model
 	bool isVisible = true;
 };
 
-struct CollisionBox 
+struct CollisionBox
 {
-	sm::Vector3 min;
-	sm::Vector3 max;
+	sm::Vector3 min = {};
+	sm::Vector3 max = {};
 	float size = 0;
 };
 

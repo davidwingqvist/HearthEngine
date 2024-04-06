@@ -39,4 +39,7 @@ namespace utility
 	// Calculate the reflect vector of (d) vector and (n) normal vector.
 	sm::Vector3 Reflect(const sm::Vector3& d, const sm::Vector3& n);
 	sm::Vector2 Reflect(const sm::Vector2& d, const sm::Vector2& n);
+
+	// Checks if two AABBs are colliding with each other.
+	bool IsBoxColliding(const CollisionBox& a, const CollisionBox& b);
 }
