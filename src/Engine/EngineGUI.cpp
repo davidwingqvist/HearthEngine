@@ -837,6 +837,14 @@ void EngineGUI::RenderNewComponentTab()
 		{
 			reg->AddComponent<Script>(m_currentEntity);
 		}
+		if (ImGui::Button("Camera Point", { ImGui::GetWindowSize().x, 0 }))
+		{
+			// To be implemented..
+		}
+		if (ImGui::Button("Collision Box", { ImGui::GetWindowSize().x, 0 }))
+		{
+			// To be implemented..
+		}
 
 		ImGui::End();
 	}

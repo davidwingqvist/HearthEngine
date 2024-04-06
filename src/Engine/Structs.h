@@ -101,6 +101,14 @@ struct camera_data
 	sm::Vector4 position;
 };
 
+struct CameraPoint 
+{
+
+	sm::Vector3 position;
+	sm::Vector3 target;
+
+};
+
 struct RigidBody
 {
 	float mass = 0;
@@ -139,6 +147,13 @@ struct Model
 	Model3D* model_data;
 	Texture* model_texture;
 	bool isVisible = true;
+};
+
+struct CollisionBox 
+{
+	sm::Vector3 min;
+	sm::Vector3 max;
+	float size = 0;
 };
 
 /*
