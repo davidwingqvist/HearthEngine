@@ -445,6 +445,10 @@ void EngineGUI::RenderStatistics()
 {
 	std::string framesText = "FPS: " + std::to_string(1 / Time::Get().GetDeltaTime());
 	ImGui::Text(framesText.c_str());
+
+
+
+	//ImGui::Checkbox("Render Collision Boxes?", nullptr);
 }
 
 void EngineGUI::RenderScenes()

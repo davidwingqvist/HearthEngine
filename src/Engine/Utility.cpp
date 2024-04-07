@@ -69,8 +69,8 @@ bool utility::IsBoxColliding(const CollisionBox& a, const CollisionBox& b)
             a.min.x < b.max.x &&
             a.max.y > b.min.y &&
             a.min.y < b.max.y &&
-            a.max.z > b.min.z &&
-            a.min.z < b.max.z;
+            a.max.z < b.min.z &&
+            a.min.z > b.max.z;
 }
 
 sm::Vector3 utility::Reflect(const sm::Vector3& d, const sm::Vector3& n)

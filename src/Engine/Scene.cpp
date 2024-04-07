@@ -59,16 +59,54 @@ Scene::~Scene()
 
 void Scene::Update()
 {
-	//m_registry.Update();
+	if (m_sceneReg)
+	{
 
-	//m_registry.Group<RigidBody, Transform>().ForEach([&](const recs::Entity& e, RigidBody& rb, Transform& transform) {
+		//m_registry.Update();
 
-	//	if (rb.hasGravity)
-	//	{
-	//		transform.pos.y -= GRAVITY * Time::Get().GetDeltaTime();
-	//	}
+		//m_registry.Group<RigidBody, Transform>().ForEach([&](const recs::Entity& e, RigidBody& rb, Transform& transform) {
 
-	//	});
+		//	if (rb.hasGravity)
+		//	{
+		//		transform.pos.y -= GRAVITY * Time::Get().GetDeltaTime();
+		//	}
+
+		//	});
+
+		// Update the min and max positions relative to transform pos.
+		m_sceneReg->Group<Transform, CollisionBox>().ForEach([&](Transform& transform, CollisionBox& coll) {
+
+			coll.min = transform.pos;
+			coll.min.x -= coll.size;
+			coll.min.z += coll.size;
+			coll.min.y -= coll.size;
+
+			coll.max = transform.pos;
+			coll.max.x += coll.size;
+			coll.max.z -= coll.size;
+			coll.max.y += coll.size;
+
+
+			});
+
+		//m_sceneReg->View<CollisionBox>().ForEach([&](const recs::Entity& ent1, CollisionBox& coll1) {
+
+		//	
+
+		//	m_sceneReg->View<CollisionBox>().ForEach([&](const recs::Entity& ent2, CollisionBox& coll2) {
+
+		//		if (ent1 != ent2)
+		//		{
+		//			if (utility::IsBoxColliding(coll1, coll2))
+		//			{
+		//				// Collision, Do something.
+		//			}
+		//		}
+
+		//		});
+
+		//	});
+	}
 }
 
 void Scene::Awake()
@@ -97,58 +135,6 @@ void Scene::PostDraw()
 {
 	EngineGUI::Get().CommitGUI();
 }
-
-//void Scene::SetupComponents()
-//{
-//	m_registry.RegisterComponent<Model>();
-//
-//	m_registry.RegisterDataToState(GameObject());
-//	m_registry.RegisterDataToState(Transform());
-//	m_registry.RegisterDataToState(Light());
-//	m_registry.RegisterDataToState(RigidBody());
-//	m_registry.RegisterDataToState(ModelID());
-//	m_registry.RegisterDataToState(Script());
-//
-//	m_registry.RegisterOnCreate<ModelID>([&](const recs::Entity& entity, ModelID& id)
-//		{
-//			if ((!m_registry.HasComponent<Model>(entity) && ((id.model_id != 0) || (id.texture_id != 0))))
-//			{
-//				Model* model = m_registry.AddComponent<Model>(entity);
-//
-//				if (id.model_id != 0)
-//				{
-//					model->model_data = ResourceManager::Get().GetResource<Model3D>(id.model_id).get();
-//				}
-//				if (id.texture_id != 0)
-//				{
-//					model->model_texture = ResourceManager::Get().GetResource<Texture>(id.texture_id).get();
-//				}
-//			}
-//		});
-//
-//	m_registry.RegisterOnCreate<Script>([&](const recs::Entity& entity, Script& script) {
-//
-//		LUA_GAME.SetCurrentEntity(entity);
-//		for (int i = 0; i < 5; i++)
-//		{
-//			LUA_GAME.CreateObjectFromScript(script.script_id[i], entity);
-//			LUA_GAME.AwakeObjectFromScript(script.script_id[i], entity);
-//		}
-//
-//		});
-//
-//	m_registry.RegisterOnUpdate<Script>([&](const recs::Entity& entity, Script& script) {
-//			
-//		LUA_GAME.SetCurrentEntity(entity);
-//		for (int i = 0; i < 5; i++)
-//		{
-//			LUA_GAME.UpdateObjectFromScript(script.script_id[i], entity);
-//		}
-//
-//		});
-//
-//	pushTransform(LUA.State());
-//}
 
 void Scene::RegisterComponentsToLua()
 {
