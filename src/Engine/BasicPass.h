@@ -2,6 +2,7 @@
 #include "Renderpass.h"
 #include "Shader.h"
 #include "WireFramePass.h"
+#include "CollisionBoxRenderPass.h"
 
 class BasicPass : public IRenderpass
 {
@@ -31,6 +32,7 @@ private:
 private:
 
 	WireFramePass m_gridPass;
+	CollisionBoxRenderPass m_collboxPass;
 
 public:
 

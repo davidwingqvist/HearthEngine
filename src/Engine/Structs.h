@@ -153,7 +153,10 @@ struct CollisionBox
 {
 	sm::Vector3 min = {};
 	sm::Vector3 max = {};
-	float size = 0;
+	float width = 1;
+	float height = 1;
+	float length = 1;
+	bool isActive = true;
 };
 
 /*

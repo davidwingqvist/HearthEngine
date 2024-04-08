@@ -206,6 +206,13 @@ void BasicPass::Pass(InternalScene* currentScene)
 	m_gridPass.Prepass();
 	m_gridPass.Pass(currentScene);
 	m_gridPass.Postpass();
+
+	if (m_collboxPass.IsActive())
+	{
+		m_collboxPass.Prepass();
+		m_collboxPass.Pass(currentScene);
+		m_collboxPass.Postpass();
+	}
 }
 
 void BasicPass::Postpass()

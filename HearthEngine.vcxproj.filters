@@ -182,6 +182,9 @@
     <ClCompile Include="src\Engine\GameScene.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine\CollisionBoxRenderPass.cpp">
+      <Filter>RenderPass\Passes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Engine\Header.h">
@@ -309,6 +312,9 @@
     </ClInclude>
     <ClInclude Include="src\Engine\Icon.h">
       <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\CollisionBoxRenderPass.h">
+      <Filter>RenderPass\Passes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -77,14 +77,14 @@ void Scene::Update()
 		m_sceneReg->Group<Transform, CollisionBox>().ForEach([&](Transform& transform, CollisionBox& coll) {
 
 			coll.min = transform.pos;
-			coll.min.x -= coll.size;
-			coll.min.z += coll.size;
-			coll.min.y -= coll.size;
+			coll.min.x -= coll.width;
+			coll.min.z += coll.length;
+			coll.min.y -= coll.height;
 
 			coll.max = transform.pos;
-			coll.max.x += coll.size;
-			coll.max.z -= coll.size;
-			coll.max.y += coll.size;
+			coll.max.x += coll.width;
+			coll.max.z -= coll.length;
+			coll.max.y += coll.height;
 
 
 			});
