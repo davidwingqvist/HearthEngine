@@ -234,4 +234,5 @@ void BasicPass::Create()
 	SetUpTextures();
 	SetUpDepthTexture();
 	m_gridPass.Create();
+	m_collboxPass.Create();
 }
