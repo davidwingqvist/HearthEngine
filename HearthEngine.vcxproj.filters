@@ -342,6 +342,12 @@
     <FxCompile Include="src\Engine\SkyBoxPixelShader.hlsl">
       <Filter>Shaders\HLSL</Filter>
     </FxCompile>
+    <FxCompile Include="src\Engine\CollisionBoxVertexShader.hlsl">
+      <Filter>Shaders\HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="src\Engine\CollisionBoxPixelShader.hlsl">
+      <Filter>Shaders\HLSL</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

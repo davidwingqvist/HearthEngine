@@ -31,7 +31,7 @@ bool CollisionBoxRenderPass::CreateIndexBuffer()
 	D3D11_SUBRESOURCE_DATA data = {};
 	data.pSysMem = &indices[0];
 
-	HRESULT hr = D3D11Core::Get().Device()->CreateBuffer(&desc, &data, m_vertexBuffer.GetAddressOf());
+	HRESULT hr = D3D11Core::Get().Device()->CreateBuffer(&desc, &data, m_indexBuffer.GetAddressOf());
 	if (FAILED(hr))
 	{
 		DEBUG_ERROR("Couldnt create index buffer for collision box pass\n");
@@ -57,6 +57,26 @@ bool CollisionBoxRenderPass::CreateVertexBuffer()
 	if (FAILED(hr))
 	{
 		DEBUG_ERROR("Couldnt create vertex buffer for collision box pass\n");
+		return false;
+	}
+
+	return true;
+}
+
+bool CollisionBoxRenderPass::CreateInputLayout()
+{
+	HRESULT hr = S_FALSE;
+
+	// Create m_defaultInputLayout.
+	std::string shaderByteCode = m_vertexShader.GetShaderByteCode();
+	D3D11_INPUT_ELEMENT_DESC defaultVertexShaderDesc[] =
+	{
+		{"POSITION",    0, DXGI_FORMAT_R32G32B32_FLOAT,    0,                0,                   D3D11_INPUT_PER_VERTEX_DATA, 0}
+	};
+
+	if (FAILED(hr = D3D11Core::Get().Device()->CreateInputLayout(defaultVertexShaderDesc, ARRAYSIZE(defaultVertexShaderDesc), shaderByteCode.c_str(), shaderByteCode.length(), m_inputLayout.GetAddressOf())))
+	{
+		DEBUG_ERROR("Failed creating input layout for collider box pass\n");
 		return false;
 	}
 
@@ -98,27 +118,42 @@ void CollisionBoxRenderPass::Create()
 {
 	CreateIndexBuffer();
 	CreateVertexBuffer();
+	m_pixelShader.Create("CollisionBoxPixelShader");
+	m_vertexShader.Create("CollisionBoxVertexShader");
+	CreateInputLayout();
 }
 
 void CollisionBoxRenderPass::Prepass()
 {
 	DC->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+
+	DC->VSSetShader(m_vertexShader.Get(), NULL, NULL);
+	DC->PSSetShader(m_pixelShader.Get(), NULL, NULL);
+
+	DC->IASetInputLayout(m_inputLayout.Get());
+
+	const UINT strides = sizeof sm::Vector3;
+	const UINT offset = 0;
+
+	DC->IASetVertexBuffers(0, 1, m_vertexBuffer.GetAddressOf(), &strides, &offset);
+	DC->IASetIndexBuffer(m_indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 }
 
 void CollisionBoxRenderPass::Pass(InternalScene* currentScene)
 {
 	// Draw individual collision box here..
 
-	//auto* reg = currentScene->GetRegistry();
+	auto* reg = currentScene->GetRegistry();
 
-	//if (reg)
-	//{
-	//	reg->View<CollisionBox>().ForEach([&](CollisionBox& collbox) {
+	if (reg)
+	{
+		reg->View<CollisionBox>().ForEach([&](CollisionBox& collbox) {
 
-	//		UpdateVertices(collbox);
+			UpdateVertices(collbox);
+			DC->DrawIndexed(24, 0, 0);
 
-	//		});
-	//}
+			});
+	}
 }
 
 void CollisionBoxRenderPass::Postpass()
