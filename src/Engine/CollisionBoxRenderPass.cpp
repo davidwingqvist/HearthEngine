@@ -14,8 +14,8 @@ bool CollisionBoxRenderPass::CreateIndexBuffer()
 	3, 4,
 	4, 5,
 	0, 5,
-	6, 2,
-	7, 3,
+	6, 1,
+	7, 2,
 	5, 6,
 	6, 7,
 	7, 4
@@ -86,12 +86,12 @@ bool CollisionBoxRenderPass::CreateInputLayout()
 bool CollisionBoxRenderPass::UpdateVertices(const CollisionBox& box)
 {
 	m_points[0] = box.min;
-	m_points[1] = box.min; m_points[1].z -= box.length;
-	m_points[2] = m_points[1]; m_points[2].x += box.width;
-	m_points[3] = m_points[2]; m_points[3].z += box.length;
-	m_points[4] = m_points[3]; m_points[4].y += box.height;
-	m_points[5] = m_points[0]; m_points[5].y += box.height;
-	m_points[6] = m_points[2]; m_points[6].y += box.height;
+	m_points[1] = box.min; m_points[1].z -= box.length * 2;
+	m_points[2] = m_points[1]; m_points[2].x += box.width * 2;
+	m_points[3] = m_points[2]; m_points[3].z += box.length * 2;
+	m_points[4] = m_points[3]; m_points[4].y += box.height * 2;
+	m_points[5] = m_points[0]; m_points[5].y += box.height * 2;
+	m_points[6] = m_points[1]; m_points[6].y += box.height * 2;
 	m_points[7] = box.max;
 
 	D3D11_MAPPED_SUBRESOURCE sub;
@@ -149,8 +149,14 @@ void CollisionBoxRenderPass::Pass(InternalScene* currentScene)
 	{
 		reg->View<CollisionBox>().ForEach([&](CollisionBox& collbox) {
 
-			UpdateVertices(collbox);
-			DC->DrawIndexed(24, 0, 0);
+			// Todo: Change color to RED when inactive?
+
+			// Draw if active.
+			if (collbox.isActive)
+			{
+				UpdateVertices(collbox);
+				DC->DrawIndexed(24, 0, 0);
+			}
 
 			});
 	}

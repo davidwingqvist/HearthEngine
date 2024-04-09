@@ -758,9 +758,9 @@ void EngineGUI::RenderProperties()
 		
 			ImGui::TextColored(ImVec4(255, 0, 255, 255), "Collision Box");
 
-			ImGui::DragFloat("Width(x)###WidthOfCollisionBoxDrag", &currCollBox->width, 0.3f, 0.0f, 0.0f, "%.1f");
-			ImGui::DragFloat("Height(y)###HeightOfCollisionBoxDrag", &currCollBox->height, 0.3f, 0.0f, 0.0f, "%.1f");
-			ImGui::DragFloat("Length(z)###LengthOfCollisionBoxDrag", &currCollBox->length, 0.3f, 0.0f, 0.0f, "%.1f");
+			ImGui::DragFloat("Width(x)###WidthOfCollisionBoxDrag", &currCollBox->width, 0.3f, 0.1f, 100.0f, "%.1f");
+			ImGui::DragFloat("Height(y)###HeightOfCollisionBoxDrag", &currCollBox->height, 0.3f, 0.1f, 100.0f, "%.1f");
+			ImGui::DragFloat("Length(z)###LengthOfCollisionBoxDrag", &currCollBox->length, 0.3f, 0.1f, 100.0f, "%.1f");
 
 			ImGui::Checkbox("Active?###collboxActivity", &currCollBox->isActive);
 
