@@ -77,6 +77,7 @@ public:
 		Temporary values
 	*/
 	LightPass* m_lightPassRef = nullptr;
+	bool* m_toggleCollisionBoxDraw = nullptr;
 
 	static auto& Get()
 	{

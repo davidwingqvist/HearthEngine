@@ -103,10 +103,8 @@ struct camera_data
 
 struct CameraPoint 
 {
-
-	sm::Vector3 position;
 	sm::Vector3 target;
-
+	UINT id;
 };
 
 struct RigidBody

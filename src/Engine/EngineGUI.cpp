@@ -447,8 +447,10 @@ void EngineGUI::RenderStatistics()
 	ImGui::Text(framesText.c_str());
 
 
-
-	//ImGui::Checkbox("Render Collision Boxes?", nullptr);
+	if (m_toggleCollisionBoxDraw != nullptr)
+	{
+		ImGui::Checkbox("Render Collision Boxes?", m_toggleCollisionBoxDraw);
+	}
 }
 
 void EngineGUI::RenderScenes()
@@ -846,31 +848,53 @@ void EngineGUI::RenderNewComponentTab()
 
 		auto reg = m_sceneManagerRef->GetCurrentScene()->GetRegistry();
 
+		if (!reg->HasComponent<RigidBody>(m_currentEntity))
+		{
+			if (ImGui::Button("Rigidbody", { ImGui::GetWindowSize().x, 0 }))
+			{
+				reg->AddComponent<RigidBody>(m_currentEntity);
+			}
+		}
 
-		if (ImGui::Button("Rigidbody", { ImGui::GetWindowSize().x, 0 }))
+		if (!reg->HasComponent<Model>(m_currentEntity))
 		{
-			reg->AddComponent<RigidBody>(m_currentEntity);
+			if (ImGui::Button("Model", { ImGui::GetWindowSize().x, 0 }))
+			{
+				reg->AddComponent<Model>(m_currentEntity);
+				reg->AddComponent<ModelID>(m_currentEntity);
+			}
 		}
-		if (ImGui::Button("Model", { ImGui::GetWindowSize().x, 0 }))
+
+		if (!reg->HasComponent<Light>(m_currentEntity))
 		{
-			reg->AddComponent<Model>(m_currentEntity);
-			reg->AddComponent<ModelID>(m_currentEntity);
+			if (ImGui::Button("Light", { ImGui::GetWindowSize().x, 0 }))
+			{
+				reg->AddComponent<Light>(m_currentEntity);
+			}
 		}
-		if (ImGui::Button("Light", { ImGui::GetWindowSize().x, 0 }))
+
+		if (!reg->HasComponent<Script>(m_currentEntity))
 		{
-			reg->AddComponent<Light>(m_currentEntity);
+			if (ImGui::Button("Script", { ImGui::GetWindowSize().x, 0 }))
+			{
+				reg->AddComponent<Script>(m_currentEntity);
+			}
 		}
-		if (ImGui::Button("Script", { ImGui::GetWindowSize().x, 0 }))
+
+		if (!reg->HasComponent<CollisionBox>(m_currentEntity))
 		{
-			reg->AddComponent<Script>(m_currentEntity);
+			if (ImGui::Button("Collision Box", { ImGui::GetWindowSize().x, 0 }))
+			{
+				reg->AddComponent<CollisionBox>(m_currentEntity);
+			}
 		}
-		if (ImGui::Button("Collision Box", { ImGui::GetWindowSize().x, 0 }))
+
+		if (!reg->HasComponent<CameraPoint>(m_currentEntity))
 		{
-			reg->AddComponent<CollisionBox>(m_currentEntity);
-		}
-		if (ImGui::Button("Camera Point", { ImGui::GetWindowSize().x, 0 }))
-		{
-			// To be implemented..
+			if (ImGui::Button("Camera Point", { ImGui::GetWindowSize().x, 0 }))
+			{
+				reg->AddComponent<CameraPoint>(m_currentEntity);
+			}
 		}
 
 

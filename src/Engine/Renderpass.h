@@ -6,14 +6,11 @@ class Renderer;
 
 class IRenderpass
 {
-private:
-
-	bool m_isActive = true;
-
 protected:
 
 	PipelineManager* m_pipeline = nullptr;
 	Renderer* m_renderer = nullptr;
+	bool m_isActive = true;
 
 public:
 	IRenderpass() = default;

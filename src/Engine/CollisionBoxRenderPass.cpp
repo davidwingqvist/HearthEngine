@@ -2,6 +2,7 @@
 #include "CollisionBoxRenderPass.h"
 #include "D3D11Context.h"
 #include "Debugger.h"
+#include "EngineGUI.h"
 
 bool CollisionBoxRenderPass::CreateIndexBuffer()
 {
@@ -121,6 +122,7 @@ void CollisionBoxRenderPass::Create()
 	m_pixelShader.Create("CollisionBoxPixelShader");
 	m_vertexShader.Create("CollisionBoxVertexShader");
 	CreateInputLayout();
+	EngineGUI::Get().m_toggleCollisionBoxDraw = &m_isActive;
 }
 
 void CollisionBoxRenderPass::Prepass()
