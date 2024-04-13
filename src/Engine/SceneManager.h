@@ -1,5 +1,6 @@
 #pragma once
 #include "Scene.h"
+#include "GameScene.h"
 
 class SceneManager
 {
@@ -20,6 +21,8 @@ public:
 
 	InternalScene* GetCurrentScene() const;
 
+	GameScene* GetCurrentGameScene();
+
 	void AddInternalScene(const std::string& sceneName);
 	void AddScene(const std::string& sceneName);
 	void SetScene(const std::string& sceneName);
@@ -27,6 +30,8 @@ public:
 	void RemoveScene(const std::string& sceneName);
 	InternalScene* GetScene(const std::string& sceneName);
 	const std::string& GetCurrentSceneName() const;
+
+	void StartGameScene(const std::string& sceneName);
 
 	// Load scenes from file.
 	void LoadScenes();

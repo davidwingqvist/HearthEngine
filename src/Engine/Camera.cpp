@@ -164,3 +164,69 @@ const camera_data& Camera::GetData() const
 {
 	return m_matData;
 }
+
+/*
+
+	GAME CAMERA AREA
+
+*/
+
+GameCamera::GameCamera()
+{
+	m_buffer = nullptr;
+	m_matData.projectionMatrix = sm::Matrix::CreatePerspectiveFieldOfView(3.1415f / 4.0f, ((float)D3D11Core::Get().GetWindow()->GetWidth() / D3D11Core::Get().GetWindow()->GetHeight()), 0.1f, 5000.f);
+
+	SetupBuffer();
+}
+
+GameCamera::~GameCamera()
+{
+	if (m_buffer)
+		m_buffer->Release();
+}
+
+void GameCamera::UpdateInfo(Transform* t, CameraPoint* p)
+{
+	m_position = t->pos;
+	m_lookAt = p->target;
+
+	m_matData.viewMatrix = sm::Matrix::CreateLookAt(m_position, m_lookAt, sm::Vector3::Up);
+	m_matData.position = { m_position.x, m_position.y, m_position.z, 1.0f };
+	this->UpdateBuffer();
+}
+
+void GameCamera::Activate() const
+{
+	D3D11Core::Get().Context()->VSSetConstantBuffers(3, 1, &m_buffer);
+	D3D11Core::Get().Context()->PSSetConstantBuffers(3, 1, &m_buffer);
+}
+
+bool GameCamera::UpdateBuffer()
+{
+	D3D11_MAPPED_SUBRESOURCE sub;
+	HRESULT hr = D3D11Core::Get().Context()->Map(m_buffer, 0, D3D11_MAP_WRITE_DISCARD, NULL, &sub);
+	if (FAILED(hr))
+	{
+		DEBUG_ERROR("Failed to map public buffer for scene!\n");
+		return false;
+	}
+	std::memcpy(sub.pData, &m_matData, sizeof camera_data);
+	D3D11Core::Get().Context()->Unmap(m_buffer, 0);
+	return true;
+}
+
+bool GameCamera::SetupBuffer()
+{
+	D3D11_BUFFER_DESC desc{};
+	desc.BindFlags = D3D11_BIND_FLAG::D3D11_BIND_CONSTANT_BUFFER;
+	desc.ByteWidth = sizeof camera_data;
+	desc.Usage = D3D11_USAGE_DYNAMIC;
+	desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	desc.MiscFlags = 0;
+	desc.StructureByteStride = 0;
+
+	D3D11_SUBRESOURCE_DATA data{};
+	data.pSysMem = &m_matData;
+
+	return !FAILED(D3D11Core::Get().Device()->CreateBuffer(&desc, &data, &m_buffer));
+}

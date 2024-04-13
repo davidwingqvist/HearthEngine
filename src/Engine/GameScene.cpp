@@ -19,6 +19,8 @@ void GameScene::Awake()
 		}
 
 		});
+
+	m_gameCamera.Activate();
 }
 
 void GameScene::Draw()
@@ -31,6 +33,24 @@ void GameScene::PreDraw()
 
 void GameScene::PostDraw()
 {
+}
+
+void GameScene::SetCameraPoint(Transform* t, CameraPoint* p)
+{
+	if (t && p)
+	{
+		m_gameCamera.UpdateInfo(t, p);
+		m_transform = t;
+		m_cameraPoint = p;
+	}
+}
+
+void GameScene::UpdateCamera()
+{
+	if (m_transform && m_cameraPoint)
+	{
+		m_gameCamera.UpdateInfo(m_transform, m_cameraPoint);
+	}
 }
 
 GameScene::GameScene()

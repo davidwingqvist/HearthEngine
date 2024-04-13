@@ -7,6 +7,7 @@
 #include "Texture.h"
 #include "Time.h"
 #include "Icon.h"
+#include "GameScene.h"
 
 constexpr ImGuiWindowFlags menuWindow = (ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoTitleBar);
 constexpr ImGuiWindowFlags bottomWindow = ImGuiWindowFlags_NoTitleBar;
@@ -127,7 +128,7 @@ void EngineGUI::RenderTopBar()
 
 	if (ImGui::Button("Run"))
 	{
-
+		m_sceneManagerRef->StartGameScene(m_sceneManagerRef->GetCurrentSceneName());
 	}
 
 	if (ImGui::Button("Dump Stack"))
@@ -770,6 +771,41 @@ void EngineGUI::RenderProperties()
 			if (ImGui::Button("Delete###cbdelete"))
 			{
 				reg->RemoveComponent<CollisionBox>(m_currentEntity);
+			}
+
+			ImGui::EndChild();
+		}
+
+		CameraPoint* currCameraPoint = reg->GetComponent<CameraPoint>(m_currentEntity);
+
+		if (currCameraPoint)
+		{
+			ImGui::BeginChild(8, ImVec2(ImGui::GetContentRegionAvail().x, 0), ImGuiChildFlags_Border | ImGuiChildFlags_AlwaysUseWindowPadding | ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_AutoResizeX);
+
+			ImGui::TextColored(ImVec4(255, 0, 255, 255), "Camera Point");
+
+			ImGui::InputInt("Camera ID", &currCameraPoint->id, 1, 100);
+			
+			if (ImGui::Checkbox("Active Camera?##SetCurrentActiveCameraBox", &currCameraPoint->currentActive))
+			{
+				if (currCameraPoint->currentActive)
+				{
+					m_sceneManagerRef->GetCurrentGameScene()->SetCameraPoint(currTransform, currCameraPoint);
+				}
+				else
+				{
+					m_sceneManagerRef->GetCurrentGameScene()->SetCameraPoint(nullptr, nullptr);
+				}
+			}
+
+			ImGui::TextColored(ImVec4(255, 0, 255, 255), "Target");
+			ImGui::DragFloat("X", &currCameraPoint->target.x, 1.0f, 0.0f, 0.0f, "%.2f");
+			ImGui::DragFloat("Y", &currCameraPoint->target.y, 1.0f, 0.0f, 0.0f, "%.2f");
+			ImGui::DragFloat("Z", &currCameraPoint->target.z, 1.0f, 0.0f, 0.0f, "%.2f");
+
+			if (ImGui::Button("Update##UpdateVariablesofCamera"))
+			{
+				m_sceneManagerRef->GetCurrentGameScene()->UpdateCamera();
 			}
 
 			ImGui::EndChild();

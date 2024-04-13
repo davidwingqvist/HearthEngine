@@ -37,3 +37,26 @@ public:
 	// Return the matrixes used for the camera.
 	const camera_data& GetData() const;
 };
+
+class GameCamera
+{
+public:
+
+	GameCamera();
+	~GameCamera();
+
+	void UpdateInfo(Transform* t, CameraPoint* p);
+
+	void Activate() const;
+
+private:
+
+	bool UpdateBuffer();
+	bool SetupBuffer();
+
+	camera_data m_matData{};
+	ID3D11Buffer* m_buffer;
+	sm::Vector3 m_position{};
+	sm::Vector3 m_lookAt{};
+
+};

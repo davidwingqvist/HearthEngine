@@ -104,7 +104,8 @@ struct camera_data
 struct CameraPoint 
 {
 	sm::Vector3 target;
-	UINT id;
+	int id = 0;
+	bool currentActive = false;
 };
 
 struct RigidBody

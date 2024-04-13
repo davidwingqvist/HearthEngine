@@ -96,6 +96,11 @@ const std::string& SceneManager::GetCurrentSceneName() const
 	return m_currentSceneName;
 }
 
+void SceneManager::StartGameScene(const std::string& sceneName)
+{
+	m_scenes[m_currentSceneName]->Awake();
+}
+
 void SceneManager::LoadScenes()
 {
 	std::ifstream stream(OPTIONPATH + "Scenes.txt");
@@ -137,4 +142,9 @@ const std::vector<std::string>& SceneManager::GetSceneNames() const
 InternalScene* SceneManager::GetCurrentScene() const
 {
 	return m_currentScene;
+}
+
+GameScene* SceneManager::GetCurrentGameScene()
+{
+	return dynamic_cast<GameScene*>(GetScene(GetCurrentSceneName()));
 }
