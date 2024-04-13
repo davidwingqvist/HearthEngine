@@ -21,4 +21,7 @@ private:
 	CameraPoint* m_cameraPoint = nullptr;
 	UINT m_activeCameraID = -1;
 	GameCamera m_gameCamera;
+	DXPointer<ID3D11Buffer> m_publicBuffer;
+
+	bool CreatePublicBuffer();
 };

@@ -10,7 +10,7 @@
 #include "InputManager.h"
 #include "LuaGameState.h"
 
-void UpdatePublicBuffer(ID3D11Buffer** buffer, const sm::Matrix& matrix_data)
+static void UpdatePublicBuffer(ID3D11Buffer** buffer, const sm::Matrix& matrix_data)
 {
 	D3D11_MAPPED_SUBRESOURCE sub;
 	HRESULT hr = D3D11Core::Get().Context()->Map(*buffer, 0, D3D11_MAP_WRITE_DISCARD, NULL, &sub);

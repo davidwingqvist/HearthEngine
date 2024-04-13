@@ -99,6 +99,7 @@ const std::string& SceneManager::GetCurrentSceneName() const
 void SceneManager::StartGameScene(const std::string& sceneName)
 {
 	m_scenes[m_currentSceneName]->Awake();
+	m_currentScene = m_scenes[m_currentSceneName];
 }
 
 void SceneManager::LoadScenes()
