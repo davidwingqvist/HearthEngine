@@ -52,7 +52,31 @@ void GameScene::Update()
 		{
 			if (utility::IsBoxColliding(coll1, coll2))
 			{
-				// Collision, Do something.
+				// Get scripts...
+				Script* scriptOne = m_registry.GetComponent<Script>(ent1);
+				Script* scriptTwo = m_registry.GetComponent<Script>(ent2);
+
+				if (scriptOne)
+				{
+					// Go through each possible script, and launch the OnCollision...
+					for (auto& id : scriptOne->script_id)
+					{
+						if (id != NULL_SCRIPT)
+						{
+							LUA_GAME.CollisionObjectFromScript(id, ent1);
+						}
+					}
+				}
+				if (scriptTwo)
+				{
+					for (auto& id : scriptTwo->script_id)
+					{
+						if (id != NULL_SCRIPT)
+						{
+							LUA_GAME.CollisionObjectFromScript(id, ent2);
+						}
+					}
+				}
 			}
 		}
 

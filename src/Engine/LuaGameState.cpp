@@ -64,3 +64,16 @@ void LuaGameState::AwakeObjectFromScript(const size_t& scriptId, const size_t& o
 	lua_pushnumber(LUA.State(), objectId);
 	lua_pcall(LUA.State(), 1, 0, 0);
 }
+
+void LuaGameState::CollisionObjectFromScript(const size_t& scriptId, const size_t& objectId)
+{
+	if (scriptId == 0 || objectId == recs::NULL_ENTITY)
+		return;
+
+	const std::string scriptName = LUA.GetScriptNameFromId(scriptId);
+	std::string functionCall = "CollisionSingle" + scriptName + "Object_Engine";
+
+	lua_getglobal(LUA.State(), functionCall.c_str());
+	lua_pushnumber(LUA.State(), objectId);
+	lua_pcall(LUA.State(), 1, 0, 0);
+}

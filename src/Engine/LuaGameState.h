@@ -24,4 +24,5 @@ public:
 	void CreateObjectFromScript(const size_t& scriptId, const size_t& objectId);
 	void UpdateObjectFromScript(const size_t& scriptId, const size_t& objectId);
 	void AwakeObjectFromScript(const size_t& scriptId, const size_t& objectId);
+	void CollisionObjectFromScript(const size_t& scriptId, const size_t& objectId);
 };

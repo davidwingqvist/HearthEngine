@@ -808,6 +808,12 @@ void EngineGUI::RenderProperties()
 				m_sceneManagerRef->GetCurrentGameScene()->UpdateCamera();
 			}
 
+			ImGui::SetCursorPosX((ImGui::GetWindowWidth() * 0.45f));
+			if (ImGui::Button("Delete###cameradelete"))
+			{
+				reg->RemoveComponent<CameraPoint>(m_currentEntity);
+			}
+
 			ImGui::EndChild();
 		}
 

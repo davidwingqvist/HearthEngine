@@ -158,6 +158,11 @@ struct CollisionBox
 	bool isActive = true;
 };
 
+struct CollisionSphere
+{
+	float radius = 1.0f;
+};
+
 /*
 
 	DEBUG STRUCTS

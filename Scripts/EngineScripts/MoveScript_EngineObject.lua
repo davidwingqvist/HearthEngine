@@ -15,3 +15,6 @@ end
 function AwakeSingleMoveScriptObject_Engine(key)
 	MoveScript_Objects[key]:OnAwake()
 end
+function CollisionSingleMoveScriptObject_Engine(key)
+	MoveScript_Objects[key]:OnCollision()
+end
