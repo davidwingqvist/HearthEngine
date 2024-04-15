@@ -9,6 +9,7 @@
 #include "Utility.h"
 #include "InputManager.h"
 #include "LuaGameState.h"
+#include "InputManager.h"
 
 static void UpdatePublicBuffer(ID3D11Buffer** buffer, const sm::Matrix& matrix_data)
 {
@@ -61,18 +62,6 @@ void Scene::Update()
 {
 	if (m_sceneReg)
 	{
-
-		//m_registry.Update();
-
-		//m_registry.Group<RigidBody, Transform>().ForEach([&](const recs::Entity& e, RigidBody& rb, Transform& transform) {
-
-		//	if (rb.hasGravity)
-		//	{
-		//		transform.pos.y -= GRAVITY * Time::Get().GetDeltaTime();
-		//	}
-
-		//	});
-
 		// Update the min and max positions relative to transform pos.
 		m_sceneReg->Group<Transform, CollisionBox>().ForEach([&](Transform& transform, CollisionBox& coll) {
 
@@ -89,23 +78,26 @@ void Scene::Update()
 
 			});
 
-		//m_sceneReg->View<CollisionBox>().ForEach([&](const recs::Entity& ent1, CollisionBox& coll1) {
+		if(InputManager::Get().CheckMouseKey(MouseKey::LEFT))
+		{
+			const Ray r = { m_camera.GetPosition(),
+				utility::ScreenRayToWorld(
+				{(float)InputManager::Get().GetMouseX(), 
+				(float)InputManager::Get().GetMouseY()}, &m_camera),
+				};
 
-		//	
+			m_sceneReg->View<CollisionBox>().ForEach(
+				[&](CollisionBox& colbox) 
+				{
 
-		//	m_sceneReg->View<CollisionBox>().ForEach([&](const recs::Entity& ent2, CollisionBox& coll2) {
+				if (utility::RayAABBCollision(colbox, r))
+				{
+					DEBUG_INFO("COLLISION!");
+				}
 
-		//		if (ent1 != ent2)
-		//		{
-		//			if (utility::IsBoxColliding(coll1, coll2))
-		//			{
-		//				// Collision, Do something.
-		//			}
-		//		}
+				});
+		}
 
-		//		});
-
-		//	});
 	}
 }
 

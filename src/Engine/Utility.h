@@ -42,4 +42,6 @@ namespace utility
 
 	// Checks if two AABBs are colliding with each other.
 	bool IsBoxColliding(const CollisionBox& a, const CollisionBox& b);
+
+	bool RayAABBCollision(const CollisionBox& b, const Ray& r);
 }

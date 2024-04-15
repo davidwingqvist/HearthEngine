@@ -101,6 +101,12 @@ struct camera_data
 	sm::Vector4 position;
 };
 
+struct Ray
+{
+	sm::Vector3 origin;
+	sm::Vector3 dir;
+};
+
 struct CameraPoint 
 {
 	sm::Vector3 target;

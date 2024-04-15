@@ -34,6 +34,8 @@ public:
 	// Activate this camera to be the main camera.
 	void Activate() const;
 
+	const sm::Vector3& GetPosition() const;
+
 	// Return the matrixes used for the camera.
 	const camera_data& GetData() const;
 };

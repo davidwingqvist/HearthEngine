@@ -64,6 +64,27 @@ bool CollisionBoxRenderPass::CreateVertexBuffer()
 	return true;
 }
 
+bool CollisionBoxRenderPass::CreateColorBuffer()
+{
+	D3D11_BUFFER_DESC indDesc{};
+	indDesc.ByteWidth = sizeof sm::Vector4;
+	indDesc.Usage = D3D11_USAGE_DYNAMIC;
+	indDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	indDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+
+	D3D11_SUBRESOURCE_DATA indData{};
+	indData.pSysMem = &m_color;
+
+	HRESULT hr = D3D11Core::Get().Device()->CreateBuffer(&indDesc, &indData, m_colorBuffer.GetAddressOf());
+	if (FAILED(hr))
+	{
+		DEBUG_ERROR("Failed creating Index buffer for Light pass!\n")
+			return false;
+	}
+
+	return true;
+}
+
 bool CollisionBoxRenderPass::CreateInputLayout()
 {
 	HRESULT hr = S_FALSE;
@@ -107,6 +128,34 @@ bool CollisionBoxRenderPass::UpdateVertices(const CollisionBox& box)
 	return !FAILED(hr);
 }
 
+void CollisionBoxRenderPass::SetGreenColor()
+{
+	m_color = { 0.0f, 1.0f, 0.0f, 1.0f };
+
+	UpdateColorBuffer();
+}
+
+void CollisionBoxRenderPass::SetRedColor()
+{
+	m_color = { 1.0f, 0.0f, 0.0f, 1.0f };
+
+	UpdateColorBuffer();
+}
+
+bool CollisionBoxRenderPass::UpdateColorBuffer()
+{
+	D3D11_MAPPED_SUBRESOURCE sub;
+	HRESULT hr = D3D11Core::Get().Context()->Map(m_colorBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, NULL, &sub);
+	if (FAILED(hr))
+	{
+		DEBUG_ERROR("Failed to update color data for collision box pass\n");
+	}
+	std::memcpy(sub.pData, &m_color, sizeof(sm::Vector4));
+	D3D11Core::Get().Context()->Unmap(m_colorBuffer.Get(), 0);
+
+	return !FAILED(hr);
+}
+
 CollisionBoxRenderPass::CollisionBoxRenderPass()
 {
 }
@@ -122,6 +171,7 @@ void CollisionBoxRenderPass::Create()
 	m_pixelShader.Create("CollisionBoxPixelShader");
 	m_vertexShader.Create("CollisionBoxVertexShader");
 	CreateInputLayout();
+	CreateColorBuffer();
 	EngineGUI::Get().m_toggleCollisionBoxDraw = &m_isActive;
 }
 
@@ -131,6 +181,7 @@ void CollisionBoxRenderPass::Prepass()
 
 	DC->VSSetShader(m_vertexShader.Get(), NULL, NULL);
 	DC->PSSetShader(m_pixelShader.Get(), NULL, NULL);
+	DC->PSSetConstantBuffers(0, 1, m_colorBuffer.GetAddressOf());
 
 	DC->IASetInputLayout(m_inputLayout.Get());
 
@@ -151,14 +202,16 @@ void CollisionBoxRenderPass::Pass(InternalScene* currentScene)
 	{
 		reg->View<CollisionBox>().ForEach([&](CollisionBox& collbox) {
 
-			// Todo: Change color to RED when inactive?
-
 			// Draw if active.
 			if (collbox.isActive)
 			{
-				UpdateVertices(collbox);
-				DC->DrawIndexed(24, 0, 0);
+				SetGreenColor();
 			}
+			else
+				SetRedColor();
+
+			UpdateVertices(collbox);
+			DC->DrawIndexed(24, 0, 0);
 
 			});
 	}

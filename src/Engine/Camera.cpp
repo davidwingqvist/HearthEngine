@@ -160,6 +160,11 @@ void Camera::Activate() const
 	D3D11Core::Get().Context()->PSSetConstantBuffers(3, 1, &m_buffer);
 }
 
+const sm::Vector3& Camera::GetPosition() const
+{
+	return m_position;
+}
+
 const camera_data& Camera::GetData() const
 {
 	return m_matData;

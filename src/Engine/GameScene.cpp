@@ -27,6 +27,16 @@ void GameScene::Update()
 {
 	m_registry.Update();
 
+
+	m_registry.Group<RigidBody, Transform>().ForEach([&](const recs::Entity& e, RigidBody& rb, Transform& transform) {
+
+		if (rb.hasGravity)
+		{
+			transform.pos.y -= GRAVITY * Time::Get().GetDeltaTime();
+		}
+
+		});
+
 	m_registry.Group<Transform, CollisionBox>().ForEach([&](Transform& transform, CollisionBox& coll) {
 
 		coll.min = transform.pos;
