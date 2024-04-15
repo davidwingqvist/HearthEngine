@@ -992,18 +992,18 @@ void EngineGUI::RenderModelsTab()
 	{
 		ImGui::Begin("Models##WindowModels", &m_showModelsTab, ImGuiWindowFlags_MenuBar);
 
-		ImGui::BeginMenuBar();
+		//ImGui::BeginMenuBar();
 
-		if (ImGui::Button("Add Model"))
-		{
+		////if (ImGui::Button("Add Model"))
+		////{
 
-		}
-		if (ImGui::Button("Remove Model"))
-		{
+		////}
+		////if (ImGui::Button("Remove Model"))
+		////{
 
-		}
+		////}
 
-		ImGui::EndMenuBar();
+		//ImGui::EndMenuBar();
 
 		recs::recs_registry* reg = m_sceneManagerRef->GetCurrentScene()->GetRegistry();
 		const auto& a = ResourceManager::Get().GetResourceMap();
@@ -1042,18 +1042,18 @@ void EngineGUI::RenderTextureTab()
 	{
 		ImGui::Begin("Textures##WindowTextures", &m_showTextureTab, ImGuiWindowFlags_MenuBar);
 
-		ImGui::BeginMenuBar();
+		//ImGui::BeginMenuBar();
 
-		if (ImGui::Button("Add Texture"))
-		{
+		////if (ImGui::Button("Add Texture"))
+		////{
 
-		}
-		if (ImGui::Button("Remove Texture"))
-		{
+		////}
+		////if (ImGui::Button("Remove Texture"))
+		////{
 
-		}
+		////}
 
-		ImGui::EndMenuBar();
+		//ImGui::EndMenuBar();
 
 		recs::recs_registry* reg = m_sceneManagerRef->GetCurrentScene()->GetRegistry();
 		const auto& a = ResourceManager::Get().GetResourceMap();
