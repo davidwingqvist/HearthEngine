@@ -14,7 +14,7 @@ public:
 	virtual void PostDraw() = 0;
 
 	// Assign this scene as the current scene.
-	void Assign();
+	virtual void Assign();
 
 	// Assign this scene for editing.
 	virtual void AssignEdit(InternalScene* scene);
@@ -32,6 +32,5 @@ protected:
 
 	recs::recs_registry m_registry;
 	DrawManager m_drawManager;
-	Camera m_camera;
 	std::string m_sceneName;
 };

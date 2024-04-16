@@ -114,7 +114,6 @@ void GameScene::Draw()
 {
 		// Public buffer is set to the first slot in Vertex Shader
 		D3D11Core::Get().Context()->VSSetConstantBuffers(0, 1, m_publicBuffer.GetAddressOf());
-		m_camera.Move();
 
 		m_registry.Group<Model, Transform>().ForEach([&](Model& model, Transform& transform) {
 

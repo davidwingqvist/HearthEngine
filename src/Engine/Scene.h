@@ -10,6 +10,7 @@ private:
 	DrawManager m_drawManager;
 	DXPointer<ID3D11Buffer> m_publicBuffer;
 	recs::recs_registry* m_sceneReg = nullptr;
+	Camera m_camera;
 
 	bool CreatePublicBuffer();
 
@@ -26,6 +27,8 @@ public:
 
 	Scene();
 	~Scene();
+
+	void Assign() override;
 
 	void PreDraw() override;
 

@@ -11,7 +11,7 @@
 
 void InternalScene::Assign()
 {
-	m_camera.Activate();
+	//m_camera.Activate();
 	LUA.m_currentRegistry = &m_registry;
 }
 

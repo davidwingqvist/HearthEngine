@@ -73,6 +73,13 @@ void SceneManager::SetSceneForEdit(const std::string& sceneName)
 
 void SceneManager::RemoveScene(const std::string& sceneName)
 {
+	if (sceneName == this->m_currentSceneName)
+	{
+		m_editScene->Reset();
+		this->m_currentScene = m_editScene;
+		m_currentSceneName = "None selected.";
+	}
+
 	delete m_scenes[sceneName];
 	m_scenes.erase(sceneName);
 

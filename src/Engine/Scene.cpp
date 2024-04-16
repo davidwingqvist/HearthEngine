@@ -58,6 +58,12 @@ Scene::~Scene()
 {
 }
 
+void Scene::Assign()
+{
+	m_camera.Activate();
+	LUA.m_currentRegistry = &m_registry;
+}
+
 void Scene::Update()
 {
 	if (m_sceneReg)
@@ -93,6 +99,8 @@ void Scene::Update()
 
 			});
 
+
+		// Left click, if object is in path of mouse ray, select object.
 		if(InputManager::Get().CheckMouseKey(MouseKey::LEFT))
 		{
 			const Ray r = { m_camera.GetPosition(),
@@ -108,9 +116,16 @@ void Scene::Update()
 				if (utility::RayAABBCollision(colbox, r))
 				{
 					EngineGUI::SetActiveEntity(entity);
+
+					return;
 				}
 
 				});
+		}
+
+		if (InputManager::Get().CheckKey(dx::Keyboard::Escape))
+		{
+			EngineGUI::SetActiveEntity(recs::NULL_ENTITY);
 		}
 
 	}
