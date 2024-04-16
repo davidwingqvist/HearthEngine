@@ -154,6 +154,12 @@ struct Model
 	bool isVisible = true;
 };
 
+struct InternalBox
+{
+	sm::Vector3 min = {};
+	sm::Vector3 max = {};
+};
+
 struct CollisionBox
 {
 	sm::Vector3 min = {};

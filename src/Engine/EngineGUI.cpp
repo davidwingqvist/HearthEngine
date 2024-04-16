@@ -102,6 +102,11 @@ const size_t& EngineGUI::GetConsoleLogSize()
 	return Get().m_consoleLogs.size();
 }
 
+void EngineGUI::SetActiveEntity(const recs::Entity& entity)
+{
+	Get().m_currentEntity = entity;
+}
+
 void EngineGUI::RenderTopBar()
 {
 	ImGui::SetNextWindowPos(ImVec2(0, 0));
@@ -335,6 +340,7 @@ void EngineGUI::RenderHierarchy()
 			// should always have a gameobject and transform component.
 			reg->AddComponent<GameObject>(e);
 			reg->AddComponent<Transform>(e);
+			reg->AddComponent<InternalBox>(e);
 		}
 
 		if (ImGui::Button("Delete All"))

@@ -44,4 +44,5 @@ namespace utility
 	bool IsBoxColliding(const CollisionBox& a, const CollisionBox& b);
 
 	bool RayAABBCollision(const CollisionBox& b, const Ray& r);
+	bool RayAABBCollision(const InternalBox& b, const Ray& r);
 }

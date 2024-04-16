@@ -94,6 +94,8 @@ public:
 	static ConsoleLogEvent& AdjustConsoleLog(const size_t& pos);
 	static const size_t& GetConsoleLogSize();
 
+	static void SetActiveEntity(const recs::Entity& entity);
+
 private:
 
 	void RenderTopBar();

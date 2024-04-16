@@ -78,6 +78,21 @@ void Scene::Update()
 
 			});
 
+		m_sceneReg->Group<Transform, InternalBox>().ForEach([&](Transform& transform, InternalBox& coll) {
+
+			coll.min = transform.pos;
+			coll.min.x -= 5.0f;
+			coll.min.z += 5.0f;
+			coll.min.y -= 5.0f;
+
+			coll.max = transform.pos;
+			coll.max.x += 5.0f;
+			coll.max.z -= 5.0f;
+			coll.max.y += 5.0f;
+
+
+			});
+
 		if(InputManager::Get().CheckMouseKey(MouseKey::LEFT))
 		{
 			const Ray r = { m_camera.GetPosition(),
@@ -86,13 +101,13 @@ void Scene::Update()
 				(float)InputManager::Get().GetMouseY()}, &m_camera),
 				};
 
-			m_sceneReg->View<CollisionBox>().ForEach(
-				[&](CollisionBox& colbox) 
+			m_sceneReg->View<InternalBox>().ForEach(
+				[&](const recs::Entity entity, InternalBox& colbox)
 				{
 
 				if (utility::RayAABBCollision(colbox, r))
 				{
-					DEBUG_INFO("COLLISION!");
+					EngineGUI::SetActiveEntity(entity);
 				}
 
 				});
