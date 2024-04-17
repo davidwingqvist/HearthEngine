@@ -94,15 +94,20 @@ bool utility::RayAABBCollision(const CollisionBox& b, const Ray& r)
     const float tmax = std::min(std::min(max(t1, t2), max(t3, t4)), max(t5, t6));
 
     if (tmax < 0)
+    {
         return false;
+    }
 
     if (tmin > tmax)
+    {
         return false;
+    }
+
 
     return true;
 }
 
-bool utility::RayAABBCollision(const InternalBox& b, const Ray& r)
+bool utility::RayAABBCollision(const InternalBox& b, const Ray& r, float& t)
 {
     sm::Vector3 normalizedRayDir = { 1.0f / r.dir.x, 1.0f / r.dir.y, 1.0f / r.dir.z };
 
@@ -117,11 +122,18 @@ bool utility::RayAABBCollision(const InternalBox& b, const Ray& r)
     const float tmax = std::min(std::min(max(t1, t2), max(t3, t4)), max(t5, t6));
 
     if (tmax < 0)
+    {
+        t = tmax;
         return false;
+    }
 
     if (tmin > tmax)
+    {
+        t = tmax;
         return false;
+    }
 
+    t = tmin;
     return true;
 }
 

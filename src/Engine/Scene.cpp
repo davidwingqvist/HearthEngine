@@ -87,14 +87,14 @@ void Scene::Update()
 		m_sceneReg->Group<Transform, InternalBox>().ForEach([&](Transform& transform, InternalBox& coll) {
 
 			coll.min = transform.pos;
-			coll.min.x -= 5.0f;
-			coll.min.z += 5.0f;
-			coll.min.y -= 5.0f;
+			coll.min.x -= 2.0f * transform.scale.x;
+			coll.min.z += 2.0f * transform.scale.z;
+			coll.min.y -= 2.0f * transform.scale.y;
 
 			coll.max = transform.pos;
-			coll.max.x += 5.0f;
-			coll.max.z -= 5.0f;
-			coll.max.y += 5.0f;
+			coll.max.x += 2.0f * transform.scale.x;
+			coll.max.z -= 2.0f * transform.scale.z;
+			coll.max.y += 2.0f * transform.scale.y;
 
 
 			});
@@ -109,13 +109,22 @@ void Scene::Update()
 				(float)InputManager::Get().GetMouseY()}, &m_camera),
 				};
 
+
+			// Hit the closest object to the camera.
+			float dist = FLT_MAX;
 			m_sceneReg->View<InternalBox>().ForEach(
 				[&](const recs::Entity entity, InternalBox& colbox)
 				{
 
-				if (utility::RayAABBCollision(colbox, r))
+					float hitDist = FLT_MAX;
+
+				if (utility::RayAABBCollision(colbox, r, hitDist))
 				{
-					EngineGUI::SetActiveEntity(entity);
+					if (hitDist < dist)
+					{
+						dist = hitDist;
+						EngineGUI::SetActiveEntity(entity);
+					}
 
 					return;
 				}
