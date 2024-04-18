@@ -4,6 +4,7 @@
 #include "Debugger.h"
 #include "InputManager.h"
 #include "Time.h"
+#include "Utility.h"
 
 constexpr float limit = dx::XM_PIDIV2 - 0.01f;
 
@@ -105,6 +106,9 @@ void Camera::SetPosition(const float& x, const float& y, const float& z)
 
 void Camera::Move()
 {
+
+	InputManager::Get().GetMouse()->SetMode(dx::Mouse::MODE_ABSOLUTE);
+
 	if (InputManager::Get().CheckKey(kb_key::W, key_state::HOLD))
 	{
 		SetPosition(0, 0, 20.f * Time::Get().GetDeltaTime());
@@ -152,6 +156,37 @@ void Camera::Move()
 	}
 	else
 		m_speed = 2.0f;
+}
+
+void Camera::MoveWithMouse()
+{
+
+	InputManager::Get().GetMouse()->SetMode(dx::Mouse::MODE_RELATIVE);
+
+
+	sm::Vector3 dir = (utility::ScreenRayToWorld(
+		{ (float)InputManager::Get().GetMouseX(),
+		(float)InputManager::Get().GetMouseY() }, this));
+
+	dir.Normalize();
+
+	const sm::Vector3 rotPos = m_position + (dir * 5.0f);
+
+	const sm::Vector3 delta = sm::Vector3(
+		float(InputManager::Get().GetMouseX()), 
+		float(InputManager::Get().GetMouseY()), 0.0f) *
+			0.005f;
+
+	m_pitch -= delta.y;
+	m_yaw -= delta.x;
+
+	//m_position = rotPos;
+
+	UpdateRotation();
+
+
+	InputManager::Get().GetMouse()->SetMode(dx::Mouse::MODE_ABSOLUTE);
+
 }
 
 void Camera::Activate() const

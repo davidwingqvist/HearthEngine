@@ -31,6 +31,9 @@ public:
 	// Update the position of the camera based on keyboard input
 	void Move();
 
+	// Update the position based on the movement of mouse.
+	void MoveWithMouse();
+
 	// Activate this camera to be the main camera.
 	void Activate() const;
 

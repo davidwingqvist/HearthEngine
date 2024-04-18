@@ -132,6 +132,11 @@ void Scene::Update()
 				});
 		}
 
+		if (InputManager::Get().CheckMouseKey(MouseKey::RIGHT, key_state::HOLD))
+		{
+			m_camera.MoveWithMouse();
+		}
+
 		if (InputManager::Get().CheckKey(dx::Keyboard::Escape))
 		{
 			EngineGUI::SetActiveEntity(recs::NULL_ENTITY);
