@@ -107,7 +107,7 @@ void Camera::SetPosition(const float& x, const float& y, const float& z)
 void Camera::Move()
 {
 
-	InputManager::Get().GetMouse()->SetMode(dx::Mouse::MODE_ABSOLUTE);
+	//InputManager::Get().GetMouse()->SetMode(dx::Mouse::MODE_ABSOLUTE);
 
 	if (InputManager::Get().CheckKey(kb_key::W, key_state::HOLD))
 	{
@@ -161,31 +161,39 @@ void Camera::Move()
 void Camera::MoveWithMouse()
 {
 
-	InputManager::Get().GetMouse()->SetMode(dx::Mouse::MODE_RELATIVE);
-
-
 	sm::Vector3 dir = (utility::ScreenRayToWorld(
 		{ (float)InputManager::Get().GetMouseX(),
 		(float)InputManager::Get().GetMouseY() }, this));
 
-	dir.Normalize();
+    dir.Normalize();
 
 	const sm::Vector3 rotPos = m_position + (dir * 5.0f);
 
 	const sm::Vector3 delta = sm::Vector3(
-		float(InputManager::Get().GetMouseX()), 
-		float(InputManager::Get().GetMouseY()), 0.0f) *
-			0.005f;
+		float(InputManager::Get().GetMouseX()),
+		float(InputManager::Get().GetMouseY()), 0.0f);
 
-	m_pitch -= delta.y;
-	m_yaw -= delta.x;
+	if (delta.y >= D3D11Core::Get().GetWindow()->GetHeight() * 0.8f)
+	{
+		m_pitch -= 0.75f * Time::Get().GetDeltaTime();
+	}
+	else if(delta.y < D3D11Core::Get().GetWindow()->GetHeight() * 0.2f)
+	{
+		m_pitch += 0.75f * Time::Get().GetDeltaTime();
+	}
+
+	if (delta.x >= D3D11Core::Get().GetWindow()->GetWidth() * 0.8f)
+	{
+		m_yaw -= 0.75f * Time::Get().GetDeltaTime();
+	}
+	else if(delta.x < D3D11Core::Get().GetWindow()->GetHeight() * 0.2f)
+	{
+		m_yaw += 0.75f * Time::Get().GetDeltaTime();
+	}
 
 	//m_position = rotPos;
 
 	UpdateRotation();
-
-
-	InputManager::Get().GetMouse()->SetMode(dx::Mouse::MODE_ABSOLUTE);
 
 }
 

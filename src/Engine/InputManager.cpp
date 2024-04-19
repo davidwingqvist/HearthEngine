@@ -21,12 +21,12 @@ void InputManager::Initialize(const HWND& window)
 	SetMouseMode(dx::Mouse::MODE_ABSOLUTE);
 }
 
-dx::Keyboard* InputManager::GetKeyboard() const
+dx::Keyboard* InputManager::GetKeyboard()
 {
 	return m_keyboard.get();
 }
 
-dx::Mouse* InputManager::GetMouse() const
+dx::Mouse* InputManager::GetMouse()
 {
 	return m_mouse.get();
 }
@@ -107,4 +107,6 @@ const bool InputManager::CheckMouseKey(const MouseKey& key, const key_state stat
 		return false;
 		break;
 	}
+
+	return false;
 }

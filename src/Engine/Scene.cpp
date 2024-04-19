@@ -132,9 +132,14 @@ void Scene::Update()
 				});
 		}
 
-		if (InputManager::Get().CheckMouseKey(MouseKey::RIGHT, key_state::HOLD))
+		if (InputManager::Get().CheckKey(dx::Keyboard::Space, key_state::HOLD))
 		{
+			//InputManager::Get().GetMouse()->SetMode(dx::Mouse::MODE_RELATIVE);
 			m_camera.MoveWithMouse();
+		}
+		else
+		{
+			//InputManager::Get().GetMouse()->SetMode(dx::Mouse::MODE_ABSOLUTE);
 		}
 
 		if (InputManager::Get().CheckKey(dx::Keyboard::Escape))

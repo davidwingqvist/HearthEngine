@@ -37,9 +37,9 @@ public:
 	*/
 	void Initialize(const HWND& window);
 
-	dx::Keyboard* GetKeyboard() const;
+	dx::Keyboard* GetKeyboard();
 
-	dx::Mouse* GetMouse() const;
+	dx::Mouse* GetMouse();
 
 	const int& GetMouseX() const;
 	const int& GetMouseY() const;
