@@ -16,6 +16,7 @@ private:
 
 	void Update();
 	void UpdateRotation();
+	void UpdateRotationButDontPush();
 	bool SetUpBuffer();
 	bool UpdateBuffer();
 public:

@@ -35,6 +35,25 @@ void Camera::UpdateRotation()
 	Update();
 }
 
+void Camera::UpdateRotationButDontPush()
+{
+	// Limiting pitch and yaw to not cause trouble.
+	m_pitch = max(-limit, m_pitch);
+	m_pitch = std::min(+limit, m_pitch);
+
+	if (m_yaw > dx::XM_PI)
+	{
+		m_yaw -= dx::XM_2PI;
+	}
+	else if (m_yaw < -dx::XM_PI)
+	{
+		m_yaw += dx::XM_2PI;
+	}
+
+	m_lookAt = sm::Vector3::Transform(m_position.Forward, sm::Matrix::CreateFromYawPitchRoll(m_yaw, m_pitch, 0.f)) + m_position;
+	m_right = sm::Vector3::Transform(m_position.Right, sm::Matrix::CreateFromYawPitchRoll(m_yaw, m_pitch, 0.f)) + m_position;
+}
+
 bool Camera::SetUpBuffer()
 {
 	D3D11_BUFFER_DESC desc{};
@@ -191,10 +210,17 @@ void Camera::MoveWithMouse()
 		m_yaw += 0.75f * Time::Get().GetDeltaTime();
 	}
 
-	//m_position = rotPos;
+	m_position = rotPos;
+
+	UpdateRotationButDontPush();
+
+	sm::Vector3 forward = m_lookAt;
+
+	forward.Normalize();
+
+	m_position -= forward * 15.0f;
 
 	UpdateRotation();
-
 }
 
 void Camera::Activate() const
