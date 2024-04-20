@@ -132,22 +132,22 @@ void Scene::Update()
 				});
 		}
 
-		if (InputManager::Get().CheckKey(dx::Keyboard::Space, key_state::HOLD))
-		{
-			//InputManager::Get().GetMouse()->SetMode(dx::Mouse::MODE_RELATIVE);
-			m_camera.MoveWithMouse();
-		}
-		else
-		{
-			//InputManager::Get().GetMouse()->SetMode(dx::Mouse::MODE_ABSOLUTE);
-		}
-
-		if (InputManager::Get().CheckKey(dx::Keyboard::Escape))
-		{
-			EngineGUI::SetActiveEntity(recs::NULL_ENTITY);
-		}
-
 	}
+
+	if (InputManager::Get().CheckMouseKey(MouseKey::RIGHT, key_state::HOLD))
+	{
+		m_camera.MoveWithMouse();
+	}
+	else
+		m_camera.ResetValues();
+
+	if (InputManager::Get().CheckKey(dx::Keyboard::Escape))
+	{
+		EngineGUI::SetActiveEntity(recs::NULL_ENTITY);
+	}
+
+	m_camera.MoveWithScrollWheel();
+	m_camera.Move();
 }
 
 void Scene::Awake()
@@ -188,7 +188,6 @@ void Scene::Draw()
 	{
 		// Public buffer is set to the first slot in Vertex Shader
 		D3D11Core::Get().Context()->VSSetConstantBuffers(0, 1, m_publicBuffer.GetAddressOf());
-		m_camera.Move();
 
 		m_sceneReg->Group<Model, Transform>().ForEach([&](Model& model, Transform& transform) {
 

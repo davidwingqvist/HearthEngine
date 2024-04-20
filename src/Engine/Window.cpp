@@ -67,11 +67,13 @@ LRESULT CALLBACK Window::WinProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 		// When you click activate the window, we want Mouse to ignore it.
 		return MA_ACTIVATEANDEAT;
 	case WM_RBUTTONUP:
+		InputManager::Get().GetMouse()->ProcessMessage(uMsg, wParam, lParam);
 		break;
 	case WM_MOUSEHOVER:
 		InputManager::Get().GetMouse()->ProcessMessage(uMsg, wParam, lParam);
 		break;
 	case WM_MOUSEWHEEL:
+		InputManager::Get().GetMouse()->ProcessMessage(uMsg, wParam, lParam);
 		break;
 	case WM_SYSKEYDOWN:
 		InputManager::Get().GetKeyboard()->ProcessMessage(uMsg, wParam, lParam);

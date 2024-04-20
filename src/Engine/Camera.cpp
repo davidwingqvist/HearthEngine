@@ -104,6 +104,11 @@ Camera::~Camera()
 		m_buffer->Release();
 }
 
+void Camera::ResetValues()
+{
+	m_lockedPos = sm::Vector3::Zero;
+}
+
 void Camera::SetPosition(const sm::Vector3& pos)
 {
 	m_position += pos;
@@ -180,13 +185,16 @@ void Camera::Move()
 void Camera::MoveWithMouse()
 {
 
-	sm::Vector3 dir = (utility::ScreenRayToWorld(
-		{ (float)InputManager::Get().GetMouseX(),
-		(float)InputManager::Get().GetMouseY() }, this));
+	if (m_lockedPos == sm::Vector3::Zero)
+	{
+		sm::Vector3 dir = (utility::ScreenRayToWorld(
+			{ (float)InputManager::Get().GetMouseX(),
+			(float)InputManager::Get().GetMouseY() }, this));
 
-    dir.Normalize();
+		dir.Normalize();
 
-	const sm::Vector3 rotPos = m_position + (dir * 5.0f);
+		m_lockedPos = m_position + (dir * 15.0f);
+	}
 
 	const sm::Vector3 delta = sm::Vector3(
 		float(InputManager::Get().GetMouseX()),
@@ -210,7 +218,7 @@ void Camera::MoveWithMouse()
 		m_yaw += 0.75f * Time::Get().GetDeltaTime();
 	}
 
-	m_position = rotPos;
+	m_position = m_lockedPos;
 
 	UpdateRotationButDontPush();
 
@@ -221,6 +229,20 @@ void Camera::MoveWithMouse()
 	m_position -= forward * 15.0f;
 
 	UpdateRotation();
+}
+
+void Camera::MoveWithScrollWheel()
+{
+	const int& scrollValue = InputManager::Get().GetScrollValue();
+
+	if (scrollValue > 0)
+	{
+		SetPosition(0, 0, 10.0f * Time::Get().GetDeltaTime() * scrollValue);
+	}
+	else if (scrollValue < 0)
+	{
+		SetPosition(0, 0, 10.0f * Time::Get().GetDeltaTime() * scrollValue);
+	}
 }
 
 void Camera::Activate() const

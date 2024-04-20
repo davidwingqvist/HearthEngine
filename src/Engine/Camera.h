@@ -9,6 +9,8 @@ private:
 	sm::Vector3 m_lookAt{};
 	sm::Vector3 m_right{};
 
+	sm::Vector3 m_lockedPos = {};
+
 	float m_pitch = 0.0f;
 	float m_yaw = 0.0f;
 
@@ -24,6 +26,8 @@ public:
 	Camera();
 	~Camera();
 
+	void ResetValues();
+
 	// Set the position of the camera in the world scene.
 	void SetPosition(const sm::Vector3& pos);
 	// Update position based on current position.
@@ -34,6 +38,9 @@ public:
 
 	// Update the position based on the movement of mouse.
 	void MoveWithMouse();
+
+	// Update the position back and forth depending on scroll wheel value.
+	void MoveWithScrollWheel();
 
 	// Activate this camera to be the main camera.
 	void Activate() const;

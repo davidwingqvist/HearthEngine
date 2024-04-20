@@ -44,6 +44,8 @@ public:
 	const int& GetMouseX() const;
 	const int& GetMouseY() const;
 
+	const int& GetScrollValue() const;
+
 	void SetMouseMode(const dx::Mouse::Mode& mode);
 
 	/*
