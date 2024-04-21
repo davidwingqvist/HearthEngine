@@ -186,8 +186,10 @@ void Camera::Move()
 
 void Camera::MoveWithMouse()
 {
-	if(InputManager::Get().GetMouseMode() != dx::Mouse::MODE_RELATIVE)
+	if (InputManager::Get().GetMouseMode() != dx::Mouse::MODE_RELATIVE)
+	{
 		InputManager::Get().SetMouseMode(dx::Mouse::MODE_RELATIVE);
+	}
 	else
 	{
 		const sm::Vector3 delta = sm::Vector3(
@@ -205,38 +207,47 @@ void Camera::MoveWithMouse()
 
 void Camera::MoveAroundLockedPosition()
 {
-	InputManager::Get().SetMouseMode(dx::Mouse::MODE_RELATIVE);
-
-	if (m_lockedPos == sm::Vector3::Zero)
+	if (InputManager::Get().GetMouseMode() != dx::Mouse::MODE_RELATIVE)
 	{
-		sm::Vector3 dir = (utility::ScreenRayToWorld(
-			{ (float)InputManager::Get().GetMouseX(),
-			(float)InputManager::Get().GetMouseY() }, this));
-
-		dir.Normalize();
-
-		m_lockedPos = m_position + (dir * 50.0f);
+		InputManager::Get().SetMouseMode(dx::Mouse::MODE_RELATIVE);
 	}
+	else
+	{
+		sm::Vector3 forward = m_lookAt;
 
-	const sm::Vector3 delta = sm::Vector3(
-		float(InputManager::Get().GetMouseX()),
-		float(InputManager::Get().GetMouseY()), 0.0f)
-		* Time::Get().GetDeltaTime();
+		if (m_lockedPos == sm::Vector3::Zero)
+		{
+			sm::Vector3 dir = (utility::ScreenRayToWorld(
+				{ (float)InputManager::Get().GetMouseX(),
+				(float)InputManager::Get().GetMouseY() }, this));
 
-	m_pitch -= delta.y;
-	m_yaw -= delta.x;
+			dir.Normalize();
 
-	m_position = m_lockedPos;
+			forward.Normalize();
 
-	UpdateRotationButDontPush();
+			m_lockedPos = m_position - (forward * 25.0f);
+		}
 
-	sm::Vector3 forward = m_lookAt;
+		const sm::Vector3 delta = sm::Vector3(
+			float(InputManager::Get().GetMouseX()),
+			float(InputManager::Get().GetMouseY()), 0.0f)
+			* Time::Get().GetDeltaTime();
 
-	forward.Normalize();
+		m_pitch -= delta.y;
+		m_yaw -= delta.x;
 
-	m_position -= forward * 50.0f;
+		m_position = m_lockedPos;
 
-	UpdateRotation();
+		UpdateRotationButDontPush();
+
+		forward = m_lookAt - m_lockedPos;
+
+		forward.Normalize();
+
+		m_position -= forward * 25.0f;
+
+		UpdateRotation();
+	}
 }
 
 void Camera::MoveWithScrollWheel()

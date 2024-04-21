@@ -138,8 +138,11 @@ void Scene::Update()
 	{
 		m_camera.MoveWithMouse();
 	}
+	else if (InputManager::Get().CheckMouseKey(MouseKey::MIDDLE, key_state::HOLD))
+		m_camera.MoveAroundLockedPosition();
 	else
 		m_camera.ResetValues();
+
 
 	if (InputManager::Get().CheckKey(dx::Keyboard::Escape))
 	{
