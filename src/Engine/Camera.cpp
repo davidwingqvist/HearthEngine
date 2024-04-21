@@ -186,18 +186,21 @@ void Camera::Move()
 
 void Camera::MoveWithMouse()
 {
-	InputManager::Get().SetMouseMode(dx::Mouse::MODE_RELATIVE);
+	if(InputManager::Get().GetMouseMode() != dx::Mouse::MODE_RELATIVE)
+		InputManager::Get().SetMouseMode(dx::Mouse::MODE_RELATIVE);
+	else
+	{
+		const sm::Vector3 delta = sm::Vector3(
+			float(InputManager::Get().GetMouseX()),
+			float(InputManager::Get().GetMouseY()), 0.0f)
+			* Time::Get().GetDeltaTime()
+			* m_sensitivty;
 
-	const sm::Vector3 delta = sm::Vector3(
-		float(InputManager::Get().GetMouseX()),
-		float(InputManager::Get().GetMouseY()), 0.0f)
-		* Time::Get().GetDeltaTime()
-		* m_sensitivty;
+		m_pitch -= delta.y;
+		m_yaw -= delta.x;
 
-	m_pitch -= delta.y;
-	m_yaw -= delta.x;
-
-	UpdateRotation();
+		UpdateRotation();
+	}
 }
 
 void Camera::MoveAroundLockedPosition()

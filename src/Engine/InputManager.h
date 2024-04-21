@@ -21,6 +21,7 @@ private:
 	int m_mouseX;
 	int m_mouseY;
 	int m_scrollValue;
+	dx::Mouse::Mode m_mouseMode;
 
 	InputManager();
 	~InputManager() = default;
@@ -48,6 +49,7 @@ public:
 	const int& GetScrollValue() const;
 
 	void SetMouseMode(const dx::Mouse::Mode& mode);
+	const dx::Mouse::Mode& GetMouseMode() const;
 
 	/*
 		Updates the states of the keyboard and the mouse.
