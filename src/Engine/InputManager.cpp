@@ -13,6 +13,7 @@ InputManager::InputManager()
 
 	m_mouseX = 0;
 	m_mouseY = 0;
+	m_scrollValue = 0;
 }
 
 void InputManager::Initialize(const HWND& window)
@@ -42,7 +43,7 @@ const int& InputManager::GetMouseY() const
 
 const int& InputManager::GetScrollValue() const
 {
-	return m_mouse->GetState().scrollWheelValue;
+	return m_scrollValue;
 }
 
 void InputManager::SetMouseMode(const dx::Mouse::Mode& mode)
@@ -53,11 +54,14 @@ void InputManager::SetMouseMode(const dx::Mouse::Mode& mode)
 
 void InputManager::Update()
 {
-	m_keyboardTracker.Update(m_keyboard->GetState());
-	m_mouseTracker.Update(m_mouse->GetState());
+	const auto mouseState = m_mouse->GetState();
 
-	m_mouseX = m_mouse->GetState().x;
-	m_mouseY = m_mouse->GetState().y;
+	m_keyboardTracker.Update(m_keyboard->GetState());
+	m_mouseTracker.Update(mouseState);
+
+	m_mouseX = mouseState.x;
+	m_mouseY = mouseState.y;
+	m_scrollValue = mouseState.scrollWheelValue;
 
 	m_mouse->ResetScrollWheelValue();
 	//DEBUG_INFO(std::to_string(m_mouseX) + " | " + std::to_string(m_mouseY) + "\n")

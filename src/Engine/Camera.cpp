@@ -107,6 +107,8 @@ Camera::~Camera()
 void Camera::ResetValues()
 {
 	m_lockedPos = sm::Vector3::Zero;
+
+	InputManager::Get().SetMouseMode(dx::Mouse::MODE_ABSOLUTE);
 }
 
 void Camera::SetPosition(const sm::Vector3& pos)
@@ -184,6 +186,23 @@ void Camera::Move()
 
 void Camera::MoveWithMouse()
 {
+	InputManager::Get().SetMouseMode(dx::Mouse::MODE_RELATIVE);
+
+	const sm::Vector3 delta = sm::Vector3(
+		float(InputManager::Get().GetMouseX()),
+		float(InputManager::Get().GetMouseY()), 0.0f)
+		* Time::Get().GetDeltaTime()
+		* m_sensitivty;
+
+	m_pitch -= delta.y;
+	m_yaw -= delta.x;
+
+	UpdateRotation();
+}
+
+void Camera::MoveAroundLockedPosition()
+{
+	InputManager::Get().SetMouseMode(dx::Mouse::MODE_RELATIVE);
 
 	if (m_lockedPos == sm::Vector3::Zero)
 	{
@@ -193,30 +212,16 @@ void Camera::MoveWithMouse()
 
 		dir.Normalize();
 
-		m_lockedPos = m_position + (dir * 15.0f);
+		m_lockedPos = m_position + (dir * 50.0f);
 	}
 
 	const sm::Vector3 delta = sm::Vector3(
 		float(InputManager::Get().GetMouseX()),
-		float(InputManager::Get().GetMouseY()), 0.0f);
+		float(InputManager::Get().GetMouseY()), 0.0f)
+		* Time::Get().GetDeltaTime();
 
-	if (delta.y >= D3D11Core::Get().GetWindow()->GetHeight() * 0.8f)
-	{
-		m_pitch -= 0.75f * Time::Get().GetDeltaTime();
-	}
-	else if(delta.y < D3D11Core::Get().GetWindow()->GetHeight() * 0.2f)
-	{
-		m_pitch += 0.75f * Time::Get().GetDeltaTime();
-	}
-
-	if (delta.x >= D3D11Core::Get().GetWindow()->GetWidth() * 0.8f)
-	{
-		m_yaw -= 0.75f * Time::Get().GetDeltaTime();
-	}
-	else if(delta.x < D3D11Core::Get().GetWindow()->GetHeight() * 0.2f)
-	{
-		m_yaw += 0.75f * Time::Get().GetDeltaTime();
-	}
+	m_pitch -= delta.y;
+	m_yaw -= delta.x;
 
 	m_position = m_lockedPos;
 
@@ -226,7 +231,7 @@ void Camera::MoveWithMouse()
 
 	forward.Normalize();
 
-	m_position -= forward * 15.0f;
+	m_position -= forward * 50.0f;
 
 	UpdateRotation();
 }
@@ -259,6 +264,11 @@ const sm::Vector3& Camera::GetPosition() const
 const camera_data& Camera::GetData() const
 {
 	return m_matData;
+}
+
+float& Camera::GetSensitivty()
+{
+	return m_sensitivty;
 }
 
 /*

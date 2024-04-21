@@ -15,6 +15,7 @@ private:
 	float m_yaw = 0.0f;
 
 	float m_speed = 1.0f;
+	float m_sensitivty = 0.5f;
 
 	void Update();
 	void UpdateRotation();
@@ -39,6 +40,8 @@ public:
 	// Update the position based on the movement of mouse.
 	void MoveWithMouse();
 
+	void MoveAroundLockedPosition();
+
 	// Update the position back and forth depending on scroll wheel value.
 	void MoveWithScrollWheel();
 
@@ -49,6 +52,8 @@ public:
 
 	// Return the matrixes used for the camera.
 	const camera_data& GetData() const;
+
+	float& GetSensitivty();
 };
 
 class GameCamera

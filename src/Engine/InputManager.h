@@ -20,6 +20,7 @@ private:
 
 	int m_mouseX;
 	int m_mouseY;
+	int m_scrollValue;
 
 	InputManager();
 	~InputManager() = default;
