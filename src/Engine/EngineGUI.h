@@ -79,6 +79,8 @@ public:
 	LightPass* m_lightPassRef = nullptr;
 	bool* m_toggleCollisionBoxDraw = nullptr;
 
+	Camera* m_editCamera = nullptr;
+
 	static auto& Get()
 	{
 		static EngineGUI instance;

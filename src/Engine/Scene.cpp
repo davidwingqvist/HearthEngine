@@ -28,6 +28,7 @@ void Scene::AssignEdit(InternalScene* scene)
 {
 	LUA.m_currentRegistry = scene->GetRegistry();
 	m_sceneReg = scene->GetRegistry();
+	//EngineGUI::Get().m_editCamera = &m_camera;
 }
 
 void Scene::Reset()
@@ -52,6 +53,7 @@ Scene::Scene()
 
 	sm::Vector3 r = utility::Reflect(d, n);
 
+	EngineGUI::Get().m_editCamera = &m_camera;
 }
 
 Scene::~Scene()
@@ -135,21 +137,20 @@ void Scene::Update()
 	}
 
 	if (InputManager::Get().CheckMouseKey(MouseKey::RIGHT, key_state::HOLD))
-	{
 		m_camera.MoveWithMouse();
-	}
 	else if (InputManager::Get().CheckMouseKey(MouseKey::MIDDLE, key_state::HOLD))
 		m_camera.MoveAroundLockedPosition();
 	else
+	{
+		m_camera.MoveWithScrollWheel();
 		m_camera.ResetValues();
+	}
 
 
 	if (InputManager::Get().CheckKey(dx::Keyboard::Escape))
-	{
 		EngineGUI::SetActiveEntity(recs::NULL_ENTITY);
-	}
 
-	m_camera.MoveWithScrollWheel();
+
 	m_camera.Move();
 }
 

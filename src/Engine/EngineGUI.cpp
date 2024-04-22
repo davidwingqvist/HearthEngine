@@ -458,6 +458,12 @@ void EngineGUI::RenderStatistics()
 	{
 		ImGui::Checkbox("Render Collision Boxes?", m_toggleCollisionBoxDraw);
 	}
+
+	if (m_editCamera)
+	{
+		ImGui::DragFloat("Camera Look Sensitity###rightClickCameraSens", &m_editCamera->GetSensitivty(), .05f, 0.01f, 10.0f);
+		ImGui::DragFloat("Camera Sphere Look Range##middleClickSphereRadius", &m_editCamera->GetSphereRadius(), 1.0f, 0.1f, 1000.0f);
+	}
 }
 
 void EngineGUI::RenderScenes()

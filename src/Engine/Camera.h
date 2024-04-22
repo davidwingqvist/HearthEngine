@@ -15,10 +15,14 @@ private:
 	float m_yaw = 0.0f;
 
 	float m_speed = 1.0f;
-	float m_sensitivty = 0.5f;
+	float m_sensitivty = 0.25f;
+	float m_sphereRadius = 25.0f;
 
 	void Update();
 	void UpdateRotation();
+
+	// Updates rotation of lookAt and right, 
+	// but doesnt update buffer.
 	void UpdateRotationButDontPush();
 	bool SetUpBuffer();
 	bool UpdateBuffer();
@@ -54,6 +58,7 @@ public:
 	const camera_data& GetData() const;
 
 	float& GetSensitivty();
+	float& GetSphereRadius();
 };
 
 class GameCamera
