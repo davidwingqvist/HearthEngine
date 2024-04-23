@@ -138,10 +138,11 @@ void Scene::Update()
 
 	if (InputManager::Get().CheckMouseKey(MouseKey::RIGHT, key_state::HOLD))
 		m_camera.MoveWithMouse();
-	else if (InputManager::Get().CheckMouseKey(MouseKey::MIDDLE, key_state::HOLD))
-		m_camera.MoveAroundLockedPosition();
+	else if (InputManager::Get().CheckMouseKey(MouseKey::MIDDLE))
+		m_camera.ToggleLock();
 	else
 	{
+		m_camera.MoveAroundLockedPosition();
 		m_camera.MoveWithScrollWheel();
 		m_camera.ResetValues();
 	}

@@ -463,6 +463,7 @@ void EngineGUI::RenderStatistics()
 	{
 		ImGui::DragFloat("Camera Look Sensitity###rightClickCameraSens", &m_editCamera->GetSensitivty(), .05f, 0.01f, 10.0f);
 		ImGui::DragFloat("Camera Sphere Look Range##middleClickSphereRadius", &m_editCamera->GetSphereRadius(), 1.0f, 0.1f, 1000.0f);
+		ImGui::DragFloat("Camera Move Speed##CamMoveSpeed", &m_editCamera->GetSpeed(), .05f, 0.01f, 10.0f);
 	}
 }
 

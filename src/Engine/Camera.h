@@ -18,6 +18,8 @@ private:
 	float m_sensitivty = 0.25f;
 	float m_sphereRadius = 25.0f;
 
+	bool m_isLocked = false;
+
 	void Update();
 	void UpdateRotation();
 
@@ -52,6 +54,8 @@ public:
 	// Activate this camera to be the main camera.
 	void Activate() const;
 
+	void ToggleLock();
+
 	const sm::Vector3& GetPosition() const;
 
 	// Return the matrixes used for the camera.
@@ -59,6 +63,7 @@ public:
 
 	float& GetSensitivty();
 	float& GetSphereRadius();
+	float& GetSpeed();
 };
 
 class GameCamera

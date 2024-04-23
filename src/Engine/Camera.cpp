@@ -108,7 +108,9 @@ void Camera::ResetValues()
 {
 	m_lockedPos = sm::Vector3::Zero;
 
-	InputManager::Get().SetMouseMode(dx::Mouse::MODE_ABSOLUTE);
+
+	if(!m_isLocked)
+		InputManager::Get().SetMouseMode(dx::Mouse::MODE_ABSOLUTE);
 }
 
 void Camera::SetPosition(const sm::Vector3& pos)
@@ -207,44 +209,61 @@ void Camera::MoveWithMouse()
 
 void Camera::MoveAroundLockedPosition()
 {
-	if (InputManager::Get().GetMouseMode() != dx::Mouse::MODE_RELATIVE)
+	if (m_isLocked)
 	{
-		InputManager::Get().SetMouseMode(dx::Mouse::MODE_RELATIVE);
-	}
-	else
-	{
-		sm::Vector3 forward = m_lookAt - m_position;
-		
-		// Get a position based on the camera position, and mouse position.
-		if (m_lockedPos == sm::Vector3::Zero)
+
+		if (InputManager::Get().GetMouseMode() != dx::Mouse::MODE_RELATIVE)
 		{
-			//sm::Vector3 dir = (utility::ScreenRayToWorld(
-			//	{ (float)InputManager::Get().GetMouseX(),
-			//	(float)InputManager::Get().GetMouseY() }, this));
-
-			forward.Normalize();
-
-			m_lockedPos = m_position + (forward * m_sphereRadius);
+			InputManager::Get().SetMouseMode(dx::Mouse::MODE_RELATIVE);
 		}
+		else
+		{
+			const int& scrollValue = InputManager::Get().GetScrollValue();
 
-		// Get relative x and y values from mouse.
-		const sm::Vector3 delta = sm::Vector3(
-			float(InputManager::Get().GetMouseX()),
-			float(InputManager::Get().GetMouseY()), 0.0f)
-			* Time::Get().GetDeltaTime();
+			if (scrollValue > 0)
+			{
+				m_sphereRadius -= 10.0f;
+			}
+			else if (scrollValue < 0)
+			{
+				m_sphereRadius += 10.0f;
+			}
 
-		m_pitch -= delta.y;
-		m_yaw -= delta.x;
+			m_sphereRadius > 1 ? m_sphereRadius = m_sphereRadius : m_sphereRadius = 1;
 
-		// Set position to locked pos and rotate the camera around it.
-		m_position = m_lockedPos;
-		UpdateRotationButDontPush();
+			sm::Vector3 forward = m_lookAt - m_position;
 
-		// Push the camera back to get the "sphere" rotation effect.
-		forward = m_lookAt - m_lockedPos;
-		forward.Normalize();
-		m_position -= forward * m_sphereRadius;
-		UpdateRotation();
+			// Get a position based on the camera position, and mouse position.
+			if (m_lockedPos == sm::Vector3::Zero)
+			{
+				//sm::Vector3 dir = (utility::ScreenRayToWorld(
+				//	{ (float)InputManager::Get().GetMouseX(),
+				//	(float)InputManager::Get().GetMouseY() }, this));
+
+				forward.Normalize();
+
+				m_lockedPos = m_position + (forward * m_sphereRadius);
+			}
+
+			// Get relative x and y values from mouse.
+			const sm::Vector3 delta = sm::Vector3(
+				float(InputManager::Get().GetMouseX()),
+				float(InputManager::Get().GetMouseY()), 0.0f)
+				* Time::Get().GetDeltaTime();
+
+			m_pitch -= delta.y;
+			m_yaw -= delta.x;
+
+			// Set position to locked pos and rotate the camera around it.
+			m_position = m_lockedPos;
+			UpdateRotationButDontPush();
+
+			// Push the camera back to get the "sphere" rotation effect.
+			forward = m_lookAt - m_lockedPos;
+			forward.Normalize();
+			m_position -= forward * m_sphereRadius;
+			UpdateRotation();
+		}
 	}
 }
 
@@ -268,6 +287,11 @@ void Camera::Activate() const
 	D3D11Core::Get().Context()->PSSetConstantBuffers(3, 1, &m_buffer);
 }
 
+void Camera::ToggleLock()
+{
+	m_isLocked = !m_isLocked;
+}
+
 const sm::Vector3& Camera::GetPosition() const
 {
 	return m_position;
@@ -286,6 +310,11 @@ float& Camera::GetSensitivty()
 float& Camera::GetSphereRadius()
 {
 	return m_sphereRadius;
+}
+
+float& Camera::GetSpeed()
+{
+	return m_speed;
 }
 
 /*
