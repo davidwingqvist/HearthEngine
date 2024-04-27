@@ -149,6 +149,17 @@ int SetScale_Model(lua_State* L)
 	return 0;
 }
 
+int GetTransform(lua_State* L)
+{
+	const UINT entityNr = luaL_checknumber(L, -1);
+
+	Transform* transform = LUA.m_currentRegistry->GetComponent<Transform>(entityNr);
+
+	lua_pushlightuserdata(L, transform);
+
+	return 0;
+}
+
 int SetTag_GameObject(lua_State* L)
 {
 	std::string name = luaL_checkstring(L, -1);

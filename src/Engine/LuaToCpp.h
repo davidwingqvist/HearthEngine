@@ -15,8 +15,8 @@ int Debug_LogSuccess(lua_State* L);
 	ENTITY FUNCTIONS
 */
 int CreateEntity_Lua(lua_State* L);
-int DeleteEntity_Lua(lua_State* L);
-int DestroyEntity_Lua(lua_State* L);
+int DeleteEntity_Lua(lua_State* L); // Other entity
+int DestroyEntity_Lua(lua_State* L); // Own entity
 /*
 	ENTITY FUNCTIONS
 */
@@ -29,6 +29,10 @@ int Translate_Model(lua_State* L);
 int SetPosition_Model(lua_State* L);
 int SetRotation_Model(lua_State* L);
 int SetScale_Model(lua_State* L);
+
+// Get transform of another entity
+int GetTransform(lua_State* L);
+
 /*
 	TRANSFORM FUNCTIONS
 */

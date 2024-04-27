@@ -27,7 +27,7 @@ private:
 	// but doesnt update buffer.
 	void UpdateRotationButDontPush();
 	bool SetUpBuffer();
-	bool UpdateBuffer();
+	bool UpdateBuffer() const;
 public:
 
 	Camera();
@@ -79,7 +79,7 @@ public:
 
 private:
 
-	bool UpdateBuffer();
+	bool UpdateBuffer() const;
 	bool SetupBuffer();
 
 	camera_data m_matData{};

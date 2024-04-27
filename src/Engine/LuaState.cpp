@@ -61,6 +61,7 @@ void LuaHandler::LoadInComponentAffectingFunctions()
 	this->RegisterFunction(SetPosition_Model, "SetPosition");
 	this->RegisterFunction(SetRotation_Model, "SetRotation");
 	this->RegisterFunction(SetScale_Model, "SetScale");
+	this->RegisterFunction(GetTransform, "GetTransform");
 
 	/*
 		GameObject

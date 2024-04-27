@@ -70,7 +70,7 @@ bool Camera::SetUpBuffer()
 	return !FAILED(D3D11Core::Get().Device()->CreateBuffer(&desc, &data, &m_buffer));
 }
 
-bool Camera::UpdateBuffer()
+bool Camera::UpdateBuffer() const
 {
 	D3D11_MAPPED_SUBRESOURCE sub;
 	HRESULT hr = D3D11Core::Get().Context()->Map(m_buffer, 0, D3D11_MAP_WRITE_DISCARD, NULL, &sub);
@@ -106,11 +106,11 @@ Camera::~Camera()
 
 void Camera::ResetValues()
 {
-	m_lockedPos = sm::Vector3::Zero;
-
-
-	if(!m_isLocked)
+	if (!m_isLocked)
+	{
+		m_lockedPos = sm::Vector3::Zero;
 		InputManager::Get().SetMouseMode(dx::Mouse::MODE_ABSOLUTE);
+	}
 }
 
 void Camera::SetPosition(const sm::Vector3& pos)
@@ -236,10 +236,6 @@ void Camera::MoveAroundLockedPosition()
 			// Get a position based on the camera position, and mouse position.
 			if (m_lockedPos == sm::Vector3::Zero)
 			{
-				//sm::Vector3 dir = (utility::ScreenRayToWorld(
-				//	{ (float)InputManager::Get().GetMouseX(),
-				//	(float)InputManager::Get().GetMouseY() }, this));
-
 				forward.Normalize();
 
 				m_lockedPos = m_position + (forward * m_sphereRadius);
@@ -353,7 +349,7 @@ void GameCamera::Activate() const
 	D3D11Core::Get().Context()->PSSetConstantBuffers(3, 1, &m_buffer);
 }
 
-bool GameCamera::UpdateBuffer()
+bool GameCamera::UpdateBuffer() const
 {
 	D3D11_MAPPED_SUBRESOURCE sub;
 	HRESULT hr = D3D11Core::Get().Context()->Map(m_buffer, 0, D3D11_MAP_WRITE_DISCARD, NULL, &sub);
