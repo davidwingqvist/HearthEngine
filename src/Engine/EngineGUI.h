@@ -1,12 +1,15 @@
 #pragma once
 #include "SceneManager.h"
 #include "LightPass.h"
+#include "DragPointer.h"
 
 class EngineGUI
 {
 private:
 	EngineGUI();
 	~EngineGUI();
+
+	DragPointer m_dragPointers;
 
 	SceneManager* m_sceneManagerRef = nullptr;
 

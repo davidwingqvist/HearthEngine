@@ -9,6 +9,8 @@ private:
 	sm::Vector3 m_lookAt{};
 	sm::Vector3 m_right{};
 
+	recs::recs_registry* m_reg;
+
 	sm::Vector3 m_lockedPos = {};
 
 	float m_pitch = 0.0f;
@@ -57,6 +59,8 @@ public:
 	void ToggleLock();
 
 	const sm::Vector3& GetPosition() const;
+
+	void SetRegistry(recs::recs_registry* registry);
 
 	// Return the matrixes used for the camera.
 	const camera_data& GetData() const;

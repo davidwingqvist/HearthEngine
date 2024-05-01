@@ -57,6 +57,9 @@
     <Filter Include="Shaders\HLSL Functions">
       <UniqueIdentifier>{c1113578-d190-4e89-b3d1-00239fa6d1bc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Debug\Debug Items">
+      <UniqueIdentifier>{16322337-10b3-4be3-bc0a-7b983aa112e3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Engine\HearthEngine.cpp">
@@ -184,6 +187,9 @@
     </ClCompile>
     <ClCompile Include="src\Engine\CollisionBoxRenderPass.cpp">
       <Filter>RenderPass\Passes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\DragPointer.cpp">
+      <Filter>Debug\Debug Items</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -315,6 +321,9 @@
     </ClInclude>
     <ClInclude Include="src\Engine\CollisionBoxRenderPass.h">
       <Filter>RenderPass\Passes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\DragPointer.h">
+      <Filter>Debug\Debug Items</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

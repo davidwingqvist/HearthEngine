@@ -29,6 +29,7 @@ void Scene::AssignEdit(InternalScene* scene)
 	LUA.m_currentRegistry = scene->GetRegistry();
 	m_sceneReg = scene->GetRegistry();
 	//EngineGUI::Get().m_editCamera = &m_camera;
+	m_camera.SetRegistry(m_sceneReg);
 }
 
 void Scene::Reset()

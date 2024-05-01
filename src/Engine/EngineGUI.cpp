@@ -74,6 +74,8 @@ void EngineGUI::RenderGUI()
 	Get().RenderTextureTab();
 	Get().RenderScriptsTab();
 	Get().RenderScenesTab();
+
+	Get().m_dragPointers.Draw(Get().m_currentEntity);
 }
 
 void EngineGUI::CommitGUI()

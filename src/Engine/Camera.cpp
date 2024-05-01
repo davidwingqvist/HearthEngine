@@ -236,9 +236,32 @@ void Camera::MoveAroundLockedPosition()
 			// Get a position based on the camera position, and mouse position.
 			if (m_lockedPos == sm::Vector3::Zero)
 			{
-				forward.Normalize();
+				const Ray r = { m_position,
+				utility::ScreenRayToWorld(
+				{(float)D3D11Core::Get().GetWindow()->GetWidth() * 0.5f,
+				(float)D3D11Core::Get().GetWindow()->GetHeight() * 0.5f}, this),
+				};
 
-				m_lockedPos = m_position + (forward * m_sphereRadius);
+				float dist = FLT_MAX;
+				// If there is a reg in the scene, loop through objets, hit object will be target.
+				if (m_reg)
+				{
+					m_reg->Group<InternalBox, Transform>().ForEach([&](const recs::Entity& entity, InternalBox& box, Transform& transform)
+						{
+							if (utility::RayAABBCollision(box, r, dist))
+							{
+								m_lockedPos = transform.pos;
+								return;
+							}
+						});
+				}
+
+				if (m_lockedPos == sm::Vector3::Zero)
+				{
+					forward.Normalize();
+
+					m_lockedPos = m_position + (forward * m_sphereRadius);
+				}
 			}
 
 			// Get relative x and y values from mouse.
@@ -291,6 +314,11 @@ void Camera::ToggleLock()
 const sm::Vector3& Camera::GetPosition() const
 {
 	return m_position;
+}
+
+void Camera::SetRegistry(recs::recs_registry* registry)
+{
+	m_reg = registry;
 }
 
 const camera_data& Camera::GetData() const

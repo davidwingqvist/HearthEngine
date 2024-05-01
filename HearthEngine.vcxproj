@@ -22,6 +22,7 @@
     <ClCompile Include="src\Engine\BasicPass.cpp" />
     <ClCompile Include="src\Engine\Camera.cpp" />
     <ClCompile Include="src\Engine\CollisionBoxRenderPass.cpp" />
+    <ClCompile Include="src\Engine\DragPointer.cpp" />
     <ClCompile Include="src\Engine\GameScene.cpp" />
     <ClCompile Include="src\Engine\Icon.cpp" />
     <ClCompile Include="src\Engine\InternalScene.cpp" />
@@ -87,6 +88,7 @@
     <ClInclude Include="src\Engine\BasicPass.h" />
     <ClInclude Include="src\Engine\Camera.h" />
     <ClInclude Include="src\Engine\CollisionBoxRenderPass.h" />
+    <ClInclude Include="src\Engine\DragPointer.h" />
     <ClInclude Include="src\Engine\GameScene.h" />
     <ClInclude Include="src\Engine\Icon.h" />
     <ClInclude Include="src\Engine\InternalScene.h" />
