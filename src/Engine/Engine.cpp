@@ -33,6 +33,7 @@ Engine::Engine()
 
 	// Create the resource manager.
 	ResourceManager::Get();
+	EngineGUI::StartUp();
 }
 
 Engine::Engine(const std::string& splashScreen)

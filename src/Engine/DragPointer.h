@@ -11,6 +11,8 @@ public:
 
 	void SetRegistry(recs::recs_registry* registry);
 
+	void StartUp();
+
 private:
 
 	recs::recs_registry* m_currentRegistry = nullptr;

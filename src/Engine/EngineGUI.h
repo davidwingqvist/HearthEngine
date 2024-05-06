@@ -93,6 +93,8 @@ public:
 	static void RenderGUI();
 	static void CommitGUI();
 
+	static void StartUp();
+
 	static void SetSceneManagerRef(SceneManager* ref_pointer);
 
 	static void RegisterConsoleLog(const ConsoleLogEvent& event);

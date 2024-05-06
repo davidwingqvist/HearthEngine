@@ -84,6 +84,11 @@ void EngineGUI::CommitGUI()
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 }
 
+void EngineGUI::StartUp()
+{
+	Get().m_dragPointers.StartUp();
+}
+
 void EngineGUI::SetSceneManagerRef(SceneManager* ref_pointer)
 {
 	Get().m_sceneManagerRef = ref_pointer;

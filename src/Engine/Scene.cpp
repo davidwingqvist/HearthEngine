@@ -11,19 +11,6 @@
 #include "LuaGameState.h"
 #include "InputManager.h"
 
-static void UpdatePublicBuffer(ID3D11Buffer** buffer, const sm::Matrix& matrix_data)
-{
-	D3D11_MAPPED_SUBRESOURCE sub;
-	HRESULT hr = D3D11Core::Get().Context()->Map(*buffer, 0, D3D11_MAP_WRITE_DISCARD, NULL, &sub);
-	if (FAILED(hr))
-	{
-		DEBUG_ERROR("Failed to map public buffer for scene!\n");
-	}
-	std::memcpy(sub.pData, &matrix_data, sizeof(float) * 16);
-	D3D11Core::Get().Context()->Unmap(*buffer, 0);
-
-}
-
 void Scene::AssignEdit(InternalScene* scene)
 {
 	LUA.m_currentRegistry = scene->GetRegistry();
@@ -199,7 +186,7 @@ void Scene::Draw()
 
 			if (model.isVisible)
 			{
-				UpdatePublicBuffer(m_publicBuffer.GetAddressOf(), GetMatrix(transform));
+				utility::UpdatePublicBuffer(m_publicBuffer.GetAddressOf(), GetMatrix(transform));
 
 				if (model.model_texture)
 					model.model_texture->SetAsTexture();

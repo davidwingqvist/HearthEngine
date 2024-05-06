@@ -4,12 +4,12 @@
 
 DragPointer::DragPointer()
 {
-	//m_pointerModel = ResourceManager::Get().GetResource<Model3D>("pointer.obj");
+	
 }
 
 void DragPointer::Draw(const recs::Entity& currentEntity)
 {
-	if (m_currentRegistry)
+	if (m_currentRegistry && currentEntity != recs::NULL_ENTITY)
 	{
 
 	}
@@ -18,4 +18,9 @@ void DragPointer::Draw(const recs::Entity& currentEntity)
 void DragPointer::SetRegistry(recs::recs_registry* registry)
 {
 	m_currentRegistry = registry;
+}
+
+void DragPointer::StartUp()
+{
+	m_pointerModel = ResourceManager::Get().GetResource<Model3D>("pointer.obj");
 }

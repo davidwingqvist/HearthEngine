@@ -2,6 +2,7 @@
 #include "Utility.h"
 #include "Camera.h"
 #include "D3D11Context.h"
+#include "Debugger.h"
 
 sm::Vector2 utility::WorldSpaceToScreenSpace(const sm::Vector3& worldPos, Camera* cam)
 {
@@ -135,6 +136,18 @@ bool utility::RayAABBCollision(const InternalBox& b, const Ray& r, float& t)
 
     t = tmin;
     return true;
+}
+
+void utility::UpdatePublicBuffer(ID3D11Buffer** buffer, const sm::Matrix& matrix_data)
+{
+    D3D11_MAPPED_SUBRESOURCE sub;
+    HRESULT hr = D3D11Core::Get().Context()->Map(*buffer, 0, D3D11_MAP_WRITE_DISCARD, NULL, &sub);
+    if (FAILED(hr))
+    {
+        DEBUG_ERROR("Failed to map public buffer for scene!\n");
+    }
+    std::memcpy(sub.pData, &matrix_data, sizeof(float) * 16);
+    D3D11Core::Get().Context()->Unmap(*buffer, 0);
 }
 
 sm::Vector3 utility::Reflect(const sm::Vector3& d, const sm::Vector3& n)
