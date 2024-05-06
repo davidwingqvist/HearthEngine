@@ -4,7 +4,7 @@
 
 DragPointer::DragPointer()
 {
-	m_pointerModel = ResourceManager::Get().GetResource<Model>("pointer.obj");
+	//m_pointerModel = ResourceManager::Get().GetResource<Model3D>("pointer.obj");
 }
 
 void DragPointer::Draw(const recs::Entity& currentEntity)

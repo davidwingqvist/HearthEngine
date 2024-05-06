@@ -14,6 +14,6 @@ public:
 private:
 
 	recs::recs_registry* m_currentRegistry = nullptr;
-	std::shared_ptr<Model> m_pointerModel = nullptr;
+	std::shared_ptr<Model3D> m_pointerModel = nullptr;
 
 };

@@ -70,7 +70,7 @@ static const char* const tmap_set[] = { "xPosition", "yPosition", "zPosition", "
 struct Transform
 {
 	sm::Vector3 pos = {0.0f, 0.0f, 0.0f};
-	sm::Quaternion rotation = {0.0f, 0.0f, 0.0f, 0.0f};
+	sm::Vector3 rotation = {0.0f, 0.0f, 0.0f};
 	sm::Vector3 scale = {1.0f, 1.0f, 1.0f};
 };
 

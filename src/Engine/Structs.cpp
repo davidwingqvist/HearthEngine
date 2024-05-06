@@ -20,7 +20,8 @@ void pushTransform(lua_State* L)
 sm::Matrix GetMatrix(const Transform& transform)
 {
 	sm::Matrix mat = sm::Matrix::CreateScale(transform.scale);
-	mat *= sm::Matrix::CreateFromQuaternion(transform.rotation);
+
+	mat *= sm::Matrix::CreateFromQuaternion(sm::Quaternion::CreateFromYawPitchRoll(transform.rotation));
 	mat.Translation(transform.pos);
 	return mat;
 }
