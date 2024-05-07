@@ -7,24 +7,42 @@
 DragPointer::DragPointer()
 {
 	m_transforms[0].rotation = { 0.0f, 0.0f, 0.0f };
-	m_transforms[1].rotation = { dx::XM_1DIV2PI, 0.0f, 0.0f };
-	m_transforms[2].rotation = { 0.0f, 0.0f, dx::XM_1DIV2PI };
+	m_transforms[1].rotation = { 0.0f, 0.0f, dx::XM_PIDIV2 };
+	m_transforms[2].rotation = { 0.0f, -dx::XM_PIDIV2, 0.0f};
+
+	sm::Vector3 scale = { 10.0f, 5.0f, 5.0f };
+
+	m_transforms[0].scale = scale;
+	m_transforms[1].scale = scale;
+	m_transforms[2].scale = scale;
 }
 
 void DragPointer::Draw(const recs::Entity& currentEntity)
 {
 	if (m_currentRegistry && currentEntity != recs::NULL_ENTITY)
 	{
+		D3D11Core::Get().Context()->VSSetConstantBuffers(0, 1, m_modelBuffer.GetAddressOf());
+
 		const Transform& modTransf = *m_currentRegistry->GetComponent<Transform>(currentEntity);
 
 		m_transforms[0].pos = modTransf.pos;
+		m_transforms[0].pos.x += 5.0f;
 		m_transforms[1].pos = modTransf.pos;
+		m_transforms[1].pos.y += 5.0f;
 		m_transforms[2].pos = modTransf.pos;
+		m_transforms[2].pos.z += 5.0f;
 
 		utility::UpdatePublicBuffer(m_modelBuffer.GetAddressOf(), 
 			GetMatrix(m_transforms[0]));
+		m_pointerModel->Draw();
 
+		utility::UpdatePublicBuffer(m_modelBuffer.GetAddressOf(),
+			GetMatrix(m_transforms[1]));
+		m_pointerModel->Draw();
 
+		utility::UpdatePublicBuffer(m_modelBuffer.GetAddressOf(),
+			GetMatrix(m_transforms[2]));
+		m_pointerModel->Draw();
 	}
 }
 

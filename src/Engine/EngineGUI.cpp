@@ -74,8 +74,6 @@ void EngineGUI::RenderGUI()
 	Get().RenderTextureTab();
 	Get().RenderScriptsTab();
 	Get().RenderScenesTab();
-
-	Get().m_dragPointers.Draw(Get().m_currentEntity);
 }
 
 void EngineGUI::CommitGUI()
@@ -516,6 +514,7 @@ void EngineGUI::RenderProperties()
 		ImGui::Begin("Properties", &m_showPropertiesTab, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
 
 		recs::recs_registry* reg = m_sceneManagerRef->GetCurrentScene()->GetRegistry();
+		m_dragPointers.SetRegistry(reg);
 
 		if (!reg)
 		{

@@ -17,6 +17,7 @@ private:
 
 	recs::recs_registry* m_currentRegistry = nullptr;
 	std::shared_ptr<Model3D> m_pointerModel = nullptr;
+	std::shared_ptr<Texture> m_pointerTexture = nullptr;
 
 	Transform m_transforms[3];
 
