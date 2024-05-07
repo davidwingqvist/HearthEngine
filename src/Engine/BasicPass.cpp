@@ -1,6 +1,7 @@
 #include "Header.h"
 #include "BasicPass.h"
 #include "Debugger.h"
+#include "EngineGUI.h"
 #include "D3D11Context.h"
 
 bool BasicPass::SetUpTextures()
@@ -203,6 +204,7 @@ void BasicPass::Prepass()
 void BasicPass::Pass(InternalScene* currentScene)
 {
 	currentScene->Draw();
+	EngineGUI::DrawDragPointers();
 	m_gridPass.Prepass();
 	m_gridPass.Pass(currentScene);
 	m_gridPass.Postpass();

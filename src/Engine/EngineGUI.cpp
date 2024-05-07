@@ -89,6 +89,11 @@ void EngineGUI::StartUp()
 	Get().m_dragPointers.StartUp();
 }
 
+void EngineGUI::DrawDragPointers()
+{
+	Get().m_dragPointers.Draw(Get().m_currentEntity);
+}
+
 void EngineGUI::SetSceneManagerRef(SceneManager* ref_pointer)
 {
 	Get().m_sceneManagerRef = ref_pointer;

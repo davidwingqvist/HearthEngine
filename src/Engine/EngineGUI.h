@@ -95,6 +95,8 @@ public:
 
 	static void StartUp();
 
+	static void DrawDragPointers();
+
 	static void SetSceneManagerRef(SceneManager* ref_pointer);
 
 	static void RegisterConsoleLog(const ConsoleLogEvent& event);

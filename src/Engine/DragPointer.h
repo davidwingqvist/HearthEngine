@@ -18,4 +18,10 @@ private:
 	recs::recs_registry* m_currentRegistry = nullptr;
 	std::shared_ptr<Model3D> m_pointerModel = nullptr;
 
+	Transform m_transforms[3];
+
+	DXPointer<ID3D11Buffer> m_modelBuffer;
+
+	bool CreateModelBuffer();
+
 };
