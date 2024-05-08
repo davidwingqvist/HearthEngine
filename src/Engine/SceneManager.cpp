@@ -2,6 +2,7 @@
 #include "SceneManager.h"
 #include "Debugger.h"
 #include "GameScene.h"
+#include "EngineGUI.h"
 
 void SceneManager::LoadSpecificScene(const std::string& sceneName)
 {

@@ -45,6 +45,7 @@ namespace utility
 
 	bool RayAABBCollision(const CollisionBox& b, const Ray& r);
 	bool RayAABBCollision(const InternalBox& b, const Ray& r, float& t);
+	bool RayAABBCollision(const InternalBox& b, const Ray& r);
 
 	// Update a public buffer used for rendering objects.
 	void UpdatePublicBuffer(ID3D11Buffer** buffer, const sm::Matrix& matrix_data);

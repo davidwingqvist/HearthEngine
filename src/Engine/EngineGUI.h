@@ -93,6 +93,8 @@ public:
 	static void RenderGUI();
 	static void CommitGUI();
 
+	DragPointer* GetDragPointers();
+
 	static void StartUp();
 
 	static void DrawDragPointers();

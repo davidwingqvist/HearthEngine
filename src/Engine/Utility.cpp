@@ -138,6 +138,32 @@ bool utility::RayAABBCollision(const InternalBox& b, const Ray& r, float& t)
     return true;
 }
 
+bool utility::RayAABBCollision(const InternalBox& b, const Ray& r)
+{
+    sm::Vector3 normalizedRayDir = { 1.0f / r.dir.x, 1.0f / r.dir.y, 1.0f / r.dir.z };
+
+    const float t1 = (b.min.x - r.origin.x) * normalizedRayDir.x;
+    const float t2 = (b.max.x - r.origin.x) * normalizedRayDir.x;
+    const float t3 = (b.min.y - r.origin.y) * normalizedRayDir.y;
+    const float t4 = (b.max.y - r.origin.y) * normalizedRayDir.y;
+    const float t5 = (b.min.z - r.origin.z) * normalizedRayDir.z;
+    const float t6 = (b.max.z - r.origin.z) * normalizedRayDir.z;
+
+    const float tmin = max(max(std::min(t1, t2), std::min(t3, t4)), std::min(t5, t6));
+    const float tmax = std::min(std::min(max(t1, t2), max(t3, t4)), max(t5, t6));
+
+    if (tmax < 0)
+    {
+        return false;
+    }
+
+    if (tmin > tmax)
+    {
+        return false;
+    }
+    return true;
+}
+
 void utility::UpdatePublicBuffer(ID3D11Buffer** buffer, const sm::Matrix& matrix_data)
 {
     D3D11_MAPPED_SUBRESOURCE sub;

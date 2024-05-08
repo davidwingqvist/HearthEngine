@@ -82,6 +82,11 @@ void EngineGUI::CommitGUI()
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 }
 
+DragPointer* EngineGUI::GetDragPointers()
+{
+	return &m_dragPointers;
+}
+
 void EngineGUI::StartUp()
 {
 	Get().m_dragPointers.StartUp();
@@ -514,7 +519,7 @@ void EngineGUI::RenderProperties()
 		ImGui::Begin("Properties", &m_showPropertiesTab, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
 
 		recs::recs_registry* reg = m_sceneManagerRef->GetCurrentScene()->GetRegistry();
-		m_dragPointers.SetRegistry(reg);
+		//m_dragPointers.SetRegistry(reg);
 
 		if (!reg)
 		{

@@ -3,6 +3,10 @@
 #include "ResourceManager.h"
 #include "D3D11Context.h"
 #include "Utility.h"
+#include "Texture.h"
+#include "InputManager.h"
+#include "Camera.h"
+#include "Time.h"
 
 DragPointer::DragPointer()
 {
@@ -19,12 +23,18 @@ DragPointer::DragPointer()
 
 void DragPointer::Draw(const recs::Entity& currentEntity)
 {
-	if (m_currentRegistry && currentEntity != recs::NULL_ENTITY)
+	m_currMouseX = InputManager::Get().GetMouseX();
+	m_currMouseY = InputManager::Get().GetMouseY();
+
+
+	if (m_currentRegistry && currentEntity != recs::NULL_ENTITY
+		&& m_camera != nullptr)
 	{
 		D3D11Core::Get().Context()->VSSetConstantBuffers(0, 1, m_modelBuffer.GetAddressOf());
 
-		const Transform& modTransf = *m_currentRegistry->GetComponent<Transform>(currentEntity);
+		Transform& modTransf = *m_currentRegistry->GetComponent<Transform>(currentEntity);
 
+		// Move pointers to their spots, related to the object position.
 		m_transforms[0].pos = modTransf.pos;
 		m_transforms[0].pos.x += 5.0f;
 		m_transforms[1].pos = modTransf.pos;
@@ -32,18 +42,59 @@ void DragPointer::Draw(const recs::Entity& currentEntity)
 		m_transforms[2].pos = modTransf.pos;
 		m_transforms[2].pos.z += 5.0f;
 
+		// Move hitboxes to cover the pointers.
+		m_hitBoxes[0].min = modTransf.pos;
+		m_hitBoxes[1].min = modTransf.pos;
+		m_hitBoxes[2].min = modTransf.pos;
+
+		m_hitBoxes[0].max = { modTransf.pos.x + 20.0f, modTransf.pos.y + 2.5f, modTransf.pos.z - 2.5f };
+		m_hitBoxes[1].max = { modTransf.pos.x + 2.5f, modTransf.pos.y + 20.0f, modTransf.pos.z - 2.5f};
+		m_hitBoxes[2].max = { modTransf.pos.x + 2.5f, modTransf.pos.y + 2.5f, modTransf.pos.z + 20.0f};
+
+
+		// Draw pointers...
 		utility::UpdatePublicBuffer(m_modelBuffer.GetAddressOf(), 
 			GetMatrix(m_transforms[0]));
+		m_pointerTextures[0]->SetAsTexture();
 		m_pointerModel->Draw();
 
 		utility::UpdatePublicBuffer(m_modelBuffer.GetAddressOf(),
 			GetMatrix(m_transforms[1]));
+		m_pointerTextures[1]->SetAsTexture();
 		m_pointerModel->Draw();
 
 		utility::UpdatePublicBuffer(m_modelBuffer.GetAddressOf(),
 			GetMatrix(m_transforms[2]));
+		m_pointerTextures[2]->SetAsTexture();
 		m_pointerModel->Draw();
+
+		const Ray r = { m_camera->GetPosition(),
+			utility::ScreenRayToWorld(
+			{(float)InputManager::Get().GetMouseX(),
+			(float)InputManager::Get().GetMouseY()}, m_camera),
+		};
+
+		if (InputManager::Get().CheckMouseKey(MouseKey::LEFT, key_state::HOLD))
+		{
+			if (utility::RayAABBCollision(m_hitBoxes[0], r))
+			{
+				modTransf.pos.x += Time::Get().GetDeltaTime();
+			}
+			else if (utility::RayAABBCollision(m_hitBoxes[1], r))
+			{
+				modTransf.pos.y += Time::Get().GetDeltaTime();
+			}
+			else if (utility::RayAABBCollision(m_hitBoxes[2], r))
+			{
+				modTransf.pos.z += Time::Get().GetDeltaTime();
+			}
+		}
+
 	}
+
+
+	m_prevMouseX = m_currMouseX;
+	m_prevMouseY = m_currMouseY;
 }
 
 void DragPointer::SetRegistry(recs::recs_registry* registry)
@@ -51,10 +102,19 @@ void DragPointer::SetRegistry(recs::recs_registry* registry)
 	m_currentRegistry = registry;
 }
 
+void DragPointer::SetCamera(Camera* camera)
+{
+	m_camera = camera;
+}
+
 void DragPointer::StartUp()
 {
 	m_pointerModel = ResourceManager::Get().GetResource<Model3D>("pointer.obj");
 	
+	m_pointerTextures[0] = ResourceManager::Get().GetResource<Texture>("red.png");
+	m_pointerTextures[1] = ResourceManager::Get().GetResource<Texture>("green.png");
+	m_pointerTextures[2] = ResourceManager::Get().GetResource<Texture>("blue.png");
+
 	CreateModelBuffer();
 }
 
