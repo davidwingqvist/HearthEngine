@@ -78,15 +78,36 @@ void DragPointer::Draw(const recs::Entity& currentEntity)
 		{
 			if (utility::RayAABBCollision(m_hitBoxes[0], r))
 			{
-				modTransf.pos.x += Time::Get().GetDeltaTime();
+				if (m_currMouseX > m_prevMouseX)
+				{
+					modTransf.pos.x += 5.0f * Time::Get().GetDeltaTime();
+				}
+				else if (m_currMouseX < m_prevMouseX)
+				{
+					modTransf.pos.x -= 5.0f * Time::Get().GetDeltaTime();
+				}
 			}
 			else if (utility::RayAABBCollision(m_hitBoxes[1], r))
 			{
-				modTransf.pos.y += Time::Get().GetDeltaTime();
+				if (m_currMouseY > m_prevMouseY)
+				{
+					modTransf.pos.y -= 5.0f * Time::Get().GetDeltaTime();
+				}
+				else if (m_currMouseY < m_prevMouseY)
+				{
+					modTransf.pos.y += 5.0f * Time::Get().GetDeltaTime();
+				}
 			}
 			else if (utility::RayAABBCollision(m_hitBoxes[2], r))
 			{
-				modTransf.pos.z += Time::Get().GetDeltaTime();
+				if (m_currMouseX > m_prevMouseX)
+				{
+					modTransf.pos.z -= 5.0f * Time::Get().GetDeltaTime();
+				}
+				else if (m_currMouseX < m_prevMouseX)
+				{
+					modTransf.pos.z += 5.0f * Time::Get().GetDeltaTime();
+				}
 			}
 		}
 
