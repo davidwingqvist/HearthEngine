@@ -27,9 +27,6 @@
     <Filter Include="Debug">
       <UniqueIdentifier>{a5e3b2a7-b77a-4f0e-b196-ad5551fa40d3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Lua">
-      <UniqueIdentifier>{2631242d-5885-4765-942e-e5a49f2dc30a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Resource">
       <UniqueIdentifier>{07ac3530-5a4c-4380-9898-4a7aaeb942e3}</UniqueIdentifier>
     </Filter>
@@ -59,6 +56,15 @@
     </Filter>
     <Filter Include="Debug\Debug Items">
       <UniqueIdentifier>{16322337-10b3-4be3-bc0a-7b983aa112e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripting">
+      <UniqueIdentifier>{7a878078-1b55-4bda-9ada-7076e1c78016}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripting\Lua">
+      <UniqueIdentifier>{2631242d-5885-4765-942e-e5a49f2dc30a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripting\Mono">
+      <UniqueIdentifier>{f7ffc963-e313-4fd7-9c94-5f5d36feeee0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -111,7 +117,7 @@
       <Filter>Debug</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\LuaState.cpp">
-      <Filter>Lua</Filter>
+      <Filter>Scripting\Lua</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Renderpass.cpp">
       <Filter>RenderPass</Filter>
@@ -171,10 +177,10 @@
       <Filter>Tools</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\LuaToCpp.cpp">
-      <Filter>Lua</Filter>
+      <Filter>Scripting\Lua</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\LuaGameState.cpp">
-      <Filter>Lua</Filter>
+      <Filter>Scripting\Lua</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\InternalScene.cpp">
       <Filter>Scene</Filter>
@@ -245,7 +251,7 @@
       <Filter>Debug</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\LuaState.h">
-      <Filter>Lua</Filter>
+      <Filter>Scripting\Lua</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Renderpass.h">
       <Filter>RenderPass</Filter>
@@ -305,10 +311,10 @@
       <Filter>Tools</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\LuaToCpp.h">
-      <Filter>Lua</Filter>
+      <Filter>Scripting\Lua</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\LuaGameState.h">
-      <Filter>Lua</Filter>
+      <Filter>Scripting\Lua</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\GameScene.h">
       <Filter>Scene</Filter>

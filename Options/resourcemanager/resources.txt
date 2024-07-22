@@ -4,4 +4,8 @@ Model Chest.obj
 Texture Chest_Albedo.png
 Model throwingknife.obj
 Model doublebarrelshotugn.obj
+Model pointer.obj
 Icon BoxIcon.png
+Texture red.png
+Texture green.png
+Texture blue.png

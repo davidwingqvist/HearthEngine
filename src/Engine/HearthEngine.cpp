@@ -5,12 +5,12 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "../../Thirdparty/stb_image/stb_image.h"
 
-
 #ifdef _DEBUG
 
 int main()
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+
 
 	Engine engine("peeky.jpg");
 	engine.Start();
