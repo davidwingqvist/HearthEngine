@@ -3,6 +3,7 @@
 #include "Debugger.h"
 #include "LuaState.h"
 #include "InputManager.h"
+#include "Canvas.h"
 
 Engine::Engine()
 {
@@ -103,7 +104,7 @@ void Engine::Start()
 
 void Engine::SetSplashScreen(const std::string& fileName)
 {
-	
+	/*
 	object2D splash(0.0f,0.0f, (float)D3D11Core::Get().GetWindow()->GetWidth(), (float)D3D11Core::Get().GetWindow()->GetHeight());
 	
 	Image2D* image = ResourceManager::Get().GetResource<Image2D>(fileName).get();
@@ -113,6 +114,7 @@ void Engine::SetSplashScreen(const std::string& fileName)
 	D2D1Core::Get().DrawP(splash, image->GetImage());
 	D2D1Core::Get().Commit();
 	D3D11Core::Get().Present();
+	*/
 }
 
 void Engine::Shutdown()

@@ -32,6 +32,9 @@ namespace utility
 	// Convert degrees to radiant.
 	float ConvertToRadiant(const float& degrees);
 
+	// Clamp a {value} based on min/max and values _set that defines clamp value degree.
+	float LinearClampF(float& value, const float& max_set, const float& min_set, const float& max_val, const float& min_val);
+
 	// Calculate the angle between two vectors and return the angle in degrees.
 	float CalcDegAngle(const sm::Vector2& a, const sm::Vector2& b);
 	float CalcDegAngle(const sm::Vector3& a, const sm::Vector3& b);

@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="src\Engine\BasicPass.cpp" />
     <ClCompile Include="src\Engine\Camera.cpp" />
+    <ClCompile Include="src\Engine\Canvas.cpp" />
     <ClCompile Include="src\Engine\CollisionBoxRenderPass.cpp" />
     <ClCompile Include="src\Engine\Container2D.cpp" />
     <ClCompile Include="src\Engine\DragPointer.cpp" />
@@ -88,6 +89,7 @@
   <ItemGroup>
     <ClInclude Include="src\Engine\BasicPass.h" />
     <ClInclude Include="src\Engine\Camera.h" />
+    <ClInclude Include="src\Engine\Canvas.h" />
     <ClInclude Include="src\Engine\CollisionBoxRenderPass.h" />
     <ClInclude Include="src\Engine\Container2D.h" />
     <ClInclude Include="src\Engine\DragPointer.h" />

@@ -19,36 +19,21 @@ enum class ACTIVITY : UINT
 	NONE = 0b0
 };
 
+enum class CANVAS_TYPE : UINT
+{
+	EMTPY = 0,
+	PICTURE,
+
+	NROF
+};
+
 struct object2D
 {
+	CANVAS_TYPE type;
 	float x;
 	float y;
 	float width;
 	float height;
-
-	object2D()
-	{
-		x = 0;
-		y = 0;
-		width = 0;
-		height = 0;
-	}
-
-	object2D(const float& x, const float& y, const float& width, const float& height)
-	{
-		this->x = x;
-		this->y = y;
-		this->width = width;
-		this->height = height;
-	}
-
-	object2D(const std::string& filename)
-	{
-		x = 0;
-		y = 0;
-		width = 0;
-		height = 0;
-	}
 };
 
 struct GameObject

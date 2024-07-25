@@ -66,6 +66,9 @@
     <Filter Include="Scripting\Mono">
       <UniqueIdentifier>{f7ffc963-e313-4fd7-9c94-5f5d36feeee0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Graphics2D">
+      <UniqueIdentifier>{2aaf9a2a-d20b-4407-be42-05545f6220c9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Engine\HearthEngine.cpp">
@@ -196,6 +199,12 @@
     </ClCompile>
     <ClCompile Include="src\Engine\DragPointer.cpp">
       <Filter>Debug\Debug Items</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Container2D.cpp">
+      <Filter>Graphics2D</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Canvas.cpp">
+      <Filter>Graphics2D</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -330,6 +339,12 @@
     </ClInclude>
     <ClInclude Include="src\Engine\DragPointer.h">
       <Filter>Debug\Debug Items</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Container2D.h">
+      <Filter>Graphics2D</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Canvas.h">
+      <Filter>Graphics2D</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

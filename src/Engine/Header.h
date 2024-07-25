@@ -52,3 +52,8 @@ const std::string SCRIPTPATH_INTERNAL = "Scripts/EngineScripts/";
 const std::string TEXTUREPATH = "Assets/Textures/";
 const std::string ICONPATH = "Assets/Icons/";
 const std::string OPTIONPATH = "Options/";
+
+namespace hrth
+{
+	using BIGINT = unsigned long long;
+};

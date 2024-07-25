@@ -47,6 +47,11 @@ float utility::ConvertToRadiant(const float& degrees)
     return degrees / 180.0f * 3.14159265f;
 }
 
+float utility::LinearClampF(float& value, const float& max_set, const float& min_set, const float& max_val, const float& min_val)
+{
+    return (value + min_set) / ((min_set + max_set) * ((max_val + min_val) + min_val));
+}
+
 float utility::CalcDegAngle(const sm::Vector2& a, const sm::Vector2& b)
 {
     float deg = std::acos(a.Dot(b) / (a.Length() * b.Length()));

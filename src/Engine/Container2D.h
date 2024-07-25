@@ -1,14 +1,16 @@
 #pragma once
+#include "Canvas.h"
 
-class Container
+class Container: public Canvas
 {
 public:
 
 	Container();
 
+	void Draw() override;
+
 private:
 
-	// {object, id}
-	std::vector<std::pair<object2D, UINT>> m_objects;
+	std::vector<Canvas*> m_children;
 
 };

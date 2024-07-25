@@ -5,3 +5,8 @@ Container::Container()
 {
 
 }
+
+void Container::Draw()
+{
+
+}
