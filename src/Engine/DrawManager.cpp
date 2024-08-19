@@ -15,7 +15,12 @@ void DrawManager::Draw()
 {
 	for (int i = 0; i < m_drawObjects.size(); i++)
 	{
-		if(m_drawObjects[i] && m_drawObjects[i]->IsVisible())
+		if(m_drawObjects[i] && m_drawObjects[i]->m_isVisible)
 			m_drawObjects[i]->Draw();
 	}
+}
+
+void DrawManager::Update()
+{
+
 }

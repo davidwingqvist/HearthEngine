@@ -18,8 +18,8 @@ void Scene::AssignEdit(InternalScene* scene)
 	//EngineGUI::Get().m_editCamera = &m_camera;
 	m_camera.SetRegistry(m_sceneReg);
 
-	EngineGUI::Get().GetDragPointers()->SetCamera(&m_camera);
-	EngineGUI::Get().GetDragPointers()->SetRegistry(scene->GetRegistry());
+	//EngineGUI::Get().GetDragPointers()->SetCamera(&m_camera);
+	//EngineGUI::Get().GetDragPointers()->SetRegistry(scene->GetRegistry());
 }
 
 void Scene::Reset()

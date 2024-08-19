@@ -1,10 +1,10 @@
+Icon MapIcon.png
 Model Tree1.obj
 Model Chest.obj
-Icon MapIcon.png
 Texture Chest_Albedo.png
 Model throwingknife.obj
-Model pointer.obj
 Model doublebarrelshotugn.obj
+Model pointer.obj
 Icon BoxIcon.png
 Texture red.png
 Texture green.png

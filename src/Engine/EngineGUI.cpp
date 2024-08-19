@@ -579,6 +579,13 @@ void EngineGUI::RenderProperties()
 			ImGui::SameLine();
 			ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionMax().x / 4.0f);
 			ImGui::DragFloat("z###Scalez", &currTransform->scale.z, 0.1, 0.0f, 0.0f, "%.2f");
+			
+			if (ImGui::Button("Reset###ResetTransform"))
+			{
+				currTransform->pos = { 0.0f, 0.0f, 0.0f };
+				currTransform->rotation = { 0.0f, 0.0f, 0.0f };
+				currTransform->scale = { 1.0f, 1.0f, 1.0f };
+			}
 			ImGui::EndGroup();
 
 			//ImGui::SetCursorPosX((ImGui::GetWindowWidth() * 0.45f));

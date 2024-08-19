@@ -1,5 +1,5 @@
 #pragma once
-#include "DrawObject.h"
+#include "Canvas.h"
 
 const size_t MAX_2D_OBJECTS = 250;
 
@@ -12,7 +12,7 @@ class DrawManager
 {
 private:
 
-	std::vector<IDrawObject*> m_drawObjects;
+	std::vector<Canvas*> m_drawObjects;
 
 public:
 
@@ -20,6 +20,8 @@ public:
 	~DrawManager();
 
 	void Draw();
+
+	void Update();
 
 
 };

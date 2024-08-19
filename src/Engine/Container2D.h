@@ -9,6 +9,8 @@ public:
 
 	void Draw() override;
 
+	void Update() override;
+
 private:
 
 	std::vector<Canvas*> m_children;
