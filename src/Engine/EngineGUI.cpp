@@ -23,6 +23,8 @@ EngineGUI::EngineGUI()
 	ImGui_ImplDX11_Init(D3D11Core::Get().Device(), D3D11Core::Get().Context());
 	ImGui::StyleColorsDark();
 	ImGui_ImplDX11_CreateDeviceObjects(); // uses device, therefore has to be called before render thread starts
+
+	m_overallManager.push_back(&m_modelManager);
 }
 
 EngineGUI::~EngineGUI()
@@ -74,6 +76,11 @@ void EngineGUI::RenderGUI()
 	Get().RenderTextureTab();
 	Get().RenderScriptsTab();
 	Get().RenderScenesTab();
+
+	for (auto manager : Get().m_overallManager)
+	{
+		manager->Draw();
+	}
 }
 
 void EngineGUI::CommitGUI()
@@ -183,6 +190,7 @@ void EngineGUI::RenderTopBar()
 		if (ImGui::Button("Models", ImVec2(ImGui::GetWindowContentRegionMax().x, 0)))
 		{
 			this->PutEditTabsToFalse();
+			m_modelManager.SetVisiblity();
 		}
 		if (ImGui::Button("Textures", ImVec2(ImGui::GetWindowContentRegionMax().x, 0)))
 		{

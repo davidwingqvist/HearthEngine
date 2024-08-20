@@ -27,6 +27,7 @@
     <ClCompile Include="src\Engine\DragPointer.cpp" />
     <ClCompile Include="src\Engine\GameScene.cpp" />
     <ClCompile Include="src\Engine\Icon.cpp" />
+    <ClCompile Include="src\Engine\IDebugManager.cpp" />
     <ClCompile Include="src\Engine\InternalScene.cpp" />
     <ClCompile Include="src\Engine\LuaGameState.cpp" />
     <ClCompile Include="src\Engine\LuaToCpp.cpp" />
@@ -43,6 +44,7 @@
     <ClCompile Include="src\Engine\InputManager.cpp" />
     <ClCompile Include="src\Engine\LightPass.cpp" />
     <ClCompile Include="src\Engine\LuaState.cpp" />
+    <ClCompile Include="src\Engine\ModelManager.cpp" />
     <ClCompile Include="src\Engine\PipelineManager.cpp" />
     <ClCompile Include="src\Engine\Renderer.cpp" />
     <ClCompile Include="src\Engine\Renderpass.cpp" />
@@ -95,6 +97,7 @@
     <ClInclude Include="src\Engine\DragPointer.h" />
     <ClInclude Include="src\Engine\GameScene.h" />
     <ClInclude Include="src\Engine\Icon.h" />
+    <ClInclude Include="src\Engine\IDebugManager.h" />
     <ClInclude Include="src\Engine\InternalScene.h" />
     <ClInclude Include="src\Engine\LuaGameState.h" />
     <ClInclude Include="src\Engine\LuaToCpp.h" />
@@ -111,6 +114,7 @@
     <ClInclude Include="src\Engine\InputManager.h" />
     <ClInclude Include="src\Engine\LightPass.h" />
     <ClInclude Include="src\Engine\LuaState.h" />
+    <ClInclude Include="src\Engine\ModelManager.h" />
     <ClInclude Include="src\Engine\PipelineManager.h" />
     <ClInclude Include="src\Engine\Renderer.h" />
     <ClInclude Include="src\Engine\Renderpass.h" />

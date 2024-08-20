@@ -2,6 +2,7 @@
 #include "SceneManager.h"
 #include "LightPass.h"
 #include "DragPointer.h"
+#include "ModelManager.h"
 
 class EngineGUI
 {
@@ -74,6 +75,11 @@ private:
 
 	void PutEditTabsToFalse();
 	void BottomBarPutToFalse();
+
+	ModelManager m_modelManager;
+
+	// contains all the managers.
+	std::vector<IDebugManager*> m_overallManager;
 public:
 
 	/*
@@ -109,6 +115,9 @@ public:
 
 private:
 
+	/*
+		Rendering functions.
+	*/
 	void RenderTopBar();
 	void RenderBottomBar();
 	void RenderHierarchy();

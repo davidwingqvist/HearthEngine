@@ -69,6 +69,9 @@
     <Filter Include="Graphics2D">
       <UniqueIdentifier>{2aaf9a2a-d20b-4407-be42-05545f6220c9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Debug\Debug Features">
+      <UniqueIdentifier>{e8b80c15-8273-4917-ae2f-10f215b0ae31}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Engine\HearthEngine.cpp">
@@ -205,6 +208,12 @@
     </ClCompile>
     <ClCompile Include="src\Engine\Canvas.cpp">
       <Filter>Graphics2D</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\ModelManager.cpp">
+      <Filter>Debug\Debug Features</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\IDebugManager.cpp">
+      <Filter>Debug\Debug Features</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -345,6 +354,12 @@
     </ClInclude>
     <ClInclude Include="src\Engine\Canvas.h">
       <Filter>Graphics2D</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\ModelManager.h">
+      <Filter>Debug\Debug Features</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\IDebugManager.h">
+      <Filter>Debug\Debug Features</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
