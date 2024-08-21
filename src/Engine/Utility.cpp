@@ -198,18 +198,28 @@ void utility::phys::ResolveCollision(Transform& t1, RigidBody& r1, Transform& t2
     if (velocityAlongNormal > 0)
         return;
 
-    float restitution = 0.8;
+    float restitution = std::min(r1.bounciness, r2.bounciness);
 
-    float impulseScalar = -(1.0f - restitution) * velocityAlongNormal;
+    float impulseScalar = -(1.0f + restitution) * velocityAlongNormal;
+    impulseScalar /= (1 / r1.mass + 1 / r2.mass);
 
     sm::Vector3 impulse = impulseScalar * collisioN;
-    r1.velocity -= 0.01 * impulse;
-    r2.velocity += 0.01 * impulse;
+    r1.velocity -= (1 / r1.mass) * impulse;
+    r2.velocity += (1 / r2.mass) * impulse;
 
-    float percent = 0.2;
+    float percent = 0.1;
     float slop = 0.01;
-    sm::Vector3 correction = max((relativeVelocity.Length() - slop), 0.0f) / (0.01) * percent * collisioN;
+    sm::Vector3 correction = max((relativeVelocity.Length() - slop), 0.0f) / ((1 / r1.mass) + (1 / r2.mass)) * percent * collisioN;
 
-    t1.pos += correction * 0.01f;
-    t2.pos -= correction * 0.01f;
+    t1.pos += correction * (1 / r1.mass);
+    t2.pos -= correction * (1 / r2.mass);
+
+    // Ground check
+    if (collisioN.y > 0)
+    {
+        if (t1.pos.y > t2.pos.y)
+        {
+            r1.velocity.y = 0;
+        }
+    }
 }

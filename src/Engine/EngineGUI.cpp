@@ -681,7 +681,8 @@ void EngineGUI::RenderProperties()
 			ImGui::BeginChild(4, ImVec2(ImGui::GetContentRegionAvail().x, 0), ImGuiChildFlags_Border | ImGuiChildFlags_AlwaysUseWindowPadding | ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_AutoResizeX);
 			
 			ImGui::TextColored(ImVec4(255, 0, 255, 255), "Rigidbody");
-			ImGui::DragFloat("Mass", &rigidBody->mass, 1, 0, 1000);
+			ImGui::DragFloat("Mass", &rigidBody->mass, 1, 1, 1000);
+			ImGui::SliderFloat("Bounciness", &rigidBody->bounciness, 0.01, 1, "%.2f");
 			ImGui::Checkbox("Collision?", &rigidBody->hasCollision);
 			ImGui::Checkbox("Gravity?", &rigidBody->hasGravity);
 

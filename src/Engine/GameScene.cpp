@@ -14,18 +14,6 @@ void GameScene::Update()
 {
 	m_registry.Update();
 
-	// Update rigidbody standalone physics.
-	m_registry.Group<RigidBody, Transform>().ForEach([&](const recs::Entity& e, RigidBody& rb, Transform& transform) {
-
-		if (rb.hasGravity)
-		{
-			// Add gravity to the velocity.
-			rb.velocity += {0, GRAVITY* Time::Get().GetDeltaTime(), 0};
-			transform.pos -= rb.velocity * 0.01;
-		}
-
-		});
-
 	m_registry.Group<Transform, CollisionBox>().ForEach([&](Transform& transform, CollisionBox& coll) {
 
 		coll.min = transform.pos;
@@ -81,17 +69,27 @@ void GameScene::Update()
 				Transform* transform1 = m_registry.GetComponent<Transform>(ent1);
 				Transform* transform2 = m_registry.GetComponent<Transform>(ent2);
 
-				rigidBody1->velocity.y = 0;
-				rigidBody2->velocity.y = 0;
-
 				utility::phys::ResolveCollision(*transform1, *rigidBody1, *transform2, *rigidBody2);
-
 			}
 		}
 
 		});
 
 	});
+
+	// Update rigidbody standalone physics.
+	m_registry.Group<RigidBody, Transform>().ForEach([&](const recs::Entity& e, RigidBody& rb, Transform& transform) {
+
+		if (rb.hasGravity)
+		{
+			// Add gravity to the velocity.
+			rb.velocity -= {0, GRAVITY* Time::Get().GetDeltaTime(), 0};
+			
+		}
+
+		transform.pos += rb.velocity * 0.01;
+
+		});
 }
 
 void GameScene::Awake()

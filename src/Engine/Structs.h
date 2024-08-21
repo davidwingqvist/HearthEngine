@@ -102,6 +102,7 @@ struct CameraPoint
 struct RigidBody
 {
 	float mass = 0;
+	float bounciness = 0.8;
 	sm::Vector3 velocity = {};
 	bool hasCollision = false;
 	bool hasGravity = false;
