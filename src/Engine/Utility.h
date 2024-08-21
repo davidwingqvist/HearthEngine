@@ -52,4 +52,13 @@ namespace utility
 
 	// Update a public buffer used for rendering objects.
 	void UpdatePublicBuffer(ID3D11Buffer** buffer, const sm::Matrix& matrix_data);
+
+	// Contains all the physics functions used by the game engine.
+	namespace phys 
+	{
+		/*
+			Resolves the collision phyics between two rigidbodies.
+		*/
+		void ResolveCollision(Transform& t1, RigidBody& r1, Transform& t2, RigidBody& r2);
+	}
 }

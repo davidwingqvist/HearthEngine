@@ -185,3 +185,31 @@ sm::Vector3 utility::Reflect(const sm::Vector3& d, const sm::Vector3& n)
 {
     return d - (((2*d.Dot(n)) / n.Length()) * n);
 }
+
+void utility::phys::ResolveCollision(Transform& t1, RigidBody& r1, Transform& t2, RigidBody& r2)
+{
+    sm::Vector3 collisioN = t1.pos - t2.pos;
+    collisioN.Normalize();
+
+    sm::Vector3 relativeVelocity = r1.velocity - r2.velocity;
+
+    float velocityAlongNormal = relativeVelocity.Dot(collisioN);
+
+    if (velocityAlongNormal > 0)
+        return;
+
+    float restitution = 0.8;
+
+    float impulseScalar = -(1.0f - restitution) * velocityAlongNormal;
+
+    sm::Vector3 impulse = impulseScalar * collisioN;
+    r1.velocity -= 0.01 * impulse;
+    r2.velocity += 0.01 * impulse;
+
+    float percent = 0.2;
+    float slop = 0.01;
+    sm::Vector3 correction = max((relativeVelocity.Length() - slop), 0.0f) / (0.01) * percent * collisioN;
+
+    t1.pos += correction * 0.01f;
+    t2.pos -= correction * 0.01f;
+}
