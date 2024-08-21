@@ -3,6 +3,7 @@
 #include "Camera.h"
 #include "D3D11Context.h"
 #include "Debugger.h"
+#include "Time.h"
 
 sm::Vector2 utility::WorldSpaceToScreenSpace(const sm::Vector3& worldPos, Camera* cam)
 {
@@ -211,15 +212,40 @@ void utility::phys::ResolveCollision(Transform& t1, RigidBody& r1, Transform& t2
     float slop = 0.01;
     sm::Vector3 correction = max((relativeVelocity.Length() - slop), 0.0f) / ((1 / r1.mass) + (1 / r2.mass)) * percent * collisioN;
 
-    t1.pos += correction * (1 / r1.mass);
+    t1.pos += correction * (1 / r1.mass); 
     t2.pos -= correction * (1 / r2.mass);
+
+    // Example values for a cube
+    float mass = 1.0f; // Mass of the object
+    float sideLength = 1.0f; // Length of a side of the cube
+
+    sm::Vector3 inertia = sm::Vector3(
+        (1.0f / 12.0f) * mass * (sideLength * sideLength), // Inertia about x-axis
+        (1.0f / 12.0f) * mass * (sideLength * sideLength), // Inertia about y-axis
+        (1.0f / 12.0f) * mass * (sideLength * sideLength)  // Inertia about z-axis
+    );
+
+    // Calculate the point of contact (for simplicity, assuming midpoint here)
+    sm::Vector3 contactPoint = (t1.pos + t2.pos) / 2.0f;
+
+    // Calculate the relative contact point
+    sm::Vector3 r1Contact = contactPoint - t1.pos;
+    sm::Vector3 r2Contact = contactPoint - t2.pos;
+
+    // Calculate torques
+    sm::Vector3 torque1 = r1Contact.Cross(impulse);
+    sm::Vector3 torque2 = r2Contact.Cross(-impulse);
+
+    // Update angular velocities (assuming you have angular velocity properties in RigidBody)
+    r1.angularVelocity += torque1 / inertia; // Assuming inertiaTensor is a Vector3 or scalar
+    r2.angularVelocity += torque2 / inertia;
 
     // Ground check
     if (collisioN.y > 0)
     {
         if (t1.pos.y > t2.pos.y)
         {
-            r1.velocity.y = 0;
+            r1.velocity.y = GRAVITY * Time::Get().GetDeltaTime() * 0.01f;
         }
     }
 }

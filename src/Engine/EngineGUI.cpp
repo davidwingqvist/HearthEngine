@@ -683,7 +683,7 @@ void EngineGUI::RenderProperties()
 			ImGui::TextColored(ImVec4(255, 0, 255, 255), "Rigidbody");
 			ImGui::DragFloat("Mass", &rigidBody->mass, 1, 1, 1000);
 			ImGui::SliderFloat("Bounciness", &rigidBody->bounciness, 0.01, 1, "%.2f");
-			ImGui::Checkbox("Collision?", &rigidBody->hasCollision);
+			ImGui::Checkbox("isStatic?", &rigidBody->isStatic);
 			ImGui::Checkbox("Gravity?", &rigidBody->hasGravity);
 
 			ImGui::SetCursorPosX((ImGui::GetWindowWidth() * 0.45f));

@@ -103,9 +103,11 @@ struct RigidBody
 {
 	float mass = 0;
 	float bounciness = 0.8;
-	sm::Vector3 velocity = {};
-	bool hasCollision = false;
+	bool isStatic = false;
 	bool hasGravity = false;
+
+	sm::Vector3 velocity = {};
+	sm::Vector3 angularVelocity = {};
 };
 
 /*

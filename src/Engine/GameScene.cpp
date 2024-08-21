@@ -80,14 +80,30 @@ void GameScene::Update()
 	// Update rigidbody standalone physics.
 	m_registry.Group<RigidBody, Transform>().ForEach([&](const recs::Entity& e, RigidBody& rb, Transform& transform) {
 
-		if (rb.hasGravity)
+		if (!rb.isStatic)
 		{
-			// Add gravity to the velocity.
-			rb.velocity -= {0, GRAVITY * Time::Get().GetDeltaTime() * 0.01f, 0};
-			
-		}
 
-		transform.pos += rb.velocity;
+			if (rb.hasGravity)
+			{
+				// Add gravity to the velocity.
+				rb.velocity -= {0, GRAVITY* Time::Get().GetDeltaTime() * 0.01f, 0};
+
+			}
+
+			transform.pos += rb.velocity;
+
+			float angle = rb.angularVelocity.Length();
+
+			if (angle > 0)
+			{
+				sm::Vector3 axis = rb.angularVelocity;
+				axis.Normalize();
+
+				sm::Quaternion deltaRot = sm::Quaternion::CreateFromAxisAngle(axis, angle);
+
+				transform.rotation = deltaRot * transform.rotation;
+			}
+		}
 
 		});
 }
