@@ -86,7 +86,7 @@ void GameScene::Update()
 			if (rb.hasGravity)
 			{
 				// Add gravity to the velocity.
-				rb.velocity -= {0, GRAVITY* Time::Get().GetDeltaTime() * 0.01f, 0};
+				rb.velocity.y -= GRAVITY * Time::Get().GetDeltaTime() * 0.01f;
 
 			}
 

@@ -205,15 +205,21 @@ void utility::phys::ResolveCollision(Transform& t1, RigidBody& r1, Transform& t2
     impulseScalar /= (1 / r1.mass + 1 / r2.mass);
 
     sm::Vector3 impulse = impulseScalar * collisioN;
-    r1.velocity -= (1 / r1.mass) * impulse;
-    r2.velocity += (1 / r2.mass) * impulse;
+
+    if(r1.isStatic)
+        r1.velocity -= (1 / r1.mass) * impulse;
+    if(r2.isStatic)
+        r2.velocity += (1 / r2.mass) * impulse;
 
     float percent = 0.1;
     float slop = 0.01;
     sm::Vector3 correction = max((relativeVelocity.Length() - slop), 0.0f) / ((1 / r1.mass) + (1 / r2.mass)) * percent * collisioN;
 
-    t1.pos += correction * (1 / r1.mass); 
-    t2.pos -= correction * (1 / r2.mass);
+    if(!r1.isStatic)
+        t1.pos += correction * (1 / r1.mass); 
+
+    if(!r2.isStatic)
+        t2.pos -= correction * (1 / r2.mass);
 
     // Example values for a cube
     float mass = 1.0f; // Mass of the object

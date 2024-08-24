@@ -3,6 +3,7 @@
 #include <assert.h>
 #include "InputManager.h"
 #include "Debugger.h"
+#include "D3D11Context.h"
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 LRESULT CALLBACK Window::WinProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -83,6 +84,15 @@ LRESULT CALLBACK Window::WinProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 		break;
 	case WM_SIZE:
 		// https://docs.microsoft.com/en-us/windows/win32/direct3ddxgi/d3d10-graphics-programming-guide-dxgi#handling-window-resizing
+
+		if (D3D11Core::Get().GetWindow())
+		{
+			D3D11Core::Get().GetWindow()->m_windowDesc.height = HIWORD(lParam);
+			D3D11Core::Get().GetWindow()->m_windowDesc.width = LOWORD(wParam);
+
+			std::cout << D3D11Core::Get().GetWindow()->GetHeight() << "\n";
+		}
+
 		break;
 	default:
 		break;
@@ -169,8 +179,8 @@ bool Window::Initialize(const Desc& desc)
 	}
 
 	// Create the window.
-	this->m_hWnd = CreateWindowEx(0, WINDOW_CLASS, desc.title,
-		WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_VISIBLE,
+	this->m_hWnd = CreateWindowEx(0, WINDOW_CLASS, desc.title, // include thick frame when rescaling should be available.
+		WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_VISIBLE /*| WS_THICKFRAME*/,
 		posX, posY,
 		width, height,
 		nullptr, nullptr, desc.hInstance, nullptr);
