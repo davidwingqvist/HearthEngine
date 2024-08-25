@@ -72,6 +72,9 @@
     <Filter Include="Debug\Debug Features">
       <UniqueIdentifier>{e8b80c15-8273-4917-ae2f-10f215b0ae31}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tools\Events">
+      <UniqueIdentifier>{71952d46-8bad-48ba-83ae-19e2318683d0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Engine\HearthEngine.cpp">
@@ -213,6 +216,9 @@
       <Filter>Debug\Debug Features</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\IDebugManager.cpp">
+      <Filter>Debug\Debug Features</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\PropertiesManager.cpp">
       <Filter>Debug\Debug Features</Filter>
     </ClCompile>
   </ItemGroup>
@@ -360,6 +366,12 @@
     </ClInclude>
     <ClInclude Include="src\Engine\IDebugManager.h">
       <Filter>Debug\Debug Features</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\PropertiesManager.h">
+      <Filter>Debug\Debug Features</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\TimeEvent.h">
+      <Filter>Tools\Events</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

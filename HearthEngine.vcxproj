@@ -46,6 +46,7 @@
     <ClCompile Include="src\Engine\LuaState.cpp" />
     <ClCompile Include="src\Engine\ModelManager.cpp" />
     <ClCompile Include="src\Engine\PipelineManager.cpp" />
+    <ClCompile Include="src\Engine\PropertiesManager.cpp" />
     <ClCompile Include="src\Engine\Renderer.cpp" />
     <ClCompile Include="src\Engine\Renderpass.cpp" />
     <ClCompile Include="src\Engine\Resource.cpp" />
@@ -116,6 +117,7 @@
     <ClInclude Include="src\Engine\LuaState.h" />
     <ClInclude Include="src\Engine\ModelManager.h" />
     <ClInclude Include="src\Engine\PipelineManager.h" />
+    <ClInclude Include="src\Engine\PropertiesManager.h" />
     <ClInclude Include="src\Engine\Renderer.h" />
     <ClInclude Include="src\Engine\Renderpass.h" />
     <ClInclude Include="src\Engine\Resource.h" />
@@ -126,6 +128,7 @@
     <ClInclude Include="src\Engine\Structs.h" />
     <ClInclude Include="src\Engine\Texture.h" />
     <ClInclude Include="src\Engine\Time.h" />
+    <ClInclude Include="src\Engine\TimeEvent.h" />
     <ClInclude Include="src\Engine\Utility.h" />
     <ClInclude Include="src\Engine\Window.h" />
     <ClInclude Include="src\Engine\WireFramePass.h" />

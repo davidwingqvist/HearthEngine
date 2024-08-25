@@ -4,14 +4,11 @@
 #include "InputManager.h"
 #include "Debugger.h"
 #include "D3D11Context.h"
+#include "EngineGUI.h"
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 LRESULT CALLBACK Window::WinProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-#ifdef _DEBUG
-	if (ImGui_ImplWin32_WndProcHandler(hwnd, uMsg, wParam, lParam))
-		return true;
-#endif
 
 	// Engine events:
 	switch (uMsg)
@@ -84,19 +81,42 @@ LRESULT CALLBACK Window::WinProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 		break;
 	case WM_SIZE:
 		// https://docs.microsoft.com/en-us/windows/win32/direct3ddxgi/d3d10-graphics-programming-guide-dxgi#handling-window-resizing
+		
+		// TODO: Handle DirectX11 resize window.
 
+
+		// Update window size values.
 		if (D3D11Core::Get().GetWindow())
 		{
 			D3D11Core::Get().GetWindow()->m_windowDesc.height = HIWORD(lParam);
-			D3D11Core::Get().GetWindow()->m_windowDesc.width = LOWORD(wParam);
+			D3D11Core::Get().GetWindow()->m_windowDesc.width = LOWORD(lParam);
 
-			std::cout << D3D11Core::Get().GetWindow()->GetHeight() << "\n";
+			EngineGUI::Get().UpdateManagers();
+
+			std::cout << D3D11Core::Get().GetWindow()->GetWidth() << "\n";
 		}
+
+		if (wParam != SIZE_MINIMIZED)
+		{
+			// Resize the Direct3D rendering target
+			if (DD != NULL)
+			{
+				ImGui_ImplDX11_InvalidateDeviceObjects();
+				// Resize buffers or handle device reset here
+				ImGui_ImplDX11_CreateDeviceObjects();
+			}
+		}
+
 
 		break;
 	default:
 		break;
 	}
+
+#ifdef _DEBUG
+	if (ImGui_ImplWin32_WndProcHandler(hwnd, uMsg, wParam, lParam))
+		return true;
+#endif
 	
 
 	return DefWindowProc(hwnd, uMsg, wParam, lParam);
@@ -180,7 +200,8 @@ bool Window::Initialize(const Desc& desc)
 
 	// Create the window.
 	this->m_hWnd = CreateWindowEx(0, WINDOW_CLASS, desc.title, // include thick frame when rescaling should be available.
-		WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_VISIBLE /*| WS_THICKFRAME*/,
+		WS_CAPTION | WS_SYSMENU | WS_VISIBLE | WS_MAXIMIZEBOX |
+		WS_MINIMIZEBOX/*| WS_THICKFRAME*/,
 		posX, posY,
 		width, height,
 		nullptr, nullptr, desc.hInstance, nullptr);

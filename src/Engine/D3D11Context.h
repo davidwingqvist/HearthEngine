@@ -4,6 +4,7 @@
 
 #define DC D3D11Core::Get().Context()
 #define DD D3D11Core::Get().Device()
+#define WINDOW D3D11Core::Get().GetWindow()
 
 class D3D11Core
 {

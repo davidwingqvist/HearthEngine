@@ -11,6 +11,8 @@ public:
 
 	void Draw() override;
 
+	virtual void Update() override;
+
 	ModelManager();
 	~ModelManager();
 

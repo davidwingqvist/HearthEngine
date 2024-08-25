@@ -17,6 +17,11 @@ void ModelManager::Draw()
 		this->InnerDraw();
 }
 
+void ModelManager::Update()
+{
+
+}
+
 void ModelManager::InnerDraw()
 {
 	ImGui::Begin("Model Manager", &m_visible);

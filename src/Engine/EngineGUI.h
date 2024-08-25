@@ -3,12 +3,17 @@
 #include "LightPass.h"
 #include "DragPointer.h"
 #include "ModelManager.h"
+#include "PropertiesManager.h"
 
 class EngineGUI
 {
 private:
+	
 	EngineGUI();
 	~EngineGUI();
+
+public:
+
 
 	DragPointer m_dragPointers;
 
@@ -77,6 +82,7 @@ private:
 	void BottomBarPutToFalse();
 
 	ModelManager m_modelManager;
+	PropertiesManager m_propertiesManager;
 
 	// contains all the managers.
 	std::vector<IDebugManager*> m_overallManager;
@@ -113,6 +119,8 @@ public:
 
 	static void SetActiveEntity(const recs::Entity& entity);
 
+	static void UpdateManagers();
+
 private:
 
 	/*
@@ -124,7 +132,6 @@ private:
 	void RenderConsole();
 	void RenderStatistics();
 	void RenderScenes();
-	void RenderProperties();
 	void RenderFileKeepingWindow();
 	void RenderNewComponentTab();
 	void RenderScriptsTab();
