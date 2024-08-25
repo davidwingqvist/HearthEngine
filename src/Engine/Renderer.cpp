@@ -14,6 +14,7 @@ Renderer::~Renderer()
 void Renderer::Initialize()
 {
 	m_pipelineManager.Initialize();
+	EngineGUI::Get().m_pipelineManager = &m_pipelineManager;
 
 	m_basicPass.Create();
 	m_lightPass.Create();

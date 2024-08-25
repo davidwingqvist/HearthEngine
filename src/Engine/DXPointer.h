@@ -23,8 +23,13 @@ public:
 		return m_data;
 	};
 
+	// Access point for the pointer
 	T* Get();
+
+	// Acces point for pointer pointer
 	T** GetAddressOf();
+
+	// Unallocates the data held by the pointer and sets to nullptr.
 	void Reset();
 };
 

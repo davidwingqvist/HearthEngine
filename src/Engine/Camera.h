@@ -37,6 +37,9 @@ public:
 
 	void ResetValues();
 
+	// Call this when window is resized.
+	void ResizeCamera();
+
 	// Set the position of the camera in the world scene.
 	void SetPosition(const sm::Vector3& pos);
 	// Update position based on current position.

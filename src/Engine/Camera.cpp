@@ -118,6 +118,11 @@ void Camera::SetPosition(const sm::Vector3& pos)
 	m_position += pos;
 }
 
+void Camera::ResizeCamera()
+{
+	m_matData.projectionMatrix = sm::Matrix::CreatePerspectiveFieldOfView(3.1415f / 4.0f, ((float)D3D11Core::Get().GetWindow()->GetWidth() / D3D11Core::Get().GetWindow()->GetHeight()), 0.1f, 5000.f);
+}
+
 void Camera::SetPosition(const float& x, const float& y, const float& z)
 {
 	sm::Vector3 vec_forward = m_lookAt - m_position;

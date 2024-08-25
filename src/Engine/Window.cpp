@@ -86,14 +86,14 @@ LRESULT CALLBACK Window::WinProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 
 
 		// Update window size values.
-		if (D3D11Core::Get().GetWindow())
+		if (D3D11Core::Get().GetWindow() && wParam != SIZE_MINIMIZED)
 		{
-			D3D11Core::Get().GetWindow()->m_windowDesc.height = HIWORD(lParam);
 			D3D11Core::Get().GetWindow()->m_windowDesc.width = LOWORD(lParam);
+			D3D11Core::Get().GetWindow()->m_windowDesc.height = HIWORD(lParam);
 
 			EngineGUI::Get().UpdateManagers();
-
-			std::cout << D3D11Core::Get().GetWindow()->GetWidth() << "\n";
+			EngineGUI::Get().m_editCamera->ResizeCamera();
+			EngineGUI::Get().m_pipelineManager->UpdateBackBuffer();
 		}
 
 		if (wParam != SIZE_MINIMIZED)

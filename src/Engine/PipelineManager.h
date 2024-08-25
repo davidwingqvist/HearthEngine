@@ -48,5 +48,8 @@ public:
 
 	void ClearScreen();
 
+	// Make updates to the back buffer, such as resize etc.
+	void UpdateBackBuffer();
+
 };
 

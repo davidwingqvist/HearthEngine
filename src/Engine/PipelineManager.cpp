@@ -2,6 +2,7 @@
 #include "PipelineManager.h"
 #include "D3D11Context.h"
 #include "Debugger.h"
+#include "EngineGUI.h"
 
 void PipelineManager::Initialize()
 {
@@ -48,13 +49,35 @@ void PipelineManager::ClearScreen()
     D3D11Core::Get().Context()->ClearRenderTargetView(m_backBuffer.Get(), clear);
 }
 
+void PipelineManager::UpdateBackBuffer()
+{
+    this->CreateRenderTargetView();
+
+    D3D11_VIEWPORT viewport = {};
+    viewport.Width = (float)WINDOW->GetWidth();
+    viewport.Height = (float)WINDOW->GetHeight();
+    viewport.MaxDepth = 1.0f;
+    DC->RSSetViewports(1, &viewport);
+}
+
 bool PipelineManager::CreateRenderTargetView()
 {
+    if (m_backBuffer.Get())
+        m_backBuffer.Reset();
+    if (m_backBufferAccessView.Get())
+    {
+        m_backBufferAccessView.Reset();
+
+        D3D11Core::Get().SwapChain()->ResizeBuffers(0, WINDOW->GetWidth(), WINDOW->GetHeight(), DXGI_FORMAT_UNKNOWN, DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH);
+    }
+
     ID3D11Texture2D* pBackBuffer = nullptr;
 
     // Get the pointer to the back buffer.
     if (FAILED(D3D11Core::Get().SwapChain()->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<LPVOID*>(&pBackBuffer))))
         return false;
+
+
 
     // Create the renderTargetView with the back buffer pointer.
     HRESULT hr = D3D11Core::Get().Device()->CreateRenderTargetView(pBackBuffer, nullptr, m_backBuffer.GetAddressOf());

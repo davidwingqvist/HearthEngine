@@ -14,7 +14,7 @@ void PropertiesManager::InnerDraw()
 {
 	const ImVec2 winPos = {
 		(float)WINDOW->GetWidth() - m_winWidth,
-		(float)WINDOW->GetHeight() * 0.05f
+		(float)WINDOW->GetHeight() * 0.025f
 	};
 
 	ImGui::SetNextWindowPos(winPos);

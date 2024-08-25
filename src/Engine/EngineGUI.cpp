@@ -141,7 +141,10 @@ void EngineGUI::UpdateManagers()
 void EngineGUI::RenderTopBar()
 {
 	ImGui::SetNextWindowPos(ImVec2(0, 0));
-	ImGui::SetNextWindowSize(ImVec2(D3D11Core::Get().GetWindow()->GetWidth(), 0));
+	ImGui::SetNextWindowSize(
+		ImVec2(D3D11Core::Get().GetWindow()->GetWidth(),
+			(float)D3D11Core::Get().GetWindow()->GetHeight() * 0.05f)
+	);
 	
 	ImGui::Begin("Menu", NULL, menuWindow);
 
@@ -353,7 +356,8 @@ void EngineGUI::RenderBottomBar()
 void EngineGUI::RenderHierarchy()
 {
 	ImGui::SetNextWindowPos(ImVec2(0, ImGui::GetWindowSize().y * 0.05f));
-	ImGui::SetNextWindowSize(ImVec2(ImGui::GetWindowSize().x * 0.6f, ImGui::GetWindowSize().y * 1.15f));
+	ImGui::SetNextWindowSize(ImVec2(ImGui::GetWindowSize().x * 0.6f, 
+		WINDOW->GetHeight() * 0.65f));
 	ImGui::Begin("Object View", 0, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_MenuBar);
 	if (m_sceneManagerRef)
 	{

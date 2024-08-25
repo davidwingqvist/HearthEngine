@@ -88,11 +88,9 @@ public:
 	std::vector<IDebugManager*> m_overallManager;
 public:
 
-	/*
-		Temporary values
-	*/
 	LightPass* m_lightPassRef = nullptr;
 	bool* m_toggleCollisionBoxDraw = nullptr;
+	PipelineManager* m_pipelineManager = nullptr;
 
 	Camera* m_editCamera = nullptr;
 
